@@ -11,11 +11,20 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
 
+$api = app('Dingo\Api\Routing\Router');
 
-Route::group(['prefix' => 'api/v1'],function() {
-
+$api->version('v1', function ($api) {
+    $api->group(['namespace' => 'App\Api\Controllers'], function ($api) {
+        $api->post('user/login', 'AuthController@authenticate');
+        $api->post('user/register', 'AuthController@register');
+        $api->group(['middleware' => 'jwt.auth'], function ($api) {
+            $api->get('user/me', 'AuthController@getAuthenticatedUser');
+            $api->get('hospitals', 'HospitalsController@index');
+            $api->get('hospitals/{id}', 'HospitalsController@show');
+        });
+    });
 });
