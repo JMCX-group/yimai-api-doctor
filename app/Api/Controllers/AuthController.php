@@ -9,7 +9,10 @@
 namespace App\Api\Controllers;
 
 
+use App\User;
+use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Http\Request;
+use Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -29,16 +32,17 @@ class AuthController extends BaseController
     public function authenticate(Request $request)
     {
         // grab credentials from the request
-        $credentials = $request->only('email', 'password');
+//        $credentials = $request->only('email', 'password');
 
         /*
          * 用于自定义用户名和密码字段:
+         */
         $credentials = [
             'phone' => $request->get('phone'),
             'password' => $request->get('password')
         ];
 
-        //如果password字段在数据库中自定义为pwd,则需要在User.php中增加下列函数:
+        /* 如果password字段在数据库中自定义为pwd,则需要在User.php中增加下列函数:
         public function getAuthPassword()
         {
             return $this->pwd;
@@ -66,9 +70,17 @@ class AuthController extends BaseController
      */
     public function register(Request $request)
     {
+        try {
+            $this->validate($request, [
+                'phone' => 'required|digits:11|unique:app_users',
+                'password' => 'required|min:6|max:60'
+            ]);
+        } catch (HttpResponseException $e) {
+            return response()->json(['error' => 'invalid_info'], 403);
+        }
+
         $newUser = [
-            'email' => $request->get('email'),
-            'name' => $request->get('name'),
+            'phone' => $request->get('phone'),
             'password' => bcrypt($request->get('password'))
         ];
         $user = User::create($newUser);
@@ -84,23 +96,15 @@ class AuthController extends BaseController
     public function getAuthenticatedUser()
     {
         try {
-
             if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found'], 404);
             }
-
         } catch (TokenExpiredException $e) {
-
             return response()->json(['token_expired'], $e->getStatusCode());
-
         } catch (TokenInvalidException $e) {
-
             return response()->json(['token_invalid'], $e->getStatusCode());
-
         } catch (JWTException $e) {
-
             return response()->json(['token_absent'], $e->getStatusCode());
-
         }
 
         // the token is valid and we have found the user via the sub claim
