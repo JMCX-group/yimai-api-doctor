@@ -8,8 +8,9 @@
 
 namespace App\Api\Controllers;
 
-
 use App\Api\Transformers\HospitalTransformer;
+use App\Api\Transformers\HospitalCityTransformer;
+use App\City;
 use App\Hospital;
 
 /**
@@ -23,9 +24,10 @@ class HospitalsController extends BaseController
      */
     public function index()
     {
-        $hospital = Hospital::paginate(15);
+        $hospitals = Hospital::paginate(15);
 
-        return $this->response->paginator($hospital, new HospitalTransformer());
+//        return $hospitals;
+        return $this->response->paginator($hospitals, new HospitalTransformer());
     }
 
     /**
@@ -38,6 +40,21 @@ class HospitalsController extends BaseController
         if (!$hospital) {
             return $this->response->errorNotFound('Hospital not found');
         }
+
         return $this->response->item($hospital, new HospitalTransformer());
+    }
+
+    /**
+     * In a city hospital.
+     *
+     * @param $cityId
+     * @return \Dingo\Api\Http\Response
+     */
+    public function inCityHospital($cityId)
+    {
+        $cityName = City::find($cityId);
+        $hospitals = Hospital::select('id', 'name')->where('city', '=', $cityName->name)->get();
+
+        return $this->response->collection($hospitals, new HospitalCityTransformer());
     }
 }

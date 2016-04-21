@@ -19,13 +19,47 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
     $api->group(['namespace' => 'App\Api\Controllers'], function ($api) {
-        $api->post('user/login', 'AuthController@authenticate');
-        $api->post('user/register', 'AuthController@register');
+        /**
+         * Api Doc
+         */
+        $api->get('/', 'ApiController@index');
 
+        /**
+         * Register & Login
+         */
+        $api->group(['prefix' => 'user'], function ($api) {
+            $api->post('register', 'AuthController@register');
+            $api->post('verify-code', 'AuthController@sendVerifyCode');
+            $api->post('inviter', 'AuthController@getInviter');
+            $api->post('login', 'AuthController@authenticate');
+        });
+
+        /**
+         * Token Auth
+         */
         $api->group(['middleware' => 'jwt.auth'], function ($api) {
-            $api->get('user/me', 'AuthController@getAuthenticatedUser');
-            $api->get('hospitals', 'HospitalsController@index');
-            $api->get('hospitals/{id}', 'HospitalsController@show');
+            // User
+            $api->group(['prefix' => 'user'], function ($api) {
+                $api->get('me', 'AuthController@getAuthenticatedUser');
+                $api->post('/', 'UserController@update');
+            });
+
+            // City
+            $api->group(['prefix' => 'city'], function ($api) {
+                $api->get('/', 'CityController@index');
+            });
+
+            // Hospital
+            $api->group(['prefix' => 'hospital'], function ($api) {
+                $api->get('/', 'HospitalsController@index');
+                $api->get('city/{city}', 'HospitalsController@inCityHospital');
+                $api->get('{hospital}', 'HospitalsController@show');
+            });
+
+            // Dept
+            $api->group(['prefix' => 'dept'], function ($api) {
+                $api->get('/', 'DeptStandardController@index');
+            });
         });
     });
 });
