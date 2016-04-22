@@ -10,7 +10,7 @@ namespace App\Api\Controllers;
 
 use App\Api\Requests\UserRequest;
 use App\Api\Transformers\UserTransformer;
-use App\User;
+use App\Hospital;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -47,7 +47,11 @@ class UserController extends BaseController
             $user->city_id = $request['city'];
         }
         if (isset($request['hospital']) && !empty($request['hospital'])) {
-            $user->hospital_id = $request['hospital'];
+            $hospitalId = $request['hospital'];
+            if (!is_numeric($request['hospital'])) {
+                $hospitalId = $this->createNewHospital($request)->id;
+            }
+            $user->hospital_id = $hospitalId;
         }
         if (isset($request['department']) && !empty($request['department'])) {
             $user->dept_id = $request['department'];
@@ -76,6 +80,22 @@ class UserController extends BaseController
             }
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+        }
+    }
+
+    public function createNewHospital($request)
+    {
+        $data = [
+            'province' => $request['province'],
+            'city' => $request['city'],
+            'name' => $request['hospital'],
+            'status' => '未核实'
+        ];
+
+        try {
+            return Hospital::create($data);
+        } catch (\Exception $e) {
+            return '';
         }
     }
 }
