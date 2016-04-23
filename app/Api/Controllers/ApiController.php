@@ -132,7 +132,7 @@ class ApiController extends BaseController
                             'sex' => '性别',
                             'province' => '用户所在省份ID',
                             'city' => '用户所属城市ID',
-                            'hospital' => '用户所属医院ID',
+                            'hospital' => '用户所属医院ID; 如果该处提交的不是医院ID，则会自动创建该医院后并返回',
                             'department' => '用户所属部门ID',
                             'job_title' => '用户职称',
                             'college' => '用户所属院校ID',

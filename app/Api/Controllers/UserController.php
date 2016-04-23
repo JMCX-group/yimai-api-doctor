@@ -83,8 +83,15 @@ class UserController extends BaseController
         }
     }
 
+    /**
+     * Create new hospital.
+     * 
+     * @param $request
+     * @return string|static
+     */
     public function createNewHospital($request)
     {
+        //TODO: 缺少一个验证，需要查一下是否该省市下是否已经有该医院，如果有则返回已有医院的ID
         $data = [
             'province' => $request['province'],
             'city' => $request['city'],
