@@ -8,7 +8,12 @@
 
 namespace App\Api\Transformers;
 
+use App\College;
+use App\DeptStandard;
+use App\Hospital;
 use App\User;
+use App\Province;
+use App\City;
 use League\Fractal\TransformerAbstract;
 
 /**
@@ -23,7 +28,9 @@ class UserTransformer extends TransformerAbstract
      */
     public function transform(User $user)
     {
-//        dd($user);
+        // ID convert id:name
+        $this->idToName($user);
+
         return [
             'id' => $user['id'],
             'code' => $user['dp_code'],
@@ -43,8 +50,34 @@ class UserTransformer extends TransformerAbstract
         ];
     }
 
+    /**
+     * ID to id:name.
+     *
+     * @param $user
+     * @return mixed
+     */
     public function idToName($user)
     {
-        //TODO: 需要把ID转换名称
+        if (!empty($user['province_id'])) {
+            $user['province_id'] = Province::find($user['province_id']);
+        }
+
+        if (!empty($user['city_id'])) {
+            $user['city_id'] = City::select('id', 'name')->find($user['city_id']);
+        }
+
+        if (!empty($user['hospital_id'])) {
+            $user['hospital_id'] = Hospital::select('id', 'name')->find($user['hospital_id']);
+        }
+
+        if (!empty($user['dept_id'])) {
+            $user['dept_id'] = DeptStandard::find($user['dept_id']);
+        }
+
+        if (!empty($user['college_id'])) {
+            $user['college_id'] = College::find($user['college_id']);
+        }
+
+        return $user;
     }
 }

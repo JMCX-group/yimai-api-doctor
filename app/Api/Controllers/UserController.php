@@ -49,7 +49,7 @@ class UserController extends BaseController
         if (isset($request['hospital']) && !empty($request['hospital'])) {
             $hospitalId = $request['hospital'];
             if (!is_numeric($request['hospital'])) {
-                $hospitalId = $this->createNewHospital($request)->id;
+                $hospitalId = $this->createNewHospital($request);
             }
             $user->hospital_id = $hospitalId;
         }
@@ -85,13 +85,12 @@ class UserController extends BaseController
 
     /**
      * Create new hospital.
-     * 
+     *
      * @param $request
      * @return string|static
      */
     public function createNewHospital($request)
     {
-        //TODO: 缺少一个验证，需要查一下是否该省市下是否已经有该医院，如果有则返回已有医院的ID
         $data = [
             'province' => $request['province'],
             'city' => $request['city'],
@@ -99,8 +98,13 @@ class UserController extends BaseController
             'status' => '未核实'
         ];
 
+        $hospitalId = Hospital::query('id')->where('province', $data['province'])->where('name', $data['name'])->get();
+        if (!empty($hospitalId)) {
+            return $hospitalId[0]->id;
+        }
+
         try {
-            return Hospital::create($data);
+            return Hospital::create($data)->id;
         } catch (\Exception $e) {
             return '';
         }

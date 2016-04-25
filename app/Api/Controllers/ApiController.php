@@ -101,17 +101,32 @@ class ApiController extends BaseController
                         ],
                         'response' => [
                             'user' => [
-                                'id' => 1,
+                                'id' => '用户id',
                                 'code' => '医脉码',
                                 'phone' => '用户注册手机号',
                                 'name' => '用户姓名',
                                 'sex' => '性别',
-                                'province' => '用户所在省份',
-                                'city' => '用户所属城市',
-                                'hospital' => '用户所属医生',
-                                'department' => '用户所属部门',
+                                'province' => [
+                                    'id' => '用户所在省份ID',
+                                    'name' => '用户所在省份名称'
+                                ],
+                                'city' => [
+                                    'id' => '用户所在城市ID',
+                                    'name' => '用户所在城市名称'
+                                ],
+                                'hospital' => [
+                                    'id' => '用户所在医院ID',
+                                    'name' => '用户所在医院名称'
+                                ],
+                                'department' => [
+                                    'id' => '用户所在科室ID',
+                                    'name' => '用户所在科室名称'
+                                ],
                                 'job_title' => '用户职称',
-                                'college' => '用户所属医院',
+                                'college' => [
+                                    'id' => '用户所在院校ID',
+                                    'name' => '用户所在院校名称'
+                                ],
                                 'ID_number' => '身份证',
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
@@ -142,18 +157,33 @@ class ApiController extends BaseController
                         ],
                         'response' => [
                             'user' => [
-                                'id' => 1,
+                                'id' => '用户id',
                                 'code' => '医脉码',
                                 'phone' => '用户注册手机号',
                                 'name' => '用户姓名',
                                 'sex' => '性别',
-                                'province' => '用户所在省份',
-                                'city' => '用户所属城市',
-                                'hospital' => '用户所属医生',
-                                'department' => '用户所属部门',
+                                'province' => [
+                                    'id' => '用户所在省份ID',
+                                    'name' => '用户所在省份名称'
+                                ],
+                                'city' => [
+                                    'id' => '用户所在城市ID',
+                                    'name' => '用户所在城市名称'
+                                ],
+                                'hospital' => [
+                                    'id' => '用户所在医院ID',
+                                    'name' => '用户所在医院名称'
+                                ],
+                                'department' => [
+                                    'id' => '用户所在科室ID',
+                                    'name' => '用户所在科室名称'
+                                ],
                                 'job_title' => '用户职称',
-                                'college' => '用户所属院校',
-                                'ID_number' => '身份证号',
+                                'college' => [
+                                    'id' => '用户所在院校ID',
+                                    'name' => '用户所在院校名称'
+                                ],
+                                'ID_number' => '身份证',
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
                                 'inviter' => '邀请者'
