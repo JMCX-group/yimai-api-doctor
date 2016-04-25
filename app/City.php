@@ -23,5 +23,10 @@ class City extends Model
      *
      * @var array
      */
-    protected $fillable = ['province_id', 'name'];
+    protected $fillable = ['province_id', 'name', 'code'];
+    
+    /**
+     * @var bool
+     */
+    public $timestamps = false;
 }

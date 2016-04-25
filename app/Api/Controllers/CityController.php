@@ -17,7 +17,7 @@ class CityController extends BaseController
     public function index()
     {
         $provinces = Province::all();
-        $citys =City::all();
+        $citys =City::all(array('id', 'name', 'province_id'));
 
         $data = [
             'provinces' => $provinces,
