@@ -26,7 +26,6 @@ class HospitalsController extends BaseController
     {
         $hospitals = Hospital::paginate(15);
 
-//        return $hospitals;
         return $this->response->paginator($hospitals, new HospitalTransformer());
     }
 

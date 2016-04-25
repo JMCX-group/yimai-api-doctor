@@ -19,12 +19,12 @@ class ApiController extends BaseController
      */
     public function index()
     {
-        $http = 'http://localhost/api';
+        $http = 'http://localhost';
 
         $api = [
             '统一说明' => [
                 '数据格式' => 'JSON',
-                'url字段' => 'HTTP请求地址; {}表示在链接后直接跟该数据的ID值即可,例:http://api/hospitals/77?token=xx,能获取id为77的医院信息',
+                'url字段' => 'HTTP请求地址; {}表示在链接后直接跟该数据的ID值即可,例:http://api/hospital/77?token=xx,能获取id为77的医院信息',
                 'method字段' => 'GET / POST',
                 'form-data字段' => '表单数据',
                 'response字段' => [
@@ -37,7 +37,7 @@ class ApiController extends BaseController
 
             '无需Token验证' => [
                 'API文档' => [
-                    'url' => $http . '/',
+                    'url' => $http . '/api',
                     'method' => 'GET'
                 ],
 
@@ -231,7 +231,7 @@ class ApiController extends BaseController
                                 'province' => '省份',
                                 'city' => '城市',
                                 'name' => '医院名称',
-                                '3a' => '是否为三甲医院; Y:三甲, 空:非三甲',
+                                '3a' => '是否为三甲医院; 1:三甲, 0:非三甲',
                                 'top' => '顶级科室的数量',
                             ],
                             'message' => '',

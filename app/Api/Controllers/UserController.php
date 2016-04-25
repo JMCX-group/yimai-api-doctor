@@ -94,19 +94,9 @@ class UserController extends BaseController
         $data = [
             'province' => $request['province'],
             'city' => $request['city'],
-            'name' => $request['hospital'],
-            'status' => '未核实'
+            'name' => $request['hospital']
         ];
 
-        $hospitalId = Hospital::query('id')->where('province', $data['province'])->where('name', $data['name'])->get();
-        if (!empty($hospitalId)) {
-            return $hospitalId[0]->id;
-        }
-
-        try {
-            return Hospital::create($data)->id;
-        } catch (\Exception $e) {
-            return '';
-        }
+        return Hospital::firstOrCreate($data)->id;
     }
 }
