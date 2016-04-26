@@ -34,7 +34,7 @@ class InviterRequest extends Request
     public function rules()
     {
         return [
-            'inviter' => 'required|digits_between:8,8|exists:app_users,dp_code'
+            'inviter' => 'required|digits_between:8,9'
         ];
     }
 
@@ -45,8 +45,7 @@ class InviterRequest extends Request
     {
         return [
             'required' => ':attribute不能为空',
-            'digits_between' => ':attribute必须为:min位长的数字',
-            'exists' => '无法识别邀请人'
+            'digits_between' => ':attribute必须为:min到:max位长的数字'
         ];
     }
 

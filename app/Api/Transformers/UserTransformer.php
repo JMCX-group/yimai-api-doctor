@@ -78,6 +78,11 @@ class UserTransformer extends TransformerAbstract
             $user['college_id'] = College::find($user['college_id']);
         }
 
+        // Spell dp code.
+        if (!empty($user['dp_code'])) {
+            $user['dp_code'] = User::getDpCode($user['id']);
+        }
+
         return $user;
     }
 }

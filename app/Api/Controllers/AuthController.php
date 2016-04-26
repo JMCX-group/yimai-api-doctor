@@ -130,8 +130,12 @@ class AuthController extends BaseController
      */
     public function getInviter(InviterRequest $request)
     {
-        $code = User::select('name')->where('dp_code', '=', $request->get('inviter'))->get();
+        $data = User::getInviter($request->get('inviter'));
 
-        return response()->json(['name' => $code->first()->name]);
+        if ($data) {
+            return response()->json(['name' => $data]);
+        } else {
+            return response()->json(['message' => '无法识别邀请人']);
+        }
     }
 }

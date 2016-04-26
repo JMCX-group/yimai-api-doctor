@@ -40,4 +40,61 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    /**
+     * Generate new DP Code.
+     *
+     * @param $cityId
+     * @param $deptId
+     * @return mixed
+     */
+    public static function generateDpCode($cityId, $deptId)
+    {
+        $data = User::select('dp_code')
+            ->where('city_id', $cityId)
+            ->where('dept_id', $deptId)
+            ->get();
+
+        return intval($data->first()->dp_code) + 1;
+    }
+
+    /**
+     * Get DP Code.
+     *
+     * @param $id
+     * @return string
+     */
+    public static function getDpCode($id)
+    {
+        $data = User::select('app_users.id', 'app_users.dp_code', 'app_users.name', 'app_users.dept_id', 'citys.code')
+            ->where('app_users.id', $id)
+            ->join('citys', 'app_users.city_id', '=', 'citys.id')
+            ->get()
+            ->first();
+
+        $dpCode = $data->code . str_pad($data->dept_id, 3, '0', STR_PAD_LEFT) . $data->dp_code;
+
+        return $dpCode;
+    }
+
+    /**
+     * Get inviter name.
+     * 
+     * @param $dpCode
+     * @return bool
+     */
+    public static function getInviter($dpCode)
+    {
+        $data = User::select('name')
+            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
+            ->where('dept_id', substr($dpCode, 3, 3))
+            ->where('dp_code', substr($dpCode, 6))
+            ->get();
+
+        if (isset($data->first()->name)) {
+            return $data->first()->name;
+        } else {
+            return false;
+        }
+    }
 }

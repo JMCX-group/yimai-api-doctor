@@ -11,6 +11,7 @@ namespace App\Api\Controllers;
 use App\Api\Requests\UserRequest;
 use App\Api\Transformers\UserTransformer;
 use App\Hospital;
+use App\User;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -19,6 +20,12 @@ use JWTAuth;
 
 class UserController extends BaseController
 {
+    /**
+     * Update user info.
+     *
+     * @param UserRequest $request
+     * @return \Dingo\Api\Http\Response|void
+     */
     public function update(UserRequest $request)
     {
         try {
@@ -70,6 +77,11 @@ class UserController extends BaseController
         }
         if (isset($request['personal_introduction']) && !empty($request['personal_introduction'])) {
             $user->profile = $request['personal_introduction'];
+        }
+
+        // Generate dp code.
+        if (empty($user->dp_code) && !empty($user->city_id) && !empty($user->dept_id)) {
+            $user->dp_code = User::generateDpCode($user->city_id, $user->dept_id);
         }
 
         try {
