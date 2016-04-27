@@ -10,11 +10,11 @@ namespace App\Api\Controllers;
 
 use App\Api\Requests\AuthRequest;
 use App\Api\Requests\InviterRequest;
+use App\Api\Requests\ResetPwdRequest;
 use App\Api\Transformers\UserTransformer;
 use App\User;
 use App\AppUserVerifyCode;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -76,6 +76,26 @@ class AuthController extends BaseController
     }
 
     /**
+     * User reset password.
+     * 
+     * @param ResetPwdRequest $request
+     * @return mixed
+     */
+    public function resetPassword(ResetPwdRequest $request)
+    {
+        $userId = User::where('phone', $request->get('phone'))
+            ->update(['password' => bcrypt($request->get('password'))]);
+        if (!$userId) {
+            return response()->json(['message' => '该手机号未注册'], 404);
+        }
+
+        $user = User::find($userId);
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(compact('token'));
+    }
+
+    /**
      * Get logged user info.
      *
      * @return mixed
@@ -114,9 +134,7 @@ class AuthController extends BaseController
         if (empty($code->all())) {
             AppUserVerifyCode::create($newCode);
         } else {
-            DB::table('app_user_verify_codes')
-                ->where('phone', $request->get('phone'))
-                ->update(['code' => $newCode['code']]);
+            AppUserVerifyCode::where('phone', $request->get('phone'))->update(['code' => $newCode['code']]);
         }
 
         return response()->json(['debug' => $newCode['code']], 200);

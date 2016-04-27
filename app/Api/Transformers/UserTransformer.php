@@ -71,11 +71,11 @@ class UserTransformer extends TransformerAbstract
         }
 
         if (!empty($user['dept_id'])) {
-            $user['dept_id'] = DeptStandard::find($user['dept_id']);
+            $user['dept_id'] = DeptStandard::select('id', 'name')->find($user['dept_id']);
         }
 
         if (!empty($user['college_id'])) {
-            $user['college_id'] = College::find($user['college_id']);
+            $user['college_id'] = College::select('id', 'name')->find($user['college_id']);
         }
 
         // Spell dp code.

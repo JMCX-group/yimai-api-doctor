@@ -19,6 +19,7 @@ $api->version('v1', function ($api) {
          * Api Doc
          */
         $api->get('/', 'ApiController@index');
+        $api->get('index', 'TestController@index');
 
         /**
          * Register & Login
@@ -28,6 +29,7 @@ $api->version('v1', function ($api) {
             $api->post('verify-code', 'AuthController@sendVerifyCode');
             $api->post('inviter', 'AuthController@getInviter');
             $api->post('login', 'AuthController@authenticate');
+            $api->post('reset-pwd', 'AuthController@resetPassword');
         });
 
         /**

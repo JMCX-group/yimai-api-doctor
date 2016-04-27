@@ -14,7 +14,7 @@ use App\Http\Requests\Request;
  * Class AuthRequest
  * @package App\Api\Requests
  */
-class AuthRequest extends Request
+class ResetPwdRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,20 +33,11 @@ class AuthRequest extends Request
      */
     public function rules()
     {
-        $rules = [
-            'phone' => 'required|digits_between:11,11'
+        return [
+            'phone' => 'required|digits_between:11,11',
+            'password' => 'required|between:6,60',
+            'verify_code' => 'required|digits_between:4,4|exists:app_user_verify_codes,code,phone,' . $_POST['phone']
         ];
-
-        if (isset($_POST['password'])) {
-            $rules = [
-                'phone' => 'required|digits_between:11,11|unique:app_users',
-                'password' => 'required|between:6,60',
-                'verify_code' => 'required|digits_between:4,4|exists:app_user_verify_codes,code,phone,' . $_POST['phone']
-            ];
-        }
-
-        return $rules;
-
     }
 
     /**
