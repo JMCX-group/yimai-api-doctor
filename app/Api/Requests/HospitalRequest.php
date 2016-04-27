@@ -34,7 +34,7 @@ class HospitalRequest extends Request
     public function rules()
     {
         return [
-            'inviter' => 'required|digits_between:8,8|exists:app_users,dp_code'
+            'inviter' => 'required|digits_between:8,8|exists:app_doctors,dp_code'
         ];
     }
 
