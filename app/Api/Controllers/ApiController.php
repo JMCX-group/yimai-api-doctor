@@ -229,6 +229,27 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '省市列表-按省分组' => [
+                        'url' => $http . '/api/city/group',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'provinces' => [
+                                'id' => '省份ID, province_id',
+                                'name' => '省份/直辖市名称'
+                            ],
+                            'citys' => [
+                                '{province_id}' => [
+                                    'id' => '城市ID',
+                                    'name' => '城市名称'
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
                 ],
 
                 '医院信息' => [

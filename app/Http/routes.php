@@ -45,6 +45,7 @@ $api->version('v1', function ($api) {
             // City
             $api->group(['prefix' => 'city'], function ($api) {
                 $api->get('/', 'CityController@index');
+                $api->get('group', 'CityController@cityGroup');
             });
 
             // Hospital
