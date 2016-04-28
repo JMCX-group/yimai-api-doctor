@@ -19,7 +19,7 @@ class ApiController extends BaseController
      */
     public function index()
     {
-        $http = 'http://localhost';
+        $http = env('MY_API_HTTP_HEAD', 'http://localhost');
 
         $api = [
             '统一说明' => [
