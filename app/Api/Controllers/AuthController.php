@@ -18,8 +18,6 @@ use Illuminate\Http\Request;
 use Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 /**
  * Class AuthController
@@ -97,24 +95,16 @@ class AuthController extends BaseController
 
     /**
      * Get logged user info.
-     *
-     * @return mixed
+     * 
+     * @return \Dingo\Api\Http\Response|mixed
      */
     public function getAuthenticatedUser()
     {
-        try {
-            if (!$user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['message' => 'user_not_found'], 404);
-            }
-        } catch (TokenExpiredException $e) {
-            return response()->json(['error' => 'token_expired'], $e->getStatusCode());
-        } catch (TokenInvalidException $e) {
-            return response()->json(['error' => 'token_invalid'], $e->getStatusCode());
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'token_absent'], $e->getStatusCode());
+        $user = User::getAuthenticatedUser();
+        if(!isset($user->id)){
+            return $user;
         }
-
-        // the token is valid and we have found the user via the sub claim
+        
         return $this->response->item($user, new UserTransformer());
     }
 

@@ -9,6 +9,10 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 /**
  * Class User
@@ -41,6 +45,29 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * Get logged user info.
+     * 
+     * @return mixed
+     */
+    public static function getAuthenticatedUser()
+    {
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['message' => 'user_not_found'], 404);
+            }
+        } catch (TokenExpiredException $e) {
+            return response()->json(['error' => 'token_expired'], $e->getStatusCode());
+        } catch (TokenInvalidException $e) {
+            return response()->json(['error' => 'token_invalid'], $e->getStatusCode());
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'token_absent'], $e->getStatusCode());
+        }
+
+        // the token is valid and we have found the user via the sub claim
+        return $user;
+    }
+    
     /**
      * Generate new DP Code.
      *
@@ -96,5 +123,26 @@ class User extends Model implements AuthenticatableContract,
         } else {
             return false;
         }
+    }
+
+    /**
+     * Get same type contact count.
+     *
+     * @param $hospitalId
+     * @param $deptId
+     * @param $collegeId
+     * @return array
+     */
+    public static function getSameTypeContactCount($hospitalId, $deptId, $collegeId)
+    {
+        $hospitalCount = User::where('hospital_id', $hospitalId)->count();
+        $deptCount = User::where('dept_id', $deptId)->count();
+        $collegeCount = User::where('college_id', $collegeId)->count();
+        
+        return [
+            'hospital' => $hospitalCount,
+            'department' => $deptCount,
+            'college' => $collegeCount,
+        ];
     }
 }

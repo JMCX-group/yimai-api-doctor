@@ -288,6 +288,83 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                ],
+
+                '医脉资源' => [
+                    '一度医脉(三部分数据)' => [
+                        'url' => $http . '/api/relation',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'same' => [
+                                'hospital' => '同医院的人数',
+                                'department' => '同领域的人数',
+                                'college' => '同学校的人数'
+                            ],
+                            'count' => [
+                                'doctor' => '我的朋友中共有多少名医生',
+                                'hospital' => '我的朋友中分别属于多少家医院'
+                            ],
+                            'friends' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室',
+                                'job_title' => '职称'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '一度医脉(两部分数据)' => [
+                        'url' => $http . '/api/relation/friends',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'count' => [
+                                'doctor' => '我的朋友中共有多少名医生',
+                                'hospital' => '我的朋友中分别属于多少家医院'
+                            ],
+                            'friends' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室',
+                                'job_title' => '职称'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '二度医脉(两部分数据)' => [
+                        'url' => $http . '/api/relation/friends-friends',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'count' => [
+                                'doctor' => '我的朋友中共有多少名医生',
+                                'hospital' => '我的朋友中分别属于多少家医院'
+                            ],
+                            'friends' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室',
+                                'job_title' => '职称'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
                 ]
             ]
         ];

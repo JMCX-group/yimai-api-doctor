@@ -36,6 +36,7 @@ class UserTransformer extends TransformerAbstract
             'code' => $user['dp_code'],
             'phone' => $user['phone'],
             'name' => $user['name'],
+            'head_url' => $user['head_img_url'],
             'sex' => $user['gender'],
             'province' => $user['province_id'],
             'city' => $user['city_id'],
