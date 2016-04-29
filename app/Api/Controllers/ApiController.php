@@ -119,6 +119,7 @@ class ApiController extends BaseController
                                 'code' => '医脉码',
                                 'phone' => '用户注册手机号',
                                 'name' => '用户姓名',
+                                'head_url' => '头像URL',
                                 'sex' => '性别',
                                 'province' => [
                                     'id' => '用户所在省份ID',
@@ -175,6 +176,7 @@ class ApiController extends BaseController
                                 'code' => '医脉码',
                                 'phone' => '用户注册手机号',
                                 'name' => '用户姓名',
+                                'head_url' => '头像URL',
                                 'sex' => '性别',
                                 'province' => [
                                     'id' => '用户所在省份ID',
@@ -303,6 +305,7 @@ class ApiController extends BaseController
                                 'department' => '同领域的人数',
                                 'college' => '同学校的人数'
                             ],
+                            'unread' => '好友信息的未读数量',
                             'count' => [
                                 'doctor' => '我的朋友中共有多少名医生',
                                 'hospital' => '我的朋友中分别属于多少家医院'
@@ -348,6 +351,7 @@ class ApiController extends BaseController
                         'params' => [
                             'token' => ''
                         ],
+                        '说明' => 'friends中的数据块已按common_friend_count的倒序排序',
                         'response' => [
                             'count' => [
                                 'doctor' => '我的朋友中共有多少名医生',
@@ -359,7 +363,29 @@ class ApiController extends BaseController
                                 'head_url' => '头像URL',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室',
-                                'job_title' => '职称'
+                                'job_title' => '职称',
+                                'common_friend_count' => '共同好友数量'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '新朋友' => [
+                        'url' => $http . '/api/relation/new-friends',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        '说明' => 'friends中的数据块已按添加好友的时间倒序排序',
+                        'response' => [
+                            'friends' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室',
+                                'status' => '与好友的状态; isFriend | waitForSure | waitForFriendAgree',
+                                'word' => '显示文案'
                             ],
                             'message' => '',
                             'error' => ''

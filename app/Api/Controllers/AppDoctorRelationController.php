@@ -35,6 +35,7 @@ class AppDoctorRelationController extends BaseController
 
         return [
             'same' => User::getSameTypeContactCount($user->hospital_id, $user->dept_id, $user->college_id),
+            'unread' => AppDoctorRelation::getNewFriendsIdList($user->id)['unread'],
             'count' => [
                 'doctor' => count($data['friends']),
                 'hospital' => $data['hospital_count']
@@ -78,14 +79,32 @@ class AppDoctorRelationController extends BaseController
             return $user;
         }
 
-        $data = Transformer::userListTransform(AppDoctorRelation::getFriendsFriends($user->id));
+        $friendsFriendsInfo = AppDoctorRelation::getFriendsFriends($user->id);
+        $data = Transformer::userListTransform($friendsFriendsInfo['user']);
 
         return [
             'count' => [
                 'doctor' => count($data['friends']),
                 'hospital' => $data['hospital_count']
             ],
-            'friends' => $data['friends']
+            'friends' => Transformer::friendsFriendsTransform($data['friends'], $friendsFriendsInfo['count'])
         ];
+    }
+
+    /**
+     * Get new friends info.
+     *
+     * @return array|mixed
+     */
+    public function getNewFriends()
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $data = AppDoctorRelation::getNewFriends($user->id);
+
+        return ['friends' => Transformer::newFriendTransform($data['users'], $data['list'])];
     }
 }

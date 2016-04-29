@@ -60,15 +60,13 @@ $api->version('v1', function ($api) {
                 $api->get('/', 'DeptStandardController@index');
             });
             
-            
             // Relation
             $api->group(['prefix' => 'relation'], function ($api) {
                 $api->get('/', 'AppDoctorRelationController@getRelations');
                 $api->get('friends', 'AppDoctorRelationController@getRelationsFriends');
                 $api->get('friends-friends', 'AppDoctorRelationController@getRelationsFriendsFriends');
+                $api->get('new-friends', 'AppDoctorRelationController@getNewFriends');
             });
-            
-            
         });
     });
 });
