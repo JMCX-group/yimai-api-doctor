@@ -293,7 +293,7 @@ class ApiController extends BaseController
                 ],
 
                 '医脉资源' => [
-                    '一度医脉(三部分数据)' => [
+                    '一度医脉(四部分数据,多用于首次/当天首次打开)' => [
                         'url' => $http . '/api/relation',
                         'method' => 'GET',
                         'params' => [
@@ -322,7 +322,7 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
-                    '一度医脉(两部分数据)' => [
+                    '一度医脉(两部分数据,多用于打开后第一次之后的刷新数据用)' => [
                         'url' => $http . '/api/relation/friends',
                         'method' => 'GET',
                         'params' => [
