@@ -263,7 +263,7 @@ class ApiController extends BaseController
                         ],
                         'response' => [
                             'data' => [
-                                'id' => '',
+                                'id' => '医院ID',
                                 'area' => '所属地区',
                                 'province' => '省份',
                                 'city' => '城市',
@@ -283,13 +283,31 @@ class ApiController extends BaseController
                         ],
                         'response' => [
                             'data' => [
-                                'id' => '',
+                                'id' => '医院ID',
                                 'name' => '医院名称'
                             ],
                             'message' => '',
                             'error' => ''
                         ]
                     ],
+                ],
+
+                '科室信息' => [
+                    '所有科室' => [
+                        'url' => $http . '/api/dept',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                'id' => '科室ID',
+                                'name' => '科室名称'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
                 ],
 
                 '医脉资源' => [
