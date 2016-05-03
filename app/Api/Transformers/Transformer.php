@@ -87,12 +87,12 @@ class Transformer
     }
 
     /**
-     * Transform new friend.
+     * @param $id
      * @param $users
      * @param $list
      * @return mixed
      */
-    public static function newFriendTransform($users, $list)
+    public static function newFriendTransform($id, $users, $list)
     {
         $retData = array();
         $hospitalIdList = array();
@@ -100,7 +100,7 @@ class Transformer
 
         foreach ($users as $user) {
             foreach ($list as $item) {
-                if ($user->id == $item->app_doctor_id || $user->id == $item->app_doctor_friend_id) {
+                if ($user->id == $item->doctor_id || $user->id == $item->doctor_friend_id) {
                     array_push(
                         $retData,
                         [
@@ -109,6 +109,7 @@ class Transformer
                             'head_url' => $user->head_img_url,
                             'hospital' => $user->hospital_id,
                             'department' => $user->dept_id,
+                            'unread' => ($id == $item->doctor_id) ? $item->doctor_read : $item->doctor_friend_read,
                             'status' => $item->status,
                             'word' => $item->word,
                         ]

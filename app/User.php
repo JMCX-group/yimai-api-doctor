@@ -29,7 +29,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var string
      */
-    protected $table = 'app_doctors';
+    protected $table = 'doctors';
 
     /**
      * The attributes that are mass assignable.
@@ -93,9 +93,9 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function getDpCode($id)
     {
-        $data = User::select('app_doctors.id', 'app_doctors.dp_code', 'app_doctors.name', 'app_doctors.dept_id', 'citys.code')
-            ->where('app_doctors.id', $id)
-            ->join('citys', 'app_doctors.city_id', '=', 'citys.id')
+        $data = User::select('doctors.id', 'doctors.dp_code', 'doctors.name', 'doctors.dept_id', 'citys.code')
+            ->where('doctors.id', $id)
+            ->join('citys', 'doctors.city_id', '=', 'citys.id')
             ->get()
             ->first();
 

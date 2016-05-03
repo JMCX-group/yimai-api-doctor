@@ -9,10 +9,10 @@
 namespace App\Api\Controllers;
 
 use App\Api\Transformers\Transformer;
-use App\AppDoctorRelation;
+use App\DoctorRelation;
 use App\User;
 
-class AppDoctorRelationController extends BaseController
+class DoctorRelationController extends BaseController
 {
     public function index()
     {
@@ -31,11 +31,11 @@ class AppDoctorRelationController extends BaseController
             return $user;
         }
 
-        $data = Transformer::userListTransform(AppDoctorRelation::getFriends($user->id));
+        $data = Transformer::userListTransform(DoctorRelation::getFriends($user->id));
 
         return [
             'same' => User::getSameTypeContactCount($user->hospital_id, $user->dept_id, $user->college_id),
-            'unread' => AppDoctorRelation::getNewFriendsIdList($user->id)['unread'],
+            'unread' => DoctorRelation::getNewFriendsIdList($user->id)['unread'],
             'count' => [
                 'doctor' => count($data['friends']),
                 'hospital' => $data['hospital_count']
@@ -56,7 +56,7 @@ class AppDoctorRelationController extends BaseController
             return $user;
         }
 
-        $data = Transformer::userListTransform(AppDoctorRelation::getFriends($user->id));
+        $data = Transformer::userListTransform(DoctorRelation::getFriends($user->id));
 
         return [
             'count' => [
@@ -79,7 +79,7 @@ class AppDoctorRelationController extends BaseController
             return $user;
         }
 
-        $friendsFriendsInfo = AppDoctorRelation::getFriendsFriends($user->id);
+        $friendsFriendsInfo = DoctorRelation::getFriendsFriends($user->id);
         $data = Transformer::userListTransform($friendsFriendsInfo['user']);
 
         return [
@@ -93,6 +93,7 @@ class AppDoctorRelationController extends BaseController
 
     /**
      * Get new friends info.
+     * Set read status.
      *
      * @return array|mixed
      */
@@ -103,8 +104,10 @@ class AppDoctorRelationController extends BaseController
             return $user;
         }
 
-        $data = AppDoctorRelation::getNewFriends($user->id);
+        $data = DoctorRelation::getNewFriends($user->id);
 
-        return ['friends' => Transformer::newFriendTransform($data['users'], $data['list'])];
+        DoctorRelation::setReadStatus($user->id);
+
+        return ['friends' => Transformer::newFriendTransform($user->id, $data['users'], $data['list'])];
     }
 }

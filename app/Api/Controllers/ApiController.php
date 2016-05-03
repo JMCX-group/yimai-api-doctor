@@ -394,7 +394,7 @@ class ApiController extends BaseController
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => 'friends中的数据块已按添加好友的时间倒序排序',
+                        '说明' => 'friends中的数据块已按添加好友的时间倒序排序; 获取之后,该次所有数据的未读状态将自动置为已读',
                         'response' => [
                             'friends' => [
                                 'id' => '用户ID',
@@ -402,6 +402,7 @@ class ApiController extends BaseController
                                 'head_url' => '头像URL',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室',
+                                'unread' => '未读状态,1为已读,0为未读',
                                 'status' => '与好友的状态; isFriend | waitForSure | waitForFriendAgree',
                                 'word' => '显示文案'
                             ],

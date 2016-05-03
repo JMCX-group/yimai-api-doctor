@@ -39,9 +39,9 @@ class AuthRequest extends Request
 
         if (isset($_POST['password'])) {
             $rules = [
-                'phone' => 'required|digits_between:11,11|unique:app_doctors',
+                'phone' => 'required|digits_between:11,11|unique:doctors',
                 'password' => 'required|between:6,60',
-                'verify_code' => 'required|digits_between:4,4|exists:app_user_verify_codes,code,phone,' . $_POST['phone']
+                'verify_code' => 'required|digits_between:4,4|exists:user_verify_codes,code,phone,' . $_POST['phone']
             ];
         }
 

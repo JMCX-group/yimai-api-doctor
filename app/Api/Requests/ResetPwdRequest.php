@@ -36,7 +36,7 @@ class ResetPwdRequest extends Request
         return [
             'phone' => 'required|digits_between:11,11',
             'password' => 'required|between:6,60',
-            'verify_code' => 'required|digits_between:4,4|exists:app_user_verify_codes,code,phone,' . $_POST['phone']
+            'verify_code' => 'required|digits_between:4,4|exists:user_verify_codes,code,phone,' . $_POST['phone']
         ];
     }
 

@@ -15,7 +15,7 @@ class AppUserVerifyCode extends Model
      *
      * @var string
      */
-    protected $table = 'app_user_verify_codes';
+    protected $table = 'user_verify_codes';
 
     /**
      * The attributes that are mass assignable.

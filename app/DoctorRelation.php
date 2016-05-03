@@ -5,21 +5,21 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class AppDoctorRelation extends Model
+class DoctorRelation extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'app_doctor_relations';
+    protected $table = 'doctor_relations';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['app_doctor_id', 'app_doctor_friend_id'];
+    protected $fillable = ['doctor_id', 'doctor_friend_id'];
 
     /**
      * Get my friends id list.
@@ -29,13 +29,13 @@ class AppDoctorRelation extends Model
      */
     public static function getFriendIdList($id)
     {
-        $friendData = AppDoctorRelation::select('app_doctor_friend_id')
-            ->where('app_doctor_id', $id)
+        $friendData = DoctorRelation::select('doctor_friend_id')
+            ->where('doctor_id', $id)
             ->get();
 
         $friend = array();
         foreach ($friendData as $data) {
-            array_push($friend, $data->app_doctor_friend_id);
+            array_push($friend, $data->doctor_friend_id);
         }
 
         return $friend;
@@ -64,15 +64,15 @@ class AppDoctorRelation extends Model
         $notSelectFriends = $myFriendList;
         array_push($notSelectFriends, $id);
 
-        $friendsFriendData = AppDoctorRelation::select('app_doctor_friend_id')
-            ->whereIn('app_doctor_id', $myFriendList)
-            ->whereNotIn('app_doctor_friend_id', $notSelectFriends)
+        $friendsFriendData = DoctorRelation::select('doctor_friend_id')
+            ->whereIn('doctor_id', $myFriendList)
+            ->whereNotIn('doctor_friend_id', $notSelectFriends)
             ->distinct()
             ->get();
 
         $friendsFriend = array();
         foreach ($friendsFriendData as $data) {
-            array_push($friendsFriend, $data->app_doctor_friend_id);
+            array_push($friendsFriend, $data->doctor_friend_id);
         }
 
         return $friendsFriend;
@@ -95,13 +95,18 @@ class AppDoctorRelation extends Model
         ];
     }
 
+    /**
+     * @param $friendIdList
+     * @param $friendsFriendsIdList
+     * @return array
+     */
     public static function getCommonFriendsCount($friendIdList, $friendsFriendsIdList)
     {
         $retData = array();
 
         foreach ($friendsFriendsIdList as $item) {
-            $count = AppDoctorRelation::where('app_doctor_id', $item)
-                ->whereIn('app_doctor_friend_id', $friendIdList)
+            $count = DoctorRelation::where('doctor_id', $item)
+                ->whereIn('doctor_friend_id', $friendIdList)
                 ->get()
                 ->count();
 
@@ -119,9 +124,9 @@ class AppDoctorRelation extends Model
      */
     public static function getNewFriendsIdList($id)
     {
-        $data = AppDoctorRelation::select('app_doctor_id', 'app_doctor_friend_id', 'read', 'created_at')
-            ->where('app_doctor_id', $id)
-            ->orWhere('app_doctor_friend_id', $id)
+        $data = DoctorRelation::select('doctor_id', 'doctor_friend_id', 'doctor_read', 'doctor_friend_read', 'created_at')
+            ->where('doctor_id', $id)
+            ->orWhere('doctor_friend_id', $id)
             ->orderBy('created_at', 'DESC')
             ->get();
 
@@ -145,8 +150,9 @@ class AppDoctorRelation extends Model
             $bool = true;
 
             foreach ($data as $item) {
-                if ($value->app_doctor_id == $id && $value->app_doctor_id == $item->app_doctor_friend_id && $item->app_doctor_id == $value->app_doctor_friend_id) {
-                    if ($value->read == 0) {
+                if ($value->doctor_id == $id && $value->doctor_id == $item->doctor_friend_id && $item->doctor_id == $value->doctor_friend_id) {
+                    // 如果doctor id是自己,且有互为好友的关系
+                    if ($value->doctor_read == 0) {
                         $unreadCount++;
                     }
                     $value['status'] = 'isFriend';
@@ -154,22 +160,24 @@ class AppDoctorRelation extends Model
                     array_push($retData, $value);
                     $bool = false;
                     break;
-                } elseif ($value->app_doctor_friend_id == $id && $value->app_doctor_id == $item->app_doctor_friend_id && $item->app_doctor_id == $value->app_doctor_friend_id) {
+                } elseif ($value->doctor_friend_id == $id && $value->doctor_id == $item->doctor_friend_id && $item->doctor_id == $value->doctor_friend_id) {
                     $bool = false;
                     break;
                 }
             }
 
             if ($bool) {
-                if ($value->app_doctor_id == $id) {
-                    if ($value->read == 0) {
+                if ($value->doctor_id == $id) {
+                    // 自己请求他人
+                    if ($value->doctor_read == 0) {
                         $unreadCount++;
                     }
                     $value['status'] = 'waitForFriendAgree';
                     $value['word'] = '请求已发送';
                     array_push($retData, $value);
-                } elseif ($value->app_doctor_friend_id == $id) {
-                    if ($value->read == 0) {
+                } elseif ($value->doctor_friend_id == $id) {
+                    // 他人请求自己
+                    if ($value->doctor_friend_read == 0) {
                         $unreadCount++;
                     }
                     $value['status'] = 'waitForSure';
@@ -187,6 +195,7 @@ class AppDoctorRelation extends Model
 
     /**
      * Get new friends all info.
+     *
      * @param $id
      * @return array
      */
@@ -196,21 +205,30 @@ class AppDoctorRelation extends Model
 
         $idList = array();
         foreach ($list as $item) {
-            if ($item->app_doctor_id != $id) {
-                array_push($idList, $item->app_doctor_id);
-            } elseif ($item->app_doctor_friend_id != $id) {
-                array_push($idList, $item->app_doctor_friend_id);
+            if ($item->doctor_id != $id) {
+                array_push($idList, $item->doctor_id);
+            } elseif ($item->doctor_friend_id != $id) {
+                array_push($idList, $item->doctor_friend_id);
             }
         }
 
         $idListStr = implode(',', $idList);
         $users = DB::select(
-            "select * from app_doctors where id in (" . $idListStr . ") order by find_in_set(id, '" . $idListStr . "')"
+            "select * from doctors where id in (" . $idListStr . ") order by find_in_set(id, '" . $idListStr . "')"
         );
 
         return [
             'users' => $users,
             'list' => $list
         ];
+    }
+
+    /**
+     * @param $id
+     */
+    public static function setReadStatus($id)
+    {
+        DoctorRelation::where('doctor_id', $id)->update(['doctor_read' => 1]);
+        DoctorRelation::where('doctor_friend_id', $id)->update(['doctor_friend_read' => 1]);
     }
 }
