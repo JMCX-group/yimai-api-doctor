@@ -31,7 +31,7 @@ class HospitalsController extends BaseController
 
     /**
      * @param $id
-     * @return \Dingo\Api\Http\Response|void
+     * @return mixed
      */
     public function show($id)
     {
@@ -47,12 +47,11 @@ class HospitalsController extends BaseController
      * In a city hospital.
      *
      * @param $cityId
-     * @return \Dingo\Api\Http\Response
+     * @return mixed
      */
     public function inCityHospital($cityId)
     {
-        $cityName = City::find($cityId);
-        $hospitals = Hospital::select('id', 'name')->where('city', '=', $cityName->name)->get();
+        $hospitals = Hospital::select('id', 'name')->where('city', $cityId)->get();
 
         return $this->response->collection($hospitals, new HospitalCityTransformer());
     }
