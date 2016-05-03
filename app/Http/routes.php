@@ -67,6 +67,12 @@ $api->version('v1', function ($api) {
                 $api->get('friends-friends', 'DoctorRelationController@getRelationsFriendsFriends');
                 $api->get('new-friends', 'DoctorRelationController@getNewFriends');
             });
+            
+            // Radio
+            $api->group(['prefix' => 'radio'], function ($api) {
+                $api->get('/', 'RadioStationController@index');
+                $api->post('read', 'RadioStationController@readStatus');
+            });
         });
     });
 });

@@ -410,7 +410,55 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ]
-                ]
+                ],
+
+                '广播信息' => [
+                    '所有广播' => [
+                        'url' => $http . '/api/radio',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => '',
+                            'page' => '页码,一页4个; 没有填页码默认是第一页'
+                        ],
+                        'response' => [
+                            'data' => [
+                                'id' => '广播ID',
+                                'name' => '广播标题',
+                                'content' => '广播内容',
+                                'author' => '发表人',
+                                'time' => '发表时间',
+                                'unread' => '是否未读,1为未读,null为已读'
+                            ],
+                            'meta' => [
+                                'pagination' => [
+                                    'total' => '广播总共的数量',
+                                    'count' => '该次请求获取的数量',
+                                    'per_page' => '每页将请求数据量',
+                                    'current_page' => '当前页码(page)',
+                                    'total_pages' => '总共页码(page)',
+                                    'links' => [
+                                        'next' => '会自动生成下一页链接,类似于:http://localhost/api/radio?page=2'
+                                    ]
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '广播已读' => [
+                        'url' => $http . '/api/radio/read',
+                        'method' => 'POST',
+                        'form-data' => [
+                            'id' => '广播ID'
+                        ],
+                        'response' => [
+                            'HTTP CODE' => '204',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
+                ],
+
             ]
         ];
 
