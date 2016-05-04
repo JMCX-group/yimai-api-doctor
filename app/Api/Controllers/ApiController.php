@@ -452,7 +452,7 @@ class ApiController extends BaseController
                             'id' => '广播ID'
                         ],
                         'response' => [
-                            'HTTP CODE' => '204',
+                            'Status Code' => '204',
                             'message' => '',
                             'error' => ''
                         ]
