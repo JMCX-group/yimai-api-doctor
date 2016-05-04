@@ -45,7 +45,7 @@ class UserTransformer extends TransformerAbstract
             'job_title' => $user['title'],
             'college' => $user['college_id'],
             'ID_number' => $user['id_num'],
-            'tags' => $user['tag_id_list'],
+            'tags' => $user['tag_list'],
             'personal_introduction' => $user['profile'],
             'inviter' => $user['inviter_dp_code']
         ];
