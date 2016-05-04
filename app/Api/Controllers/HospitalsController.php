@@ -39,14 +39,17 @@ class HospitalsController extends BaseController
     }
 
     /**
-     * In a city hospital.
+     * 在某个城市的医院
      *
      * @param $cityId
      * @return mixed
      */
     public function inCityHospital($cityId)
     {
-        $hospitals = Hospital::select('id', 'name')->where('city', $cityId)->get();
+        $hospitals = Hospital::select('id', 'name')
+            ->where('city', $cityId)
+            ->orderBy('three_a', 'desc')
+            ->get();
 
         return $this->response->collection($hospitals, new HospitalCityTransformer());
     }
