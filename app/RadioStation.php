@@ -18,5 +18,5 @@ class RadioStation extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'content', 'author', 'status', 'valid'];
+    protected $fillable = ['name', 'content', 'img_url', 'author', 'status', 'valid'];
 }

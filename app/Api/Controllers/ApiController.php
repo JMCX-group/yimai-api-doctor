@@ -440,6 +440,7 @@ class ApiController extends BaseController
                                 'id' => '广播ID',
                                 'name' => '广播标题',
                                 'content' => '广播内容',
+                                'img_url' => '首页图片URL',
                                 'author' => '发表人',
                                 'time' => '发表时间',
                                 'unread' => '是否未读,1为未读,null为已读'

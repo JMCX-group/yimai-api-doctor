@@ -25,6 +25,7 @@ class RadioStationTransformer extends TransformerAbstract
             'id' => $radioStation['id'],
             'name' => $radioStation['name'],
             'content' => $radioStation['content'],
+            'img_url' => $radioStation['img_url'],
             'author' => $radioStation['author'],
             'time' => $radioStation['time'],
             'unread' => $radioStation['value']
