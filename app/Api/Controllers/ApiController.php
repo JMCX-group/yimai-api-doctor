@@ -290,6 +290,21 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '模糊查询某个医院名称' => [
+                        'url' => $http . '/api/hospital/search/{search_field}',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                'id' => '医院ID',
+                                'name' => '医院名称'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
                 ],
 
                 '科室信息' => [

@@ -53,6 +53,7 @@ $api->version('v1', function ($api) {
                 $api->get('/', 'HospitalsController@index');
                 $api->get('city/{city}', 'HospitalsController@inCityHospital');
                 $api->get('{hospital}', 'HospitalsController@show');
+                $api->get('search/{search_field}', 'HospitalsController@findHospital');
             });
 
             // Dept

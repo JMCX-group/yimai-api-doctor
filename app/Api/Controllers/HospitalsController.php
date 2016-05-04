@@ -10,13 +10,8 @@ namespace App\Api\Controllers;
 
 use App\Api\Transformers\HospitalTransformer;
 use App\Api\Transformers\HospitalCityTransformer;
-use App\City;
 use App\Hospital;
 
-/**
- * Class HospitalsController
- * @package App\Api\Controllers
- */
 class HospitalsController extends BaseController
 {
     /**
@@ -52,6 +47,26 @@ class HospitalsController extends BaseController
     public function inCityHospital($cityId)
     {
         $hospitals = Hospital::select('id', 'name')->where('city', $cityId)->get();
+
+        return $this->response->collection($hospitals, new HospitalCityTransformer());
+    }
+
+    /**
+     * 通过名称模糊查询医院
+     *
+     * @param $data
+     * @return \Dingo\Api\Http\Response
+     */
+    public function findHospital($data)
+    {
+        preg_match_all('/./u', $data, $newData);
+        $newData = implode('%', $newData[0]);
+        $newData = '%' . $newData . '%';
+
+        $hospitals = Hospital::select('id', 'name')
+            ->where('name', 'like', $newData)
+            ->orderBy('three_a', 'desc')
+            ->get();
 
         return $this->response->collection($hospitals, new HospitalCityTransformer());
     }
