@@ -9,7 +9,10 @@
 namespace App\Api\Controllers;
 
 use App\Api\Requests\UserRequest;
+use App\Api\Transformers\Transformer;
 use App\Api\Transformers\UserTransformer;
+use App\DeptStandard;
+use App\DoctorRelation;
 use App\Hospital;
 use App\User;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -73,7 +76,7 @@ class UserController extends BaseController
             $user->id_num = $request['ID_number'];
         }
         if (isset($request['tags']) && !empty($request['tags'])) {
-            $user->tag_id_list = $request['tags'];
+            $user->tag_list = $request['tags'];
         }
         if (isset($request['personal_introduction']) && !empty($request['personal_introduction'])) {
             $user->profile = $request['personal_introduction'];
@@ -110,5 +113,70 @@ class UserController extends BaseController
         ];
 
         return Hospital::firstOrCreate($data)->id;
+    }
+
+    /**
+     * Search for doctors and grouping.
+     *
+     * @param $data
+     * @return array|mixed
+     */
+    public function searchUser($data)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        /*
+         * 获取姓名/医院/科室/特长标签中的有各个数据list;
+         * 合并4个list.
+         */
+        $dataList1 = User::where('name', 'like', '%' . $data . '%')->get();
+
+        $hospitalIdList = Hospital::where('name', 'like', '%' . $data . '%')->lists('id')->toArray();
+        $dataList2 = User::whereIn('hospital_id', $hospitalIdList)->get();
+
+        $deptIdList = DeptStandard::where('name', 'like', '%' . $data . '%')->lists('id')->toArray();
+        $dataList3 = User::whereIn('dept_id', $deptIdList)->get();
+
+        $dataList4 = User::where('tag_list', 'like', '%' . $data . '%')->get();
+
+        $dataList = $dataList1->merge($dataList2)->merge($dataList3)->merge($dataList4);
+
+        $friends = DoctorRelation::getFriends($user->id);
+        $friendsFriends = DoctorRelation::getFriendsFriends($user->id)['user'];
+
+        /*
+         * 分组成好友/好友的好友/其他:
+         */
+        $friendArr = array();
+        $friendsFriendArr = array();
+        $OtherArr = array();
+        foreach ($dataList as $item) {
+            foreach ($friends as $friend) {
+                if ($item->id == $friend->id) {
+                    array_push($friendArr, $item);
+                    continue 2;
+                    break;
+                }
+            }
+
+            foreach ($friendsFriends as $friendsFriend) {
+                if ($item->id == $friendsFriend->id) {
+                    array_push($friendsFriendArr, $item);
+                    continue 2;
+                    break;
+                }
+            }
+
+            array_push($OtherArr, $item);
+        }
+
+        return [
+            'friends' => Transformer::userListTransform($friendArr)['friends'],
+            'friends-friends' => Transformer::userListTransform($friendsFriendArr)['friends'],
+            'others' => Transformer::userListTransform($OtherArr)['friends']
+        ];
     }
 }

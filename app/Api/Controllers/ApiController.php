@@ -151,6 +151,42 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '搜索医生信息' => [
+                        'url' => $http . '/api/user/search/{search_field}',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        '说明' => '该API还未完善,但目前可简单测试',
+                        'response' => [
+                            'friends' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室',
+                                'job_title' => '职称'
+                            ],
+                            'friends-friends' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室',
+                                'job_title' => '职称'
+                            ],
+                            'others' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室',
+                                'job_title' => '职称'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                     '修改个人信息' => [
                         'url' => $http . '/api/user',
                         'method' => 'POST',
