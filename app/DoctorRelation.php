@@ -29,16 +29,7 @@ class DoctorRelation extends Model
      */
     public static function getFriendIdList($id)
     {
-        $friendData = DoctorRelation::select('doctor_friend_id')
-            ->where('doctor_id', $id)
-            ->get();
-
-        $friend = array();
-        foreach ($friendData as $data) {
-            array_push($friend, $data->doctor_friend_id);
-        }
-
-        return $friend;
+        return DoctorRelation::where('doctor_id', $id)->lists('doctor_friend_id')->toArray();
     }
 
     /**
