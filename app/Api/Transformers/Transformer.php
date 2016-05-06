@@ -49,7 +49,7 @@ class Transformer
         return [
             'id' => $user['id'],
             'name' => $user['name'],
-            'head_url' => $user['head_img_url'],
+            'head_url' => $user['avatar'],
             'hospital' => $user['hospital_id'],
             'department' => $user['dept_id'],
             'job_title' => $user['title']
@@ -65,7 +65,7 @@ class Transformer
         return [
             'id' => $user->id,
             'name' => $user->name,
-            'head_url' => $user->head_img_url,
+            'head_url' => $user->avatar,
             'job_title' => $user->title,
             'city' => $user->city,
             'hospital' => $user->hospital,
@@ -123,7 +123,7 @@ class Transformer
                         [
                             'id' => $user->id,
                             'name' => $user->name,
-                            'head_url' => $user->head_img_url,
+                            'head_url' => $user->avatar,
                             'hospital' => $user->hospital_id,
                             'department' => $user->dept_id,
                             'unread' => ($id == $item->doctor_id) ? $item->doctor_read : $item->doctor_friend_read,
