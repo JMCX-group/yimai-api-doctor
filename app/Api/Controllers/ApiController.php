@@ -163,7 +163,9 @@ class ApiController extends BaseController
                         'url' => $http . '/api/user/search',
                         'method' => 'POST',
                         'params' => [
-                            'token' => '',
+                            'token' => ''
+                        ],
+                        'form-data' => [
                             'field' => '搜索的关键字; 必填项',
                             'city_id' => '下拉框选择的城市ID; 可选项',
                             'hospital_id' => '下拉框选择的医院ID; 可选项',
