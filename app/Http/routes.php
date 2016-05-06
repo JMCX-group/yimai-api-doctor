@@ -39,8 +39,8 @@ $api->version('v1', function ($api) {
             // User
             $api->group(['prefix' => 'user'], function ($api) {
                 $api->get('me', 'AuthController@getAuthenticatedUser');
-                $api->get('search/{search_field}', 'UserController@searchUser');
                 $api->post('/', 'UserController@update');
+                $api->post('search', 'UserController@searchUser');
             });
 
             // City

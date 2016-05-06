@@ -8,10 +8,11 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Requests\SearchUserRequest;
 use App\Api\Requests\UserRequest;
 use App\Api\Transformers\Transformer;
 use App\Api\Transformers\UserTransformer;
-use App\DeptStandard;
+use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\Hospital;
 use App\User;
@@ -116,67 +117,77 @@ class UserController extends BaseController
     }
 
     /**
-     * Search for doctors and grouping.
+     * Search for doctors.
+     * Order by.
      *
-     * @param $data
-     * @return array|mixed
+     * @param SearchUserRequest $request
+     * @return mixed
      */
-    public function searchUser($data)
+    public function searchUser(SearchUserRequest $request)
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
             return $user;
         }
 
-        /*
-         * 获取姓名/医院/科室/特长标签中的有各个数据list;
-         * 合并4个list.
+        $data = [
+            'field' => $request['field'],
+            'city_id' => isset($request['city']) ? $request['city'] : false,
+            'hospital_id' => isset($request['hospital']) ? $request['hospital'] : false,
+            'dept_id' => isset($request['department']) ? $request['department'] : false
+        ];
+
+        /**
+         * 获取基础数据:
          */
-        $dataList1 = User::where('name', 'like', '%' . $data . '%')->get();
+        $users = User::searchDoctor($data['field'], $data['city_id'], $data['hospital_id'], $data['dept_id']);
 
-        $hospitalIdList = Hospital::where('name', 'like', '%' . $data . '%')->lists('id')->toArray();
-        $dataList2 = User::whereIn('hospital_id', $hospitalIdList)->get();
-
-        $deptIdList = DeptStandard::where('name', 'like', '%' . $data . '%')->lists('id')->toArray();
-        $dataList3 = User::whereIn('dept_id', $deptIdList)->get();
-
-        $dataList4 = User::where('tag_list', 'like', '%' . $data . '%')->get();
-
-        $dataList = $dataList1->merge($dataList2)->merge($dataList3)->merge($dataList4);
-
-        $friends = DoctorRelation::getFriends($user->id);
-        $friendsFriends = DoctorRelation::getFriendsFriends($user->id)['user'];
-
-        /*
-         * 分组成好友/好友的好友/其他:
+        /**
+         * 获取辅助数据:
          */
+        $contactRecords = DoctorContactRecord::where('doctor_id', $user->id)->lists('contacts_id_list');
+        $contactRecordsIdList = (count($contactRecords) != 0) ? explode(',', $contactRecords[0]) : $contactRecords;
+
+        $friendsIdList = DoctorRelation::getFriendIdList($user->id);
+
+        /**
+         * 排序
+         * 规则: 最近互动 + 共同好友 + 同城 + 北上广三甲 + 180天内累计约诊次数
+         */
+        $recentContactsArr = array();
         $friendArr = array();
-        $friendsFriendArr = array();
-        $OtherArr = array();
-        foreach ($dataList as $item) {
-            foreach ($friends as $friend) {
-                if ($item->id == $friend->id) {
-                    array_push($friendArr, $item);
-                    continue 2;
-                    break;
-                }
+        $sameCityArr = array();
+        $b_s_g_threeA = array();
+        $otherArr = array();
+        foreach ($users as $userItem) {
+            if (in_array($userItem->id, $contactRecordsIdList)) {
+                array_push($recentContactsArr, Transformer::searchDoctorTransform($userItem));
+                continue;
             }
 
-            foreach ($friendsFriends as $friendsFriend) {
-                if ($item->id == $friendsFriend->id) {
-                    array_push($friendsFriendArr, $item);
-                    continue 2;
-                    break;
-                }
+            if (in_array($userItem->id, $friendsIdList)) {
+                array_push($friendArr, Transformer::searchDoctorTransform($userItem));
+                continue;
             }
 
-            array_push($OtherArr, $item);
+            if ($user->city_id == $userItem->city_id) {
+                array_push($sameCityArr, Transformer::searchDoctorTransform($userItem));
+                continue;
+            }
+
+            if (in_array($userItem->city, array('北京', '上海', '广州'))) {
+                array_push($b_s_g_threeA, Transformer::searchDoctorTransform($userItem));
+                continue;
+            }
+
+            array_push($otherArr, Transformer::searchDoctorTransform($userItem));
         }
 
+        $retData = array_merge($recentContactsArr, $friendArr, $sameCityArr, $b_s_g_threeA, $otherArr);
+
         return [
-            'friends' => Transformer::userListTransform($friendArr)['friends'],
-            'friends-friends' => Transformer::userListTransform($friendsFriendArr)['friends'],
-            'others' => Transformer::userListTransform($OtherArr)['friends']
+            'count' => count($retData),
+            'users' => $retData
         ];
     }
 }

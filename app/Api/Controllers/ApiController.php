@@ -160,36 +160,26 @@ class ApiController extends BaseController
                         ]
                     ],
                     '搜索医生信息' => [
-                        'url' => $http . '/api/user/search/{search_field}',
-                        'method' => 'GET',
+                        'url' => $http . '/api/user/search',
+                        'method' => 'POST',
                         'params' => [
-                            'token' => ''
+                            'token' => '',
+                            'field' => '搜索的关键字; 必填项',
+                            'city_id' => '下拉框选择的城市ID; 可选项',
+                            'hospital_id' => '下拉框选择的医院ID; 可选项',
+                            'dept_id' => '下拉框选择的科室ID; 可选项'
                         ],
-                        '说明' => '该API还未完善,但目前可简单测试',
+                        '说明' => '会一次传递所有排好序的数据,一次显示5个即可; 如果下拉框为后置条件,建议前端执行过滤',
                         'response' => [
-                            'friends' => [
+                            'count' => '满足条件的医生数量',
+                            'users' => [
                                 'id' => '用户ID',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
+                                'job_title' => '职称',
+                                'city' => '所属城市',
                                 'hospital' => '所属医院',
-                                'department' => '所属科室',
-                                'job_title' => '职称'
-                            ],
-                            'friends-friends' => [
-                                'id' => '用户ID',
-                                'name' => '用户姓名',
-                                'head_url' => '头像URL',
-                                'hospital' => '所属医院',
-                                'department' => '所属科室',
-                                'job_title' => '职称'
-                            ],
-                            'others' => [
-                                'id' => '用户ID',
-                                'name' => '用户姓名',
-                                'head_url' => '头像URL',
-                                'hospital' => '所属医院',
-                                'department' => '所属科室',
-                                'job_title' => '职称'
+                                'department' => '所属科室'
                             ],
                             'message' => '',
                             'error' => ''

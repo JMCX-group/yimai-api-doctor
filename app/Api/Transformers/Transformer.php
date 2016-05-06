@@ -57,6 +57,23 @@ class Transformer
     }
 
     /**
+     * @param $user
+     * @return array
+     */
+    public static function searchDoctorTransform($user)
+    {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'head_url' => $user->head_img_url,
+            'job_title' => $user->title,
+            'city' => $user->city,
+            'hospital' => $user->hospital,
+            'department' => $user->dept
+        ];
+    }
+
+    /**
      * Id to name.
      *
      * @param $users

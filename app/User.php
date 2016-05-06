@@ -13,6 +13,7 @@ use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use DB;
 
 /**
  * Class User
@@ -36,7 +37,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['phone', 'password'];
+    protected $fillable = ['dp_code', 'phone', 'password', 'name', 'gender', 'city_id', 'hospital_id', 'dept_id', 'college_id', 'tag_list'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -47,7 +48,7 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * Get logged user info.
-     * 
+     *
      * @return mixed
      */
     public static function getAuthenticatedUser()
@@ -67,7 +68,7 @@ class User extends Model implements AuthenticatableContract,
         // the token is valid and we have found the user via the sub claim
         return $user;
     }
-    
+
     /**
      * Generate new DP Code.
      *
@@ -106,7 +107,7 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * Get inviter name.
-     * 
+     *
      * @param $dpCode
      * @return bool
      */
@@ -138,11 +139,50 @@ class User extends Model implements AuthenticatableContract,
         $hospitalCount = User::where('hospital_id', $hospitalId)->count();
         $deptCount = User::where('dept_id', $deptId)->count();
         $collegeCount = User::where('college_id', $collegeId)->count();
-        
+
         return [
             'hospital' => $hospitalCount,
             'department' => $deptCount,
             'college' => $collegeCount,
         ];
+    }
+
+    /**
+     * 根据必填的字段值和可选的城市/医院/科室条件搜索符合条件的医生.
+     * id转name.
+     * 按是否三甲医院排序.
+     * 
+     * @param $field
+     * @param $cityId
+     * @param $hospitalId
+     * @param $deptId
+     * @return mixed
+     */
+    public static function searchDoctor($field, $cityId, $hospitalId, $deptId)
+    {
+        $condition = "where ";
+        $condition .= $cityId ? "city_id = '$cityId' " : "";
+        $condition .= $cityId ? "and " : "";
+        $condition .= $hospitalId ? "`hospital_id` = '$hospitalId' " : "";
+        $condition .= $hospitalId ? "and " : "";
+        $condition .= $deptId ? "`dept_id` = '$deptId' " : "";
+        $condition .= $deptId ? "and " : "";
+        $condition .= " (";
+        $condition .= "doctors.name like '%$field%' ";
+        $condition .= $hospitalId ? "" : "or hospitals.name like '%$field%' ";
+        $condition .= $deptId ? "" : "or dept_standards.name like '%$field%' ";
+        $condition .= "or doctors.tag_list like '%$field%' ";
+        $condition .= ") ";
+
+        return DB::select(
+            "SELECT doctors.id, doctors.name, doctors.head_img_url, doctors.city_id, doctors.title, " .
+                "citys.name AS city, hospitals.name AS hospital, dept_standards.name AS dept " .
+            "FROM doctors " .
+            "LEFT JOIN dept_standards ON dept_standards.id=doctors.dept_id " .
+            "LEFT JOIN citys ON citys.id=doctors.city_id " .
+            "LEFT JOIN hospitals ON hospitals.id=doctors.hospital_id " .
+            $condition .
+            "ORDER BY hospitals.three_a desc"
+        );
     }
 }
