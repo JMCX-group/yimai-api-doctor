@@ -84,8 +84,8 @@ class UserController extends BaseController
         }
 
         // Generate dp code.
-        if (empty($user->dp_code) && !empty($user->city_id) && !empty($user->dept_id)) {
-            $user->dp_code = User::generateDpCode($user->city_id, $user->dept_id);
+        if (empty($user->dp_code) && !empty($user->dept_id)) {
+            $user->dp_code = User::generateDpCode($user->dept_id);
         }
 
         try {

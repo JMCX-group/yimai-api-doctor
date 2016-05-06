@@ -71,19 +71,24 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * Generate new DP Code.
+     * 科室编号3位 + 301开始的编码.
+     * 300以内为内定.
      *
-     * @param $cityId
      * @param $deptId
      * @return mixed
      */
-    public static function generateDpCode($cityId, $deptId)
+    public static function generateDpCode($deptId)
     {
         $data = User::select('dp_code')
-            ->where('city_id', $cityId)
             ->where('dept_id', $deptId)
-            ->get();
+            ->orderBy('dp_code', 'desc')
+            ->first();
 
-        return intval($data->first()->dp_code) + 1;
+        if (isset($data->dp_code)) {
+            return intval($data->dp_code) + 1;
+        } else {
+            return 301;
+        }
     }
 
     /**
@@ -94,13 +99,9 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function getDpCode($id)
     {
-        $data = User::select('doctors.id', 'doctors.dp_code', 'doctors.name', 'doctors.dept_id', 'citys.code')
-            ->where('doctors.id', $id)
-            ->join('citys', 'doctors.city_id', '=', 'citys.id')
-            ->get()
-            ->first();
+        $data = User::select('dp_code', 'dept_id')->where('id', $id)->first();
 
-        $dpCode = $data->code . str_pad($data->dept_id, 3, '0', STR_PAD_LEFT) . $data->dp_code;
+        $dpCode = str_pad($data->dept_id, 3, '0', STR_PAD_LEFT) . $data->dp_code;
 
         return $dpCode;
     }
