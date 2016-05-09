@@ -60,7 +60,7 @@ $api->version('v1', function ($api) {
                 $api->get('city/{city}', 'HospitalsController@inCityHospital');
                 $api->get('{hospital}', 'HospitalsController@show');
                 $api->get('search/{search_field}', 'HospitalsController@findHospital');
-                $api->post('search/{search_field}', 'HospitalsController@findHospitalPost');
+                $api->post('search', 'HospitalsController@findHospitalPost');
             });
 
             // Dept
