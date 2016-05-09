@@ -172,20 +172,43 @@ class ApiController extends BaseController
                             'dept_id' => '下拉框选择的科室ID; 可选项'
                         ],
                         '说明' => '会一次传递所有排好序的数据,一次显示5个即可; 如果下拉框为后置条件,建议前端执行过滤',
-                        'response' => [
-                            'count' => '满足条件的医生数量',
-                            'users' => [
-                                'id' => '用户ID',
-                                'name' => '用户姓名',
-                                'head_url' => '头像URL',
-                                'job_title' => '职称',
-                                'city' => '所属城市',
-                                'hospital' => '所属医院',
-                                'department' => '所属科室'
-                            ],
-                            'message' => '',
-                            'error' => ''
-                        ]
+                        'response' =>
+                            [
+                                'provinces' => [
+                                    'id' => '省份ID, province_id',
+                                    'name' => '省份/直辖市名称'
+                                ],
+                                'citys' => [
+                                    '{province_id}' => [
+                                        'id' => '城市ID',
+                                        'name' => '城市名称'
+                                    ]
+                                ],
+                                'hospitals' => [
+                                    '{province_id}' => [
+                                        '{city_id}' => [
+                                            'id' => '医院ID',
+                                            'name' => '城市名称'
+                                        ]
+                                    ]
+                                ],
+                                'departments' => [
+                                    'id' => '科室ID',
+                                    'name' => '科室名称'
+                                ],
+                                'count' => '满足条件的医生数量',
+                                'users' => [
+                                    'id' => '用户ID',
+                                    'name' => '用户姓名',
+                                    'head_url' => '头像URL',
+                                    'job_title' => '职称',
+                                    'city' => '所属城市',
+                                    'hospital' => '所属医院',
+                                    'department' => '所属科室'
+                                ],
+                                'message' => '',
+                                'error' => ''
+                            ]
                     ],
                     '修改个人信息' => [
                         'url' => $http . '/api/user',

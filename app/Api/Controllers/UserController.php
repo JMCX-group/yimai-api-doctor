@@ -151,15 +151,30 @@ class UserController extends BaseController
         $friendsIdList = DoctorRelation::getFriendIdList($user->id);
 
         /**
-         * 排序
+         * 排序/分组
          * 规则: 最近互动 + 共同好友 + 同城 + 北上广三甲 + 180天内累计约诊次数
          */
+        $provinces = array();
+        $citys = array();
+        $hospitals = array();
+        $departments = array();
+        $cityIdList = array();
+        $provinceIdList = array();
+        $hospitalIdList = array();
+        $departmentIdList = array();
+
         $recentContactsArr = array();
         $friendArr = array();
         $sameCityArr = array();
         $b_s_g_threeA = array();
         $otherArr = array();
+
         foreach ($users as $userItem) {
+            $this->groupByCitys($userItem, $citys, $cityIdList);
+            $this->groupByProvinces($userItem, $provinces, $provinceIdList);
+            $this->groupByHospitals($userItem, $hospitals, $hospitalIdList);
+            $this->groupByDepartments($userItem, $departments, $departmentIdList);
+
             if (in_array($userItem->id, $contactRecordsIdList)) {
                 array_push($recentContactsArr, Transformer::searchDoctorTransform($userItem));
                 continue;
@@ -186,8 +201,104 @@ class UserController extends BaseController
         $retData = array_merge($recentContactsArr, $friendArr, $sameCityArr, $b_s_g_threeA, $otherArr);
 
         return [
+            'provinces' => $provinces,
+            'citys' => $citys,
+            'hospitals' => $hospitals,
+            'departments' => $departments,
             'count' => count($retData),
             'users' => $retData
         ];
+    }
+
+    /**
+     * 将城市按省分组
+     *
+     * @param $userItem
+     * @param $citys
+     * @param $cityIdList
+     */
+    public function groupByCitys($userItem, &$citys, &$cityIdList)
+    {
+        if (!in_array($userItem->city_id, $cityIdList)) {
+            array_push($cityIdList, $userItem->city_id);
+            if (isset($citys[$userItem->province_id])) {
+                array_push(
+                    $citys[$userItem->province_id],
+                    ['id' => $userItem->city_id, 'name' => $userItem->city]
+                );
+            } else {
+                $citys[$userItem->province_id] = [
+                    ['id' => $userItem->city_id, 'name' => $userItem->city]
+                ];
+            }
+        }
+    }
+
+    /**
+     * @param $userItem
+     * @param $provinces
+     * @param $provinceIdList
+     */
+    public function groupByProvinces($userItem, &$provinces, &$provinceIdList)
+    {
+        if (!in_array($userItem->province_id, $provinceIdList)) {
+            array_push($provinceIdList, $userItem->province_id);
+            array_push(
+                $provinces,
+                ['id' => $userItem->province_id, 'name' => $userItem->province]
+            );
+        }
+    }
+
+    /**
+     * 将医院按省和市层级分组
+     *
+     * @param $userItem
+     * @param $hospitals
+     * @param $hospitalIdList
+     */
+    public function groupByHospitals($userItem, &$hospitals, &$hospitalIdList)
+    {
+        if (!in_array($userItem->hospital_id, $hospitalIdList)) {
+            array_push($hospitalIdList, $userItem->hospital_id);
+
+            if (isset($hospitals[$userItem->province_id])) {
+                if (isset($hospitals[$userItem->province_id][$userItem->city_id])) {
+                    array_push(
+                        $hospitals[$userItem->province_id][$userItem->city_id],
+                        ['id' => $userItem->hospital_id, 'name' => $userItem->hospital]
+                    );
+                } else {
+                    array_push(
+                        $hospitals[$userItem->province_id],
+                        [$userItem->city_id =>
+                            ['id' => $userItem->hospital_id, 'name' => $userItem->hospital]
+                        ]
+                    );
+                }
+            } else {
+                $hospitals[$userItem->province_id] = [
+                    [$userItem->city_id =>
+                        ['id' => $userItem->hospital_id, 'name' => $userItem->hospital]
+                    ]
+                ];
+            }
+        }
+    }
+
+    /**
+     * @param $userItem
+     * @param $departments
+     * @param $departmentIdList
+     */
+    public function groupByDepartments($userItem, &$departments, &$departmentIdList)
+    {
+        if (!in_array($userItem->dept_id, $departmentIdList)) {
+            array_push($departmentIdList, $userItem->dept_id);
+            array_push(
+                $departments,
+                ['id' => $userItem->dept_id, 'name' => $userItem->dept]
+            );
+        }
     }
 }

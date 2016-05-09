@@ -176,9 +176,10 @@ class User extends Model implements AuthenticatableContract,
         $condition .= ") ";
 
         return DB::select(
-            "SELECT doctors.id, doctors.name, doctors.avatar, doctors.city_id, doctors.title, " .
-                "citys.name AS city, hospitals.name AS hospital, dept_standards.name AS dept " .
+            "SELECT doctors.id, doctors.name, doctors.avatar, doctors.province_id, doctors.city_id, doctors.hospital_id, doctors.dept_id, doctors.title, " .
+                "provinces.name AS province, citys.name AS city, hospitals.name AS hospital, dept_standards.name AS dept " .
             "FROM doctors " .
+            "LEFT JOIN provinces ON provinces.id=doctors.province_id " .
             "LEFT JOIN dept_standards ON dept_standards.id=doctors.dept_id " .
             "LEFT JOIN citys ON citys.id=doctors.city_id " .
             "LEFT JOIN hospitals ON hospitals.id=doctors.hospital_id " .
