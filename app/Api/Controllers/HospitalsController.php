@@ -11,6 +11,7 @@ namespace App\Api\Controllers;
 use App\Api\Transformers\HospitalTransformer;
 use App\Api\Transformers\HospitalCityTransformer;
 use App\Hospital;
+use App\Http\Requests\Request;
 
 class HospitalsController extends BaseController
 {
@@ -63,6 +64,26 @@ class HospitalsController extends BaseController
     public function findHospital($data)
     {
         preg_match_all('/./u', $data, $newData);
+        $newData = implode('%', $newData[0]);
+        $newData = '%' . $newData . '%';
+
+        $hospitals = Hospital::select('id', 'name')
+            ->where('name', 'like', $newData)
+            ->orderBy('three_a', 'desc')
+            ->get();
+
+        return $this->response->collection($hospitals, new HospitalCityTransformer());
+    }
+
+    /**
+     * Post的方法，给肠媳测试
+     * 
+     * @param Request $request
+     * @return mixed
+     */
+    public function findHospitalPost(Request $request)
+    {
+        preg_match_all('/./u', $request['field'], $newData);
         $newData = implode('%', $newData[0]);
         $newData = '%' . $newData . '%';
 

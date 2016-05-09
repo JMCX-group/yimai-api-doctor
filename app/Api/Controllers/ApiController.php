@@ -435,9 +435,12 @@ class ApiController extends BaseController
                     ],
                     '模糊查询某个医院名称' => [
                         'url' => $http . '/api/hospital/search/{search_field}',
-                        'method' => 'GET',
+                        'method' => 'GET/POST',
                         'params' => [
                             'token' => ''
+                        ], 
+                        'form-data' => [
+                            'field' => '搜索字段，该项仅在POST下有效。'
                         ],
                         'response' => [
                             'data' => [
