@@ -567,7 +567,22 @@ class ApiController extends BaseController
                             'message' => '',
                             'error' => ''
                         ]
-                    ]
+                    ],
+
+                    '同步最近联系人记录到服务器' => [
+                        'url' => $http . '/api/user/relation/push-recent-contacts',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id_list' => '最近联系人ID list; 例如: 1,2,3,4,5 ; 最长12个人'
+                        ],
+                        'response' => [
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                 ],
 
                 '广播信息' => [

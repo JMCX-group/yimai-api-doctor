@@ -73,6 +73,7 @@ $api->version('v1', function ($api) {
                 $api->get('friends', 'DoctorRelationController@getRelationsFriends');
                 $api->get('friends-friends', 'DoctorRelationController@getRelationsFriendsFriends');
                 $api->get('new-friends', 'DoctorRelationController@getNewFriends');
+                $api->post('push-recent-contacts', 'DoctorRelationController@pushRecentContacts');
             });
             
             // Radio

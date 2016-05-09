@@ -4,6 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class DoctorContactRecord
+ * @property  doctor_id
+ * @property mixed contacts_id_list
+ * @package App
+ */
 class DoctorContactRecord extends Model
 {
     /**

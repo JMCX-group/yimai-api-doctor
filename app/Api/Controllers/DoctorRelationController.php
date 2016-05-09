@@ -9,8 +9,10 @@
 namespace App\Api\Controllers;
 
 use App\Api\Transformers\Transformer;
+use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\User;
+use Illuminate\Http\Request;
 
 class DoctorRelationController extends BaseController
 {
@@ -109,5 +111,33 @@ class DoctorRelationController extends BaseController
         DoctorRelation::setReadStatus($user->id);
 
         return ['friends' => Transformer::newFriendTransform($user->id, $data['users'], $data['list'])];
+    }
+
+    /**
+     * 同步前台管理的最近联系人记录
+     *
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response|mixed
+     */
+    public function pushRecentContacts(Request $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $contactRecord = DoctorContactRecord::where('doctor_id', $user->id)->get();
+
+        if (count($contactRecord) == 0) {
+            $contactRecord = new DoctorContactRecord();
+            $contactRecord->doctor_id = $user->id;
+            $contactRecord->contacts_id_list = $request['id_list'];
+            $contactRecord->save();
+        } else {
+            DoctorContactRecord::where('doctor_id', $user->id)
+                ->update(['contacts_id_list' => $request['id_list']]);
+        }
+
+        return $this->response->noContent();
     }
 }
