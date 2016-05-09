@@ -83,12 +83,12 @@ class HospitalsController extends BaseController
      */
     public function findHospitalPost(Request $request)
     {
-        preg_match_all('/./u', $request['field'], $newData);
-        $newData = implode('%', $newData[0]);
-        $newData = '%' . $newData . '%';
+//        preg_match_all('/./u', $request['field'], $newData);
+//        $newData = implode('%', $newData[0]);
+//        $newData = '%' . $newData . '%';
 
         $hospitals = Hospital::select('id', 'name')
-            ->where('name', 'like', $newData)
+            ->where('name', 'like', $request['field'])
             ->orderBy('three_a', 'desc')
             ->get();
 
