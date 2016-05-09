@@ -171,7 +171,7 @@ class ApiController extends BaseController
                             'hospital_id' => '下拉框选择的医院ID; 可选项',
                             'dept_id' => '下拉框选择的科室ID; 可选项'
                         ],
-                        '说明' => '会一次传递所有排好序的数据,一次显示5个即可; 如果下拉框为后置条件,建议前端执行过滤',
+                        '说明' => '会一次传递所有排好序的数据,一次显示5个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'response' =>
                             [
                                 'provinces' => [
@@ -180,7 +180,7 @@ class ApiController extends BaseController
                                 ],
                                 'citys' => [
                                     '{province_id}' => [
-                                        'id' => '城市ID',
+                                        'id' => '城市ID, city_id',
                                         'name' => '城市名称'
                                     ]
                                 ],
