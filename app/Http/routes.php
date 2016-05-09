@@ -36,6 +36,11 @@ $api->version('v1', function ($api) {
          * Token Auth
          */
         $api->group(['middleware' => 'jwt.auth'], function ($api) {
+            // Init
+            $api->group(['prefix' => 'init'], function ($api) {
+                $api->get('/', 'InitController@index');
+            });
+
             // User
             $api->group(['prefix' => 'user'], function ($api) {
                 $api->get('me', 'AuthController@getAuthenticatedUser');

@@ -114,6 +114,87 @@ class ApiController extends BaseController
             ],
 
             '需要Token验证' => [
+
+                '初始化信息' => [
+                    '启动软件初始化' => [
+                        'url' => $http . '/api/init',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'user' => [
+                                'id' => '用户id',
+                                'code' => '医脉码',
+                                'phone' => '用户注册手机号',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'sex' => '性别',
+                                'province' => [
+                                    'id' => '用户所在省份ID',
+                                    'name' => '用户所在省份名称'
+                                ],
+                                'city' => [
+                                    'id' => '用户所在城市ID',
+                                    'name' => '用户所在城市名称'
+                                ],
+                                'hospital' => [
+                                    'id' => '用户所在医院ID',
+                                    'name' => '用户所在医院名称'
+                                ],
+                                'department' => [
+                                    'id' => '用户所在科室ID',
+                                    'name' => '用户所在科室名称'
+                                ],
+                                'job_title' => '用户职称',
+                                'college' => [
+                                    'id' => '用户所在院校ID',
+                                    'name' => '用户所在院校名称'
+                                ],
+                                'ID_number' => '身份证',
+                                'tags' => '特长/标签',
+                                'personal_introduction' => '个人简介',
+                                'is_auth' => '是否认证,1为认证,0为未认证',
+                                'inviter' => '邀请者'
+                            ],
+                            'relations' => [
+                                'same' => [
+                                    'hospital' => '同医院的人数',
+                                    'department' => '同领域的人数',
+                                    'college' => '同学校的人数'
+                                ],
+                                'unread' => '好友信息的未读数量',
+                                'count' => [
+                                    'doctor' => '我的朋友中共有多少名医生',
+                                    'hospital' => '我的朋友中分别属于多少家医院'
+                                ],
+                                'friends' => [
+                                    'id' => '用户ID',
+                                    'name' => '用户姓名',
+                                    'head_url' => '头像URL',
+                                    'hospital' => '所属医院',
+                                    'department' => '所属科室',
+                                    'job_title' => '职称'
+                                ]
+                            ],
+                            'recent_contacts' => [
+                                'id' => '用户id',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'department' => '用户所在科室名称',
+                                'is_auth' => '是否认证,1为认证,0为未认证'
+                            ],
+                            'sys_info' => [
+                                'radio_unread_count' => '未读的广播数量',
+                                'admissions_unread_count' => '未读的接诊信息数量',
+                                'appointment_unread_count' => '未读的约诊信息数量'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
+                ],
+
                 '用户信息' => [
                     '查询个人信息' => [
                         'url' => $http . '/api/user/me',
@@ -153,6 +234,7 @@ class ApiController extends BaseController
                                 'ID_number' => '身份证',
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
+                                'is_auth' => '是否认证,1为认证,0为未认证',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',
@@ -261,6 +343,7 @@ class ApiController extends BaseController
                                 'ID_number' => '身份证',
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
+                                'is_auth' => '是否认证,1为认证,0为未认证',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',

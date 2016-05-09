@@ -39,6 +39,8 @@ class RadioStationController extends BaseController
     }
 
     /**
+     * 已读后删除对应消息
+     * 
      * @param Request $request
      * @return \Dingo\Api\Http\Response|mixed
      */

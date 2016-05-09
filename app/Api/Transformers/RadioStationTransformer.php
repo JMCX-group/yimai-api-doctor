@@ -19,7 +19,7 @@ class RadioStationTransformer extends TransformerAbstract
      */
     public function transform(RadioStation $radioStation)
     {
-        $this->timeTransform($radioStation);
+        self::timeTransform($radioStation);
 
         return [
             'id' => $radioStation['id'],
@@ -38,10 +38,27 @@ class RadioStationTransformer extends TransformerAbstract
      * @param $radioStation
      * @return mixed
      */
-    public function timeTransform($radioStation)
+    public static function timeTransform($radioStation)
     {
         $radioStation['time'] = $radioStation['created_at']->format('Y-m-d H:i:s');
 
         return $radioStation;
+    }
+
+    /**
+     * @param $radioStation
+     * @return array
+     */
+    public static function transformRadio($radioStation)
+    {
+        return [
+            'id' => $radioStation['id'],
+            'name' => $radioStation['name'],
+            'content' => $radioStation['content'],
+            'img_url' => $radioStation['img_url'],
+            'author' => $radioStation['author'],
+            'time' => $radioStation['time'],
+            'unread' => $radioStation['value']
+        ];
     }
 }

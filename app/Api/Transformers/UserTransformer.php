@@ -29,7 +29,7 @@ class UserTransformer extends TransformerAbstract
     public function transform(User $user)
     {
         // ID convert id:name
-        $this->idToName($user);
+        self::idToName($user);
 
         return [
             'id' => $user['id'],
@@ -47,6 +47,7 @@ class UserTransformer extends TransformerAbstract
             'ID_number' => $user['id_num'],
             'tags' => $user['tag_list'],
             'personal_introduction' => $user['profile'],
+            'is_auth' => $user['auth'],
             'inviter' => $user['inviter_dp_code']
         ];
     }
@@ -57,7 +58,7 @@ class UserTransformer extends TransformerAbstract
      * @param $user
      * @return mixed
      */
-    public function idToName($user)
+    public static function idToName($user)
     {
         if (!empty($user['province_id'])) {
             $user['province_id'] = Province::find($user['province_id']);
@@ -85,5 +86,35 @@ class UserTransformer extends TransformerAbstract
         }
 
         return $user;
+    }
+
+    /**
+     * @param $user
+     * @return array
+     */
+    public static function transformUser($user)
+    {
+        // ID convert id:name
+        self::idToName($user);
+
+        return [
+            'id' => $user['id'],
+            'code' => $user['dp_code'],
+            'phone' => $user['phone'],
+            'name' => $user['name'],
+            'head_url' => $user['avatar'],
+            'sex' => $user['gender'],
+            'province' => $user['province_id'],
+            'city' => $user['city_id'],
+            'hospital' => $user['hospital_id'],
+            'department' => $user['dept_id'],
+            'job_title' => $user['title'],
+            'college' => $user['college_id'],
+            'ID_number' => $user['id_num'],
+            'tags' => $user['tag_list'],
+            'personal_introduction' => $user['profile'],
+            'is_auth' => $user['auth'],
+            'inviter' => $user['inviter_dp_code']
+        ];
     }
 }

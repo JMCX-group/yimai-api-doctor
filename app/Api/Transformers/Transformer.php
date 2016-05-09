@@ -57,6 +57,23 @@ class Transformer
     }
 
     /**
+     * Transform contacts.
+     *
+     * @param $user
+     * @return array
+     */
+    public static function contactsTransform($user)
+    {
+        return [
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'head_url' => $user['avatar'],
+            'department' => $user['dept_id'],
+            'is_auth' => $user['auth']
+        ];
+    }
+
+    /**
      * @param $user
      * @return array
      */
