@@ -34,7 +34,8 @@ class UserRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'between:1,10'
+            'name' => 'between:1,10',
+            'head_img' => 'mimes:jpg,jpeg,png'
         ];
     }
 
@@ -45,7 +46,8 @@ class UserRequest extends Request
     {
         return [
             'required' => ':attribute不能为空',
-            'between' => ':attribute长度必须在:min和:max之间'
+            'between' => ':attribute长度必须在:min和:max之间',
+            'mimes' => ':attribute需为jpg/jpeg/png文件',
         ];
     }
 
@@ -55,7 +57,8 @@ class UserRequest extends Request
     public function attributes()
     {
         return [
-            'name' => '姓名'
+            'name' => '姓名',
+            'head_img' => '用户头像'
         ];
     }
 

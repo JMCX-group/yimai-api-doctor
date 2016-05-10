@@ -300,6 +300,7 @@ class ApiController extends BaseController
                         ],
                         'form-data' => [
                             'name' => '用户姓名',
+                            'head_img' => '用户头像; 直接POST文件,支持后缀:jpg/jpeg/png',
                             'sex' => '性别',
                             'province' => '用户所在省份ID',
                             'city' => '用户所属城市ID',
@@ -311,13 +312,14 @@ class ApiController extends BaseController
                             'tags' => '特长/标签',
                             'personal_introduction' => '个人简介'
                         ],
+                        '说明' => '以上form-data为可选,修改任意一个或几个都可以,有什么数据加什么字段',
                         'response' => [
                             'user' => [
                                 'id' => '用户id',
                                 'code' => '医脉码',
                                 'phone' => '用户注册手机号',
                                 'name' => '用户姓名',
-                                'head_url' => '头像URL',
+                                'head_url' => '头像URL; 相对地址,需要拼服务器域名或ip,例如:回传/uploads/a.jpg,要拼成:http://yimai.com/uploads/a.jpg; 注意url中没有api',
                                 'sex' => '性别',
                                 'province' => [
                                     'id' => '用户所在省份ID',

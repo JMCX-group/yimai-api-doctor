@@ -16,6 +16,7 @@ use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\Hospital;
 use App\User;
+use Intervention\Image\Facades\Image;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -46,6 +47,9 @@ class UserController extends BaseController
 
         if (isset($request['name']) && !empty($request['name'])) {
             $user->name = $request['name'];
+        }
+        if (isset($request['head_img']) && !empty($request['head_img'])) {
+            $user->avatar = $this->avatar($user->id, $request->file('head_img'));
         }
         if (isset($request['sex']) && !empty($request['sex'])) {
             // 1:男; 0:女
@@ -97,6 +101,24 @@ class UserController extends BaseController
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
         }
+    }
+
+    /**
+     * 存储头像文件并压缩成200*200
+     * 
+     * @param $userId
+     * @param $avatarFile
+     * @return string
+     */
+    public function avatar($userId, $avatarFile)
+    {
+        $destinationPath = 'uploads/avatar/';
+        $filename = $userId . '_' . $avatarFile->getClientOriginalName();
+        $avatarFile->move($destinationPath, $filename);
+
+        Image::make($destinationPath.$filename)->fit(200)->save();
+
+        return '/' . $destinationPath . $filename;
     }
 
     /**
