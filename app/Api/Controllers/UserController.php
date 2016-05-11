@@ -33,16 +33,9 @@ class UserController extends BaseController
      */
     public function update(UserRequest $request)
     {
-        try {
-            if (!$user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['message' => 'user_not_found'], 404);
-            }
-        } catch (TokenExpiredException $e) {
-            return response()->json(['error' => 'token_expired'], $e->getStatusCode());
-        } catch (TokenInvalidException $e) {
-            return response()->json(['error' => 'token_invalid'], $e->getStatusCode());
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'token_absent'], $e->getStatusCode());
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
         }
 
         if (isset($request['name']) && !empty($request['name'])) {
