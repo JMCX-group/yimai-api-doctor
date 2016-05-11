@@ -36,6 +36,9 @@ $api->version('v1', function ($api) {
          * Token Auth
          */
         $api->group(['middleware' => 'jwt.auth'], function ($api) {
+            // Test
+            $api->post('post', 'TestController@postFun');
+
             // Init
             $api->group(['prefix' => 'init'], function ($api) {
                 $api->get('/', 'InitController@index');
@@ -80,6 +83,12 @@ $api->version('v1', function ($api) {
             $api->group(['prefix' => 'radio'], function ($api) {
                 $api->get('/', 'RadioStationController@index');
                 $api->post('read', 'RadioStationController@readStatus');
+            });
+
+            //appointment
+            $api->group(['prefix' => 'appointment'], function ($api) {
+                $api->post('new', 'AppointmentController@store');
+                $api->post('upload-img', 'AppointmentController@updateImg');
             });
         });
     });
