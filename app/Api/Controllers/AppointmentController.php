@@ -22,6 +22,10 @@ class AppointmentController extends BaseController
 
     }
 
+    /**
+     * @param AppointmentRequest $request
+     * @return array|mixed
+     */
     public function store(AppointmentRequest $request)
     {
         $user = User::getAuthenticatedUser();
@@ -50,16 +54,24 @@ class AppointmentController extends BaseController
         return ['id' => $appointment['id']];
     }
 
-    public function updateImg(Request $request)
+    /**
+     * 上传图片
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function uploadImg(Request $request)
     {
         $appointment = Appointment::find($request['id']);
         $imgUrl = $this->saveImg($appointment->id, $request->file('img'));
 
-        if (empty($appointment->patient_imgs)) {
-            $appointment->patient_imgs .= $imgUrl;
+        if (strlen($appointment->patient_imgs) > 0) {
+            $appointment->patient_imgs .= ',' . $imgUrl;
         } else {
             $appointment->patient_imgs = $imgUrl;
         }
+
+        $appointment->save();
 
         return ['url' => $imgUrl];
     }
@@ -129,19 +141,25 @@ class AppointmentController extends BaseController
         }
     }
 
+    /**
+     * 保存图片并另存一个压缩图片
+     *
+     * @param $appointmentId
+     * @param $imgFile
+     * @return string
+     */
     public function saveImg($appointmentId, $imgFile)
     {
-        //TODO debug 
-        $nowYear = date('Y');
-        $nowMonth = date('m');
-        $destinationPath = 'uploads/case-history/' . $nowYear . '/' . $nowMonth . '/'; 
-        $filename = $appointmentId . '_' . $imgFile->getClientOriginalName();
+        $destinationPath = 'uploads/case-history/' . date('Y') . '/' . date('m') . '/';
+        $filename = $appointmentId . '_' . time() . '.jpg';
+
         $imgFile->move($destinationPath, $filename);
-        $fullPath = $destinationPath.$filename;
-        $newPath = str_replace($appointmentId . '_', $appointmentId . '_thumb_', $filename);
 
-        Image::make($filename)->fit(200)->save($newFilename);
+        $fullPath = $destinationPath . $filename;
+        $newPath = str_replace('.jpg', '_thumb.jpg', $fullPath);
 
-        return '/' . $newFilename;
+        Image::make($fullPath)->encode('jpg', 30)->save($newPath); //按30的品质压缩图片
+
+        return '/' . $newPath;
     }
 }

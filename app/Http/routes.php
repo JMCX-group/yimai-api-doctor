@@ -88,7 +88,7 @@ $api->version('v1', function ($api) {
             //appointment
             $api->group(['prefix' => 'appointment'], function ($api) {
                 $api->post('new', 'AppointmentController@store');
-                $api->post('upload-img', 'AppointmentController@updateImg');
+                $api->post('upload-img', 'AppointmentController@uploadImg');
             });
         });
     });
