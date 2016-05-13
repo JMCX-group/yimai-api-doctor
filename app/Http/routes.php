@@ -85,10 +85,15 @@ $api->version('v1', function ($api) {
                 $api->post('read', 'RadioStationController@readStatus');
             });
 
-            //appointment
+            //Appointment
             $api->group(['prefix' => 'appointment'], function ($api) {
                 $api->post('new', 'AppointmentController@store');
                 $api->post('upload-img', 'AppointmentController@uploadImg');
+            });
+
+            //Patient
+            $api->group(['prefix' => 'patient'], function ($api) {
+                $api->get('get-by-phone', 'PatientController@getInfoByPhone');
             });
         });
     });

@@ -33,11 +33,27 @@ class AppointmentController extends BaseController
             return $user;
         }
 
+        /**
+         * 计算预约码做ID.
+         * 规则:01-99 . 年月日各两位长 . 0001-9999
+         */
+        $frontId = '02' . date('ymd');
+        $lastId = Appointment::where('id', 'like', $frontId . '%')
+            ->orderBy('id', 'desc')
+            ->lists('id');
+        if ($lastId->isEmpty()) {
+            $nowId = '0001';
+        } else {
+            $lastId = intval(substr($lastId[0], 8));
+            $nowId = str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
+        }
+
         $data = [
-            'locums_id' => $user->id,
+            'id' => $frontId . $nowId,
+            'locums_id' => $user->id, //代理医生ID
             'patient_name' => $request['name'],
             'patient_phone' => $request['phone'],
-            'patient_gender' => $request['gender'],
+            'patient_gender' => $request['sex'],
             'patient_age' => $request['age'],
             'patient_history' => $request['history'],
             'doctor_id' => $request['doctor'],
@@ -46,12 +62,12 @@ class AppointmentController extends BaseController
         ];
 
         try {
-            $appointment = Appointment::create($data);
+            Appointment::create($data);
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
         }
 
-        return ['id' => $appointment['id']];
+        return ['id' => $frontId . $nowId];
     }
 
     /**
@@ -74,71 +90,6 @@ class AppointmentController extends BaseController
         $appointment->save();
 
         return ['url' => $imgUrl];
-    }
-
-    public function update(AppointmentRequest $request)
-    {
-        $user = User::getAuthenticatedUser();
-        if (!isset($user->id)) {
-            return $user;
-        }
-
-        if (isset($request['name']) && !empty($request['name'])) {
-            $user->name = $request['name'];
-        }
-        if (isset($request['head_img']) && !empty($request['head_img'])) {
-            $user->avatar = $this->avatar($user->id, $request->file('head_img'));
-        }
-        if (isset($request['sex']) && !empty($request['sex'])) {
-            // 1:男; 0:女
-            $user->gender = $request['sex'];
-        }
-        if (isset($request['province']) && !empty($request['province'])) {
-            $user->province_id = $request['province'];
-        }
-        if (isset($request['city']) && !empty($request['city'])) {
-            $user->city_id = $request['city'];
-        }
-        if (isset($request['hospital']) && !empty($request['hospital'])) {
-            $hospitalId = $request['hospital'];
-            if (!is_numeric($request['hospital'])) {
-                $hospitalId = $this->createNewHospital($request);
-            }
-            $user->hospital_id = $hospitalId;
-        }
-        if (isset($request['department']) && !empty($request['department'])) {
-            $user->dept_id = $request['department'];
-        }
-        if (isset($request['job_title']) && !empty($request['job_title'])) {
-            $user->title = $request['job_title'];
-        }
-        if (isset($request['college']) && !empty($request['college'])) {
-            $user->college_id = $request['college'];
-        }
-        if (isset($request['ID_number']) && !empty($request['ID_number'])) {
-            $user->id_num = $request['ID_number'];
-        }
-        if (isset($request['tags']) && !empty($request['tags'])) {
-            $user->tag_list = $request['tags'];
-        }
-        if (isset($request['personal_introduction']) && !empty($request['personal_introduction'])) {
-            $user->profile = $request['personal_introduction'];
-        }
-
-        // Generate dp code.
-        if (empty($user->dp_code) && !empty($user->dept_id)) {
-            $user->dp_code = User::generateDpCode($user->dept_id);
-        }
-
-        try {
-            if ($user->save()) {
-                return $this->response->item($user, new UserTransformer());
-            } else {
-                return $this->response->error('unknown error', 400);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
-        }
     }
 
     /**

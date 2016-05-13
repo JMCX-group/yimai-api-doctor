@@ -440,7 +440,7 @@ class ApiController extends BaseController
                         'method' => 'GET',
                         'params' => [
                             'token' => ''
-                        ], 
+                        ],
                         '说明' => '{search_field}字段传中文可能需要转码',
                         'response' => [
                             'data' => [
@@ -625,6 +625,9 @@ class ApiController extends BaseController
                     '广播已读' => [
                         'url' => $http . '/api/radio/read',
                         'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
                         'form-data' => [
                             'id' => '广播ID'
                         ],
@@ -636,6 +639,68 @@ class ApiController extends BaseController
                     ]
                 ],
 
+                '约诊' => [
+                    '新建约诊' => [
+                        'url' => $http . '/api/appointment',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'name' => '患者姓名',
+                            'phone' => '患者手机号',
+                            'sex' => '患者性别,1男0女',
+                            'age' => '患者年龄',
+                            'history' => '患者现病史',
+                            'doctor' => '预约的医生的ID',
+                            'time' => '预约时间,选了时间就把日期按标准时间日期格式传来,没有选时间就把1',
+                            'am_or_pm' => '预约时间,选了时间就把上午或下午传来,上午:am,下午:pm',
+                        ],
+                        'response' => [
+                            'id' => '预约码',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '上传图片' => [
+                        'url' => $http . '/api/appointment/upload-img',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'img' => '病历照片,一张张传; 直接POST文件,支持后缀:jpg/jpeg/png'
+                        ],
+                        'response' => [
+                            'url' => '压缩后的图片访问url链接,可直接用于阅览',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
+                ],
+
+                '患者信息' => [
+                    '所有广播' => [
+                        'url' => $http . '/api/patient/get-by-phone',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => '',
+                            'phone' => '患者手机号'
+                        ],
+                        '说明' => '没有注册,则返回信息为[]',
+                        'response' => [
+                            'data' => [
+                                'id' => '患者ID',
+                                'phone' => '患者手机号',
+                                'name' => '患者姓名',
+                                'sex' => '患者性别',
+                                'age' => '患者年龄'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
+                ]
             ]
         ];
 
