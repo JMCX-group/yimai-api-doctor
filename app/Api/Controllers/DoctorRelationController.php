@@ -107,10 +107,13 @@ class DoctorRelationController extends BaseController
         }
 
         $data = DoctorRelation::getNewFriends($user->id);
+        if (empty($data)) {
+            return $this->response->noContent();
+        } else {
+            DoctorRelation::setReadStatus($user->id);
 
-        DoctorRelation::setReadStatus($user->id);
-
-        return ['friends' => Transformer::newFriendTransform($user->id, $data['users'], $data['list'])];
+            return ['friends' => Transformer::newFriendTransform($user->id, $data['users'], $data['list'])];
+        }
     }
 
     /**

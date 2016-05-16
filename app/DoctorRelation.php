@@ -194,24 +194,28 @@ class DoctorRelation extends Model
     {
         $list = self::getNewFriendsIdList($id)['id_list'];
 
-        $idList = array();
-        foreach ($list as $item) {
-            if ($item->doctor_id != $id) {
-                array_push($idList, $item->doctor_id);
-            } elseif ($item->doctor_friend_id != $id) {
-                array_push($idList, $item->doctor_friend_id);
+        if (empty($list)) {
+            return [];
+        } else {
+            $idList = array();
+            foreach ($list as $item) {
+                if ($item->doctor_id != $id) {
+                    array_push($idList, $item->doctor_id);
+                } elseif ($item->doctor_friend_id != $id) {
+                    array_push($idList, $item->doctor_friend_id);
+                }
             }
+
+            $idListStr = implode(',', $idList);
+            $users = DB::select(
+                "select * from doctors where id in (" . $idListStr . ") order by find_in_set(id, '" . $idListStr . "')"
+            );
+
+            return [
+                'users' => $users,
+                'list' => $list
+            ];
         }
-
-        $idListStr = implode(',', $idList);
-        $users = DB::select(
-            "select * from doctors where id in (" . $idListStr . ") order by find_in_set(id, '" . $idListStr . "')"
-        );
-
-        return [
-            'users' => $users,
-            'list' => $list
-        ];
     }
 
     /**
