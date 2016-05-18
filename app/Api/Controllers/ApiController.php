@@ -247,6 +247,7 @@ class ApiController extends BaseController
                         'params' => [
                             'token' => ''
                         ],
+                        '说明' => '请前台判断是否在查询自己,自己的信息在登陆时已经有全部的了,而且看自己的没有中间的两个按钮',
                         'response' => [
                             'user' => [
                                 'is_friend' => '决定按钮的布局; true | false',
