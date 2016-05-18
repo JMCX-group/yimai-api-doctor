@@ -8,7 +8,7 @@
 
 return [
     'CASE_HISTORY_SAVE_PATH' => 'uploads/case-history/',
-    
+    'AVATAR_SAVE_PATH' => 'uploads/avatar/',
     
     'APPOINTMENT_DEFAULT' => '{代约医生}替患者{患者}向{医生}医生发起约诊',
     'APPOINTMENT_DEFAULT_REQUEST' => '{患者}发起代约请求',

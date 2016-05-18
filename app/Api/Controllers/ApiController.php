@@ -705,7 +705,7 @@ class ApiController extends BaseController
                             'detail_info' => [
                                 'progress' => '进度,该项还未做完',
                                 'time_line' => [
-                                    '说明' => 'time_line及其内部other下可能有1条或多条信息,需要遍历',
+                                    '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
                                     0 => [
                                         'time' => '时间轴左侧的时间',
                                         'info' => [

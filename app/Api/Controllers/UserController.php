@@ -103,7 +103,7 @@ class UserController extends BaseController
      */
     public function avatar($userId, $avatarFile)
     {
-        $destinationPath = 'uploads/avatar/';
+        $destinationPath = \Config::get('constants.AVATAR_SAVE_PATH');
         $filename = $userId . '_' . $avatarFile->getClientOriginalName();
         $avatarFile->move($destinationPath, $filename);
 
