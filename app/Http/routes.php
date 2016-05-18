@@ -44,9 +44,10 @@ $api->version('v1', function ($api) {
                 $api->get('/', 'InitController@index');
             });
 
-            // User
+            // Doctor
             $api->group(['prefix' => 'user'], function ($api) {
                 $api->get('me', 'AuthController@getAuthenticatedUser');
+                $api->get('/{doctor}', 'UserController@findDoctor');
                 $api->post('/', 'UserController@update');
                 $api->post('search', 'UserController@searchUser');
             });

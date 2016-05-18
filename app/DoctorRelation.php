@@ -22,6 +22,48 @@ class DoctorRelation extends Model
     protected $fillable = ['doctor_id', 'doctor_friend_id'];
 
     /**
+     * 获取和某个医生的共同好友的id list.
+     * 
+     * @param $myId
+     * @param $id
+     * @return mixed
+     */
+    public static function getCommonFriendIdList($myId, $id)
+    {
+        $relations = DoctorRelation::select('doctor_id', 'doctor_friend_id')
+            ->where('doctor_friend_id', $myId)
+            ->orWhere('doctor_friend_id', $id)
+            ->get();
+
+        $commonFriendIdList = array();
+        foreach ($relations as $relation) {
+            foreach ($relations as $relationItem) {
+                if ($relation->doctor_id == $relationItem->doctor_id && $relation->doctor_friend_id != $relationItem->doctor_friend_id) {
+                    array_push($commonFriendIdList, $relation->doctor_id);
+                }
+            }
+        }
+        
+        return array_unique($commonFriendIdList);
+    }
+
+    /**
+     * 获取和某人是否是好友关系,返回是2则互为好友.
+     * 
+     * @param $myId
+     * @param $id
+     * @return mixed
+     */
+    public static function getIsFriend($myId, $id)
+    {
+        return DB::select(
+            "SELECT count(*) as count " .
+            "FROM doctor_relations " .
+            "WHERE (doctor_id=$myId AND doctor_friend_id=$id) OR (doctor_id=$id AND doctor_friend_id=$myId)"
+        );
+    }
+
+    /**
      * Get my friends id list.
      *
      * @param $id
