@@ -676,6 +676,62 @@ class ApiController extends BaseController
                             'message' => '',
                             'error' => ''
                         ]
+                    ],
+                    '获取约诊详细信息' => [
+                        'url' => $http . '/api/appointment/detail/{appointment_id}',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        '说明' => '还未做完,可以测试:/api/appointment/detail/011605130001?token=',
+                        'response' => [
+                            'doctor_info' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'job_title' => '职称',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室'
+                            ],
+                            'patient_info' => [
+                                'name' => '患者姓名',
+                                'head_url' => '患者头像URL',
+                                'sex' => '患者性别',
+                                'age' => '患者年龄',
+                                'phone' => '所属科室',
+                                'history' => '病情描述',
+                                'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
+                            ],
+                            'detail_info' => [
+                                'progress' => '进度,该项还未做完',
+                                'time_line' => [
+                                    '说明' => 'time_line及其内部other下可能有1条或多条信息,需要遍历',
+                                    0 => [
+                                        'time' => '时间轴左侧的时间',
+                                        'info' => [
+                                            'text' => '文案描述',
+                                            'other' => [
+                                                0 => [
+                                                    'name' => '其他的信息名称,例如:期望就诊时间',
+                                                    'content' => '其他的信息内容,例如:2016-05-18 上午'
+                                                ]
+                                            ]
+                                        ],
+                                        'type' => '决定使用什么icon; begin | wait'
+                                    ],
+                                    1 => [
+                                        'time' => '时间轴左侧的时间, null为没有',
+                                        'info' => [
+                                            'text' => '文案描述',
+                                            'other' => 'null为没有'
+                                        ],
+                                        'type' => '决定使用什么icon; begin | wait'
+                                    ]
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
                     ]
                 ],
 

@@ -29,6 +29,7 @@ class Appointment extends Model
         'patient_imgs',
         'doctor_id',
         'visit_time',
-        'am_pm'
+        'am_pm',
+        'status'
     ];
 }

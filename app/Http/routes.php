@@ -89,6 +89,7 @@ $api->version('v1', function ($api) {
             $api->group(['prefix' => 'appointment'], function ($api) {
                 $api->post('new', 'AppointmentController@store');
                 $api->post('upload-img', 'AppointmentController@uploadImg');
+                $api->get('detail/{appointment}', 'AppointmentController@getDetailInfo');
             });
 
             //Patient

@@ -186,4 +186,38 @@ class Transformer
 
         return $friends;
     }
+
+    /**
+     * 格式化约诊详细信息
+     * 
+     * @param $appointments
+     * @param $doctor
+     * @return array
+     */
+    public static function appointmentsTransform($appointments, $doctor)
+    {
+        return [
+            'doctor_info' => [
+                'id' => $doctor->id,
+                'name' => $doctor->name,
+                'head_url' => $doctor->avatar,
+                'job_title' => $doctor->title,
+                'hospital' => $doctor->hospital,
+                'department' => $doctor->dept
+            ],
+            'patient_info' => [
+                'name' => $appointments->patient_name,
+                'head_url' => $appointments->patient_avatar,
+                'sex' => $appointments->patient_gender,
+                'age' => $appointments->patient_age,
+                'phone' => $appointments->patient_phone,
+                'history' => $appointments->patient_history,
+                'img_url' => $appointments->patient_imgs
+            ],
+            'other_info' => [
+                'progress' => $appointments->progress,
+                'time_line' => $appointments->time_line
+            ]
+        ];
+    }
 }

@@ -8,10 +8,11 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Requests\AppointmentIdRequest;
 use App\Api\Requests\AppointmentRequest;
+use App\Api\Transformers\Transformer;
 use App\Appointment;
 use App\User;
-use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -37,7 +38,7 @@ class AppointmentController extends BaseController
          * 计算预约码做ID.
          * 规则:01-99 . 年月日各两位长 . 0001-9999
          */
-        $frontId = '02' . date('ymd');
+        $frontId = '01' . date('ymd');
         $lastId = Appointment::where('id', 'like', $frontId . '%')
             ->orderBy('id', 'desc')
             ->lists('id');
@@ -73,10 +74,10 @@ class AppointmentController extends BaseController
     /**
      * 上传图片
      *
-     * @param Request $request
+     * @param AppointmentIdRequest $request
      * @return array
      */
-    public function uploadImg(Request $request)
+    public function uploadImg(AppointmentIdRequest $request)
     {
         $appointment = Appointment::find($request['id']);
         $imgUrl = $this->saveImg($appointment->id, $request->file('img'));
@@ -101,8 +102,11 @@ class AppointmentController extends BaseController
      */
     public function saveImg($appointmentId, $imgFile)
     {
-        $destinationPath = 'uploads/case-history/' . date('Y') . '/' . date('m') . '/';
-        $filename = $appointmentId . '_' . time() . '.jpg';
+        $destinationPath =
+            \Config::get('constants.CASE_HISTORY_SAVE_PATH') .
+            date('Y') . '/' . date('m') . '/' .
+            $appointmentId . '/';
+        $filename = time() . '.jpg';
 
         $imgFile->move($destinationPath, $filename);
 
@@ -112,5 +116,129 @@ class AppointmentController extends BaseController
         Image::make($fullPath)->encode('jpg', 30)->save($newPath); //按30的品质压缩图片
 
         return '/' . $newPath;
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getDetailInfo($id)
+    {
+        $appointments = Appointment::where('appointments.id', $id)
+            ->leftJoin('doctors', 'doctors.id', '=', 'appointments.locums_id')
+            ->leftJoin('patients', 'patients.id', '=', 'appointments.patient_id')
+            ->select('appointments.*', 'doctors.name as locums_name', 'patients.avatar as patient_avatar')
+            ->get()
+            ->first();
+
+        $doctors = User::select(
+            'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.title',
+            'hospitals.name AS hospital', 'dept_standards.name AS dept')
+            ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
+            ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
+            ->where('doctors.id', $appointments->doctor_id)
+            ->get()
+            ->first();
+
+        $appointments['time_line'] = $this->generateTimeLine($appointments, $doctors);
+        $appointments['progress'] = ''; //TODO 待完成
+
+        return Transformer::appointmentsTransform($appointments, $doctors);
+    }
+
+    /**
+     * 生成时间轴及其文案
+     * 
+     * @param $appointments
+     * @param $doctors
+     * @return array
+     */
+    public function generateTimeLine($appointments, $doctors)
+    {
+        $retData = array();
+
+        switch ($appointments->status) {
+            case 'wait-1':
+                $time = $appointments->created_at->format('Y-m-d H:i:s');
+                $infoText = $this->beginText($appointments, $doctors);
+                $infoOther = [0 => [
+                    'name' => \Config::get('constants.TREATMENT_TIME'),
+                    'content' => $appointments->visit_time . ' ' . (($appointments->am_pm == 'am') ? '上午' : '下午')
+                ]];
+                $retData = $this->copyTransformer($retData, $time, $infoText, $infoOther, 'begin');
+
+                $infoText = \Config::get('constants.WAIT_PAYMENT');
+                $retData = $this->copyTransformer($retData, null, $infoText, null, 'wait');
+                break;
+            case 'wait-2':
+                $retData = [];
+                break;
+            case 'wait-3':
+                $retData = [];
+                break;
+            case 'wait-4':
+                $retData = [];
+                break;
+            case 'wait-5':
+                $retData = [];
+                break;
+            case '':
+                $retData = [];
+                break;
+            default:
+                $retData = [];
+                break;
+        }
+
+        return $retData;
+    }
+
+    /**
+     * 第一句文案的角色名称替换
+     * 
+     * @param $appointments
+     * @param $doctors
+     * @return mixed
+     */
+    public function beginText($appointments, $doctors)
+    {
+        if ($appointments->doctor_or_patient == 'd') {
+            $text = \Config::get('constants.APPOINTMENT_DEFAULT');
+            $text = str_replace('{代约医生}', $appointments->locums_name, $text);
+            $text = str_replace('{患者}', $appointments->patient_name, $text);
+            $text = str_replace('{医生}', $doctors->name, $text);
+        } else {
+            $text = \Config::get('constants.APPOINTMENT_DEFAULT_REQUEST');
+            $text = str_replace('{患者}', $appointments->patient_name, $text);
+        }
+
+        return $text;
+    }
+
+    /**
+     * 格式化文案
+     * 
+     * @param $retData
+     * @param $time
+     * @param $infoText
+     * @param $infoOther
+     * @param $type
+     * @return mixed
+     */
+    public function copyTransformer($retData, $time, $infoText, $infoOther, $type)
+    {
+        array_push(
+            $retData,
+            [
+                'time' => $time,
+                'info' => [
+                    'text' => $infoText,
+                    'other' => $infoOther
+                ],
+                'type' => $type
+            ]
+        );
+
+        return $retData;
     }
 }
