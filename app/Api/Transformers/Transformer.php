@@ -113,8 +113,14 @@ class Transformer
             'head_url' => $user->avatar,
             'job_title' => $user->title,
             'city' => $user->city,
-            'hospital' => $user->hospital,
-            'department' => $user->dept
+            'hospital' => [
+                'id' => $user->hospital_id,
+                'name' => $user->hospital,
+            ],
+            'department' => [
+                'id' => $user->dept_id,
+                'name' => $user->dept,
+            ]
         ];
     }
 

@@ -211,6 +211,24 @@ class UserController extends BaseController
             array_push($otherArr, Transformer::searchDoctorTransform($userItem));
         }
 
+        /**
+         * 把医院数据特殊处理:
+         */
+        foreach ($hospitals as $key=>$val){
+            foreach ($val as $keyItem=>$valItem){
+                $newData = [
+                    'city_id' => $keyItem,
+                    ''
+                ];
+            }
+            $newHospital = [
+                'province_id' => $key,
+                'data' => [
+
+                ]
+            ];
+        }
+
         $retData = array_merge($recentContactsArr, $friendArr, $sameCityArr, $b_s_g_threeA, $otherArr);
 
         return [
