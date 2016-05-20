@@ -212,21 +212,24 @@ class UserController extends BaseController
         }
 
         /**
-         * 把医院数据特殊处理:
+         * 把医院数据格式特殊处理:
          */
-        foreach ($hospitals as $key=>$val){
-            foreach ($val as $keyItem=>$valItem){
-                $newData = [
-                    'city_id' => $keyItem,
-                    ''
+        if (isset($request['format']) && $request['format'] == 'android') {
+            $newHospital = array();
+            foreach ($hospitals as $key => $val) {
+                $newCityList = [
+                    'province_id' => $key,
+                    'data' => []
                 ];
+                foreach ($val as $keyItem => $valItem) {
+                    $newHospitalList = [
+                        'city_id' => $keyItem,
+                        'data' => $valItem
+                    ];
+                    array_push($newCityList['data'], $newHospitalList);
+                }
+                array_push($newHospital, $newCityList);
             }
-            $newHospital = [
-                'province_id' => $key,
-                'data' => [
-
-                ]
-            ];
         }
 
         $retData = array_merge($recentContactsArr, $friendArr, $sameCityArr, $b_s_g_threeA, $otherArr);
@@ -234,7 +237,7 @@ class UserController extends BaseController
         return [
             'provinces' => $provinces,
             'citys' => $citys,
-            'hospitals' => $hospitals,
+            'hospitals' => isset($newHospital) ? $newHospital : $hospitals,
             'departments' => $departments,
             'count' => count($retData),
             'users' => $retData
@@ -293,25 +296,16 @@ class UserController extends BaseController
         if (!in_array($userItem->hospital_id, $hospitalIdList)) {
             array_push($hospitalIdList, $userItem->hospital_id);
 
-            if (isset($hospitals[$userItem->province_id])) {
-                if (isset($hospitals[$userItem->province_id][$userItem->city_id])) {
-                    array_push(
-                        $hospitals[$userItem->province_id][$userItem->city_id],
-                        ['id' => $userItem->hospital_id, 'name' => $userItem->hospital]
-                    );
-                } else {
-                    array_push(
-                        $hospitals[$userItem->province_id],
-                        [$userItem->city_id =>
-                            ['id' => $userItem->hospital_id, 'name' => $userItem->hospital]
-                        ]
-                    );
-                }
+            if (isset($hospitals[$userItem->province_id]) && isset($hospitals[$userItem->province_id][$userItem->city_id])) {
+                array_push(
+                    $hospitals[$userItem->province_id][$userItem->city_id],
+                    ['id' => $userItem->hospital_id, 'name' => $userItem->hospital,
+                        'province_id' => $userItem->province_id, 'city_id' => $userItem->city_id]
+                );
             } else {
-                $hospitals[$userItem->province_id] = [
-                    [$userItem->city_id =>
-                        ['id' => $userItem->hospital_id, 'name' => $userItem->hospital]
-                    ]
+                $hospitals[$userItem->province_id][$userItem->city_id] = [
+                    ['id' => $userItem->hospital_id, 'name' => $userItem->hospital,
+                        'province_id' => $userItem->province_id, 'city_id' => $userItem->city_id]
                 ];
             }
         }

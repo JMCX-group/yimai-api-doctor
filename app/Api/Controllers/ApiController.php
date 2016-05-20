@@ -284,7 +284,8 @@ class ApiController extends BaseController
                             'field' => '搜索的关键字; 必填项',
                             'city_id' => '下拉框选择的城市ID; 可选项',
                             'hospital_id' => '下拉框选择的医院ID; 可选项',
-                            'dept_id' => '下拉框选择的科室ID; 可选项'
+                            'dept_id' => '下拉框选择的科室ID; 可选项',
+                            'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式'
                         ],
                         '说明' => '会一次传递所有排好序的数据,一次显示5个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'response' =>
@@ -300,12 +301,35 @@ class ApiController extends BaseController
                                     ]
                                 ],
                                 'hospitals' => [
+                                    '默认格式说明' => '例如: hospitals[1][1]可以取到1省1市下的医院列表',
                                     '{province_id}' => [
                                         '{city_id}' => [
-                                            'id' => '医院ID',
-                                            'name' => '城市名称'
+                                            '{自增的数据序号}' => [
+                                                'id' => '医院ID',
+                                                'name' => '城市名称',
+                                                'province_id' => '该医院的省id',
+                                                'city_id' => '该医院的市id'
+                                            ]
                                         ]
-                                    ]
+                                    ],
+
+                                    '安卓格式说明' => '提交format字段,且值为android时,hospitals会返回该格式 :',
+                                    '{自增的数据序号}' => [
+                                        'province_id' => '省份ID',
+                                        'data' => [
+                                            '{自增的数据序号}' => [
+                                                'city_id' => '城市ID',
+                                                'data' => [
+                                                    '{自增的数据序号}' => [
+                                                        'id' => '医院ID',
+                                                        'name' => '城市名称',
+                                                        'province_id' => '该医院的省id',
+                                                        'city_id' => '该医院的市id'
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ],
                                 ],
                                 'departments' => [
                                     'id' => '科室ID',
