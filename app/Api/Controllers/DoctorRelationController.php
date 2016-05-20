@@ -8,17 +8,122 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Requests\RelationIdRequest;
 use App\Api\Transformers\Transformer;
 use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DoctorRelationController extends BaseController
 {
     public function index()
     {
 
+    }
+
+    /**
+     * 新增好友关系
+     *
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response|\Illuminate\Http\JsonResponse|mixed
+     */
+    public function store(Request $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        /**
+         * 可以通过ID、电话、医脉码来添加好友。
+         */
+        if (isset($request['id']) && !empty($request['id'])) {
+            $friend = User::find($request['id']);
+            if (!Empty($friend)) {
+                $data['doctor_friend_id'] = $request['id'];
+            }
+        } else {
+            if (isset($request['phone']) && !empty($request['phone'])) {
+                $friend = User::where('phone', $request['phone'])->first();
+                if (!Empty($friend)) {
+                    $data['doctor_friend_id'] = $friend['id'];
+                }
+            } else {
+                if (isset($request['code']) && !empty($request['code'])) {
+                    $deptId = substr($request['code'], 0, 3);
+                    $dpCode = substr($request['code'], 3);
+                    $friend = User::where('dp_code', $dpCode)->where('dept_id', $deptId)->first();
+                    if (!Empty($friend)) {
+                        $data['doctor_friend_id'] = $friend['id'];
+                    }
+                }
+            }
+        }
+
+        if (isset($data)) {
+            $data['doctor_id'] = $user->id;
+            $data['doctor_read'] = 1;
+            $data['doctor_friend_read'] = 0;
+
+            try {
+                if (DoctorRelation::create($data)) {
+                    return $this->response->noContent();
+                } else {
+                    return response()->json(['message' => '添加失败'], 500);
+                }
+            } catch (\Exception $e) {
+                Log::info('add friend', ['context' => $e->getMessage()]);
+                return response()->json(['message' => '添加失败'], 400);
+            }
+        } else {
+            return response()->json(['message' => '该好友未加入医脉'], 400);
+        }
+    }
+
+    /**
+     * 被申请一方确认关系
+     * 
+     * @param RelationIdRequest $request
+     * @return \Dingo\Api\Http\Response|\Illuminate\Http\JsonResponse|mixed
+     */
+    public function update(RelationIdRequest $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $relation = DoctorRelation::where('doctor_id', $request['id'])->where('doctor_friend_id', $user->id)->first();
+        if (!Empty($relation)) {
+            if ($relation->where('doctor_id', $request['id'])
+                ->where('doctor_friend_id', $user->id)
+                ->update(['doctor_friend_read' => 1])
+            ) {
+                $data = [
+                    'doctor_id' => $user->id,
+                    'doctor_friend_id' => $request['id'],
+                    'doctor_read' => 1,
+                    'doctor_friend_read' => 0
+                ];
+
+                try {
+                    if (DoctorRelation::create($data)) {
+                        return $this->response->noContent();
+                    } else {
+                        return response()->json(['message' => '添加失败'], 500);
+                    }
+                } catch (\Exception $e) {
+                    Log::info('add friend', ['context' => $e->getMessage()]);
+                    return response()->json(['message' => '添加失败'], 400);
+                }
+            } else {
+                return response()->json(['message' => '确认失败'], 500);
+            }
+        } else {
+            return response()->json(['message' => '关系不存在'], 400);
+        }
     }
 
     /**

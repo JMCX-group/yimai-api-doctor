@@ -19,7 +19,7 @@ class DoctorRelation extends Model
      *
      * @var array
      */
-    protected $fillable = ['doctor_id', 'doctor_friend_id'];
+    protected $fillable = ['doctor_id', 'doctor_friend_id', 'doctor_read', 'doctor_friend_read'];
 
     /**
      * 获取和某个医生的共同好友的id list.
