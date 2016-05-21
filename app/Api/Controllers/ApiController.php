@@ -529,6 +529,36 @@ class ApiController extends BaseController
                 ],
 
                 '医脉资源' => [
+                    '新增朋友/申请好友' => [
+                        'url' => $http . '/api/user/relation/add-friend',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '用户ID； 三选一即可',
+                            'phone' => '用户手机号； 三选一即可',
+                            'code' => '用户医脉码； 三选一即可'
+                        ],
+                        'response' => [
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '同意/确定申请' => [
+                        'url' => $http . '/api/user/relation/confirm',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '用户ID'
+                        ],
+                        'response' => [
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                     '一度医脉(四部分数据,多用于首次/当天首次打开)' => [
                         'url' => $http . '/api/relation',
                         'method' => 'GET',
