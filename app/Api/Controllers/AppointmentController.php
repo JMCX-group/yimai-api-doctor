@@ -141,7 +141,7 @@ class AppointmentController extends BaseController
             ->first();
 
         $appointments['time_line'] = $this->generateTimeLine($appointments, $doctors);
-        $appointments['progress'] = ''; //TODO 待完成
+        $appointments['progress'] = $this->generateProgressStatus($appointments->status);
 
         return Transformer::appointmentsTransform($appointments, $doctors);
     }
@@ -169,6 +169,40 @@ class AppointmentController extends BaseController
 
                 $infoText = \Config::get('constants.WAIT_PAYMENT');
                 $retData = $this->copyTransformer($retData, null, $infoText, null, 'wait');
+                break;
+            case 'wait-2':
+                $retData = [];
+                break;
+            case 'wait-3':
+                $retData = [];
+                break;
+            case 'wait-4':
+                $retData = [];
+                break;
+            case 'wait-5':
+                $retData = [];
+                break;
+            case '':
+                $retData = [];
+                break;
+            default:
+                $retData = [];
+                break;
+        }
+
+        return $retData;
+    }
+
+    public function generateProgressStatus($status)
+    {
+        $retData = array();
+
+        switch ($status) {
+            case 'wait-1':
+                $retData = [
+                    'milestone' => '发起约诊',
+                    'status' => '待付款'
+                ];
                 break;
             case 'wait-2':
                 $retData = [];
