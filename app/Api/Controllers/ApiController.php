@@ -281,7 +281,7 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'form-data' => [
-                            'field' => '搜索的关键字; 必填项',
+                            'field' => '搜索的关键字; 必填项,当type为指定内容时为可选项,不过此时将会是全局搜索,返回信息量巨大',
                             'city_id' => '下拉框选择的城市ID; 可选项',
                             'hospital_id' => '下拉框选择的医院ID; 可选项',
                             'dept_id' => '下拉框选择的科室ID; 可选项',
