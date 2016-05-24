@@ -79,7 +79,22 @@ class UserController extends BaseController
             $user->profile = $request['personal_introduction'];
         }
 
-        // Generate dp code.
+        /**
+         * 接诊收费设置。
+         */
+        if (isset($request['fee_switch']) && !empty($request['fee_switch'])) {
+            $user->name = $request['fee_switch'];
+        }
+        if (isset($request['fee']) && !empty($request['fee'])) {
+            $user->name = $request['fee'];
+        }
+        if (isset($request['fee_face_to_face']) && !empty($request['fee_face_to_face'])) {
+            $user->name = $request['fee_face_to_face'];
+        }
+
+        /**
+         * Generate dp code.
+         */
         if (empty($user->dp_code) && !empty($user->dept_id)) {
             $user->dp_code = User::generateDpCode($user->dept_id);
         }

@@ -375,9 +375,12 @@ class ApiController extends BaseController
                             'college' => '用户所属院校ID',
                             'ID_number' => '身份证号',
                             'tags' => '特长/标签',
-                            'personal_introduction' => '个人简介'
+                            'personal_introduction' => '个人简介',
+                            'fee_switch' => '接诊收费开关, 1:开, 0:关(默认值)',
+                            'fee' => '接诊收费金额,默认300',
+                            'fee_face_to_face' => '当面咨询收费金额,默认100'
                         ],
-                        '说明' => '以上form-data为可选,修改任意一个或几个都可以,有什么数据加什么字段',
+                        '说明' => '以上form-data项均为可选项,修改任意一个或几个都可以,有什么数据加什么字段',
                         'response' => [
                             'user' => [
                                 'id' => '用户id',
@@ -411,6 +414,9 @@ class ApiController extends BaseController
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
                                 'is_auth' => '是否认证,1为认证,0为未认证',
+                                'fee_switch' => '1:开, 0:关',
+                                'fee' => '接诊收费金额',
+                                'fee_face_to_face' => '当面咨询收费金额',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',
