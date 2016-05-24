@@ -12,6 +12,7 @@ use App\Api\Requests\SearchUserRequest;
 use App\Api\Requests\UserRequest;
 use App\Api\Transformers\Transformer;
 use App\Api\Transformers\UserTransformer;
+use App\DeptStandard;
 use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\Hospital;
@@ -144,19 +145,42 @@ class UserController extends BaseController
         }
 
         $data = [
-            'field' => $request['field'],
-            'city_id' => isset($request['city']) ? $request['city'] : false,
-            'hospital_id' => isset($request['hospital']) ? $request['hospital'] : false,
-            'dept_id' => isset($request['department']) ? $request['department'] : false
+            'field' => isset($request['field']) && !empty($request['field']) ? $request['field'] : false,
+            'city_id' => isset($request['city']) && !empty($request['city']) ? $request['city'] : false,
+            'hospital_id' => isset($request['hospital']) && !empty($request['hospital']) ? $request['hospital'] : false,
+            'dept_id' => isset($request['department']) && !empty($request['department']) ? $request['department'] : false
         ];
 
         /**
-         * 获取基础数据:
+         * 获取基础数据: 符合条件的所有医生数据.
+         *
+         * type参数 ( false: 不传或传空的默认值) :
+         * same_hospital: 医脉处进行同医院搜索;
+         *
          */
-        $users = User::searchDoctor($data['field'], $data['city_id'], $data['hospital_id'], $data['dept_id']);
+        if (isset($request['type']) && !empty($request['type'])) {
+            switch ($request['type'])
+            {
+                case 'same_hospital':
+                    $users = User::searchDoctor_sameHospital($data['field'], $user->hospital_id);
+                    break;
+                case 'same_department':
+                    $deptIdList = DeptStandard::getSameFirstLevelDeptIdList($user->dept_id);
+                    $users = User::searchDoctor_sameDept($data['field'], $deptIdList);
+                    break;
+                case 'same_college':
+                    $users = User::searchDoctor_sameCollege($data['field'], $user->college_id);
+                    break;
+                default:
+                    $users = User::searchDoctor($data['field'], $data['city_id'], $data['hospital_id'], $data['dept_id']);
+                    break;
+            }
+        } else {
+            $users = User::searchDoctor($data['field'], $data['city_id'], $data['hospital_id'], $data['dept_id']);
+        }
 
         /**
-         * 获取辅助数据:
+         * 获取辅助数据: 最近通讯记录 / 好友ID列表
          */
         $contactRecords = DoctorContactRecord::where('doctor_id', $user->id)->lists('contacts_id_list');
         $contactRecordsIdList = (count($contactRecords) != 0) ? explode(',', $contactRecords[0]) : $contactRecords;
@@ -189,12 +213,12 @@ class UserController extends BaseController
             $this->groupByDepartments($userItem, $departments, $departmentIdList);
 
             if (in_array($userItem->id, $contactRecordsIdList)) {
-                array_push($recentContactsArr, Transformer::searchDoctorTransform($userItem));
+                array_push($recentContactsArr, Transformer::searchDoctorTransform($userItem, 1));
                 continue;
             }
 
             if (in_array($userItem->id, $friendsIdList)) {
-                array_push($friendArr, Transformer::searchDoctorTransform($userItem));
+                array_push($friendArr, Transformer::searchDoctorTransform($userItem, 1));
                 continue;
             }
 

@@ -30,7 +30,7 @@ class SearchUserRequest extends Request
     public function rules()
     {
         return [
-            'field' => 'required'
+            'field' => 'required_unless:type,same_hospital,same_department,same_college'
         ];
     }
 
@@ -40,7 +40,7 @@ class SearchUserRequest extends Request
     public function messages()
     {
         return [
-            'required' => ':attribute不能为空'
+            'required_unless' => ':attribute不能为空'
         ];
     }
 

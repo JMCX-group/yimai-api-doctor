@@ -103,9 +103,10 @@ class Transformer
 
     /**
      * @param $user
+     * @param $relation
      * @return array
      */
-    public static function searchDoctorTransform($user)
+    public static function searchDoctorTransform($user, $relation=null)
     {
         return [
             'id' => $user->id,
@@ -120,7 +121,8 @@ class Transformer
             'department' => [
                 'id' => $user->dept_id,
                 'name' => $user->dept,
-            ]
+            ],
+            'relation' => $relation
         ];
     }
 

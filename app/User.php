@@ -152,7 +152,7 @@ class User extends Model implements AuthenticatableContract,
      * 根据必填的字段值和可选的城市/医院/科室条件搜索符合条件的医生.
      * id转name.
      * 按是否三甲医院排序.
-     * 
+     *
      * @param $field
      * @param $cityId
      * @param $hospitalId
@@ -175,19 +175,89 @@ class User extends Model implements AuthenticatableContract,
         $condition .= "or doctors.tag_list like '%$field%' ";
         $condition .= ") ";
 
+        return self::defaultSearchSql($condition, "ORDER BY hospitals.three_a desc");
+    }
+
+    /**
+     * 搜索同医院的医生信息.
+     * id转name.
+     *
+     * @param $field
+     * @param $hospitalId
+     * @return mixed
+     */
+    public static function searchDoctor_sameHospital($field, $hospitalId)
+    {
+        $condition = "where `hospital_id` = '$hospitalId' ";
+        $condition .= $field ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' ) " : "";
+
+        return self::defaultSearchSql($condition);
+    }
+
+    /**
+     * 搜索相同一级科室的所有一二级科室的医生信息。
+     * id转name。
+     *
+     * @param $field
+     * @param $deptList
+     * @return mixed
+     */
+    public static function searchDoctor_sameDept($field, $deptList)
+    {
+        $deptList = implode(',', $deptList);
+        $condition = "where `dept_id` IN ($deptList) ";
+        $condition .= $field ? "and (doctors.name like '%$field%' or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') " : "";
+
+        return self::defaultSearchSql($condition);
+    }
+
+    /**
+     * 搜索同院校下的医生信息。
+     * id转name。
+     *
+     * @param $field
+     * @param $collegeId
+     * @return mixed
+     */
+    public static function searchDoctor_sameCollege($field, $collegeId)
+    {
+        $condition = "where `college_id` = '$collegeId' ";
+        $condition .= $field
+            ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' " .
+            "or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') "
+            : "";
+
+        return self::defaultSearchSql($condition);
+    }
+
+    /**
+     * 标准的查询SQL语句
+     *
+     * @param $condition
+     * @param $order
+     * @return mixed
+     */
+    public static function defaultSearchSql($condition, $order='')
+    {
         return DB::select(
             "SELECT doctors.id, doctors.name, doctors.avatar, doctors.province_id, doctors.city_id, doctors.hospital_id, doctors.dept_id, doctors.title, " .
-                "provinces.name AS province, citys.name AS city, hospitals.name AS hospital, dept_standards.name AS dept " .
+            "provinces.name AS province, citys.name AS city, hospitals.name AS hospital, dept_standards.name AS dept " .
             "FROM doctors " .
             "LEFT JOIN provinces ON provinces.id=doctors.province_id " .
             "LEFT JOIN dept_standards ON dept_standards.id=doctors.dept_id " .
             "LEFT JOIN citys ON citys.id=doctors.city_id " .
             "LEFT JOIN hospitals ON hospitals.id=doctors.hospital_id " .
-            $condition .
-            "ORDER BY hospitals.three_a desc"
+            $condition.
+            $order
         );
     }
 
+    /**
+     * 获得某个医生主页信息
+     *
+     * @param $id
+     * @return mixed
+     */
     public static function findDoctor($id)
     {
         return User::select(
@@ -195,7 +265,7 @@ class User extends Model implements AuthenticatableContract,
             'doctors.province_id', 'doctors.city_id', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.college_id',
             'doctors.tag_list', 'doctors.profile',
             'provinces.name AS province', 'citys.name AS city',
-            'hospitals.name AS hospital', 'dept_standards.name AS dept', 
+            'hospitals.name AS hospital', 'dept_standards.name AS dept',
             'colleges.name AS college')
             ->leftJoin('provinces', 'provinces.id', '=', 'doctors.province_id')
             ->leftJoin('citys', 'citys.id', '=', 'doctors.city_id')
