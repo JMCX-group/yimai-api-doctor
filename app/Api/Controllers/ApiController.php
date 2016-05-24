@@ -235,6 +235,9 @@ class ApiController extends BaseController
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
                                 'is_auth' => '是否认证,1为认证,0为未认证',
+                                'fee_switch' => '1:开, 0:关',
+                                'fee' => '接诊收费金额',
+                                'fee_face_to_face' => '当面咨询收费金额',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',

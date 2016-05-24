@@ -48,6 +48,9 @@ class UserTransformer extends TransformerAbstract
             'tags' => $user['tag_list'],
             'personal_introduction' => $user['profile'],
             'is_auth' => $user['auth'],
+            'fee_switch' => $user['fee_switch'],
+            'fee' => $user['fee'],
+            'fee_face_to_face' => $user['fee_face_to_face'],
             'inviter' => $user['inviter_dp_code']
         ];
     }
