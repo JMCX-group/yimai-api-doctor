@@ -842,7 +842,7 @@ class ApiController extends BaseController
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => '还未做完,可以测试:/api/appointment/detail/011605130001?token=',
+                        '说明' => '还未做完,可以测试:/api/appointment/detail/011605130001?token= ; 可测试约诊号(每个状态不同):011605130001,011605130002,011605130003',
                         'response' => [
                             'doctor_info' => [
                                 'id' => '用户ID',
