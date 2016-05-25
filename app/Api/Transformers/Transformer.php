@@ -39,6 +39,27 @@ class Transformer
     }
 
     /**
+     * Transform users.
+     * @param $users
+     * @return mixed
+     */
+    public static function usersTransform($users)
+    {
+        $hospitalIdList = array();
+        $deptIdList = array();
+        $newUsers = array();
+
+        foreach ($users as $user) {
+            array_push($hospitalIdList, $user->hospital_id);
+            array_push($deptIdList, $user->dept_id);
+
+            array_push($newUsers, self::userTransform($user));
+        }
+
+        return self::idToIdName($newUsers, $hospitalIdList, $deptIdList);
+    }
+
+    /**
      * Transform user.
      *
      * @param $user
@@ -149,6 +170,42 @@ class Transformer
             foreach ($depts as $dept) {
                 if ($user['department'] == $dept['id']) {
                     $user['department'] = $dept['name'];
+                }
+            }
+        }
+
+        return $users;
+    }
+
+    /**
+     * ID to ID:Name.
+     * 
+     * @param $users
+     * @param $hospitalIdList
+     * @param $deptIdList
+     * @return mixed
+     */
+    public static function idToIdName($users, $hospitalIdList, $deptIdList)
+    {
+        $hospitals = Hospital::select('id', 'name')->find($hospitalIdList);
+        $depts = DeptStandard::select('id', 'name')->find($deptIdList);
+
+        foreach ($users as &$user) {
+            foreach ($hospitals as $hospital) {
+                if ($user['hospital'] == $hospital['id']) {
+                    $user['hospital'] = [
+                        'id' => $hospital['id'],
+                        'name' => $hospital['name'],
+                    ];
+                }
+            }
+
+            foreach ($depts as $dept) {
+                if ($user['department'] == $dept['id']) {
+                    $user['department'] = [
+                        'id' => $dept['id'],
+                        'name' => $dept['name'],
+                    ];
                 }
             }
         }

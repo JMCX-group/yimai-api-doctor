@@ -200,6 +200,29 @@ class DoctorRelationController extends BaseController
     }
 
     /**
+     * Get common friends.
+     * 
+     * @param $friendId
+     * @return array|mixed
+     */
+    public function getCommonFriends($friendId)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $friendsIdList = DoctorRelation::getFriendIdList($user->id);
+        $commonFriendsIdList = DoctorRelation::where('doctor_id', $friendId)
+            ->whereIn('doctor_friend_id', $friendsIdList)
+            ->lists('doctor_friend_id')
+            ->toArray();
+        $commonFriends = User::find($commonFriendsIdList);
+        
+        return Transformer::usersTransform($commonFriends);
+    }
+
+    /**
      * Get new friends info.
      * Set read status.
      *

@@ -78,6 +78,7 @@ $api->version('v1', function ($api) {
                 $api->get('/', 'DoctorRelationController@getRelations');
                 $api->get('friends', 'DoctorRelationController@getRelationsFriends');
                 $api->get('friends-friends', 'DoctorRelationController@getRelationsFriendsFriends');
+                $api->get('common-friends/{friend}', 'DoctorRelationController@getCommonFriends');
                 $api->get('new-friends', 'DoctorRelationController@getNewFriends');
                 $api->post('push-recent-contacts', 'DoctorRelationController@pushRecentContacts');
                 $api->post('remarks', 'DoctorRelationController@setRemarks');

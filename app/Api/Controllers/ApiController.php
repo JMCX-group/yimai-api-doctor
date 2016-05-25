@@ -318,7 +318,7 @@ class ApiController extends BaseController
                                     ],
 
                                     '安卓格式说明' => '提交format字段,且值为android时,hospitals会返回该格式 :',
-                                    '{自增的数据序号}' => [
+                                    '{自增的数组序号}' => [
                                         'province_id' => '省份ID',
                                         'data' => [
                                             '{自增的数据序号}' => [
@@ -653,6 +653,31 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '共同好友' => [
+                        'url' => $http . '/api/relation/common-friends/{friend-id}',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            '{自增的数组序号}' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'hospital' => [
+                                    'id' => '用户所在医院ID',
+                                    'name' => '用户所在医院名称'
+                                ],
+                                'department' => [
+                                    'id' => '用户所在科室ID',
+                                    'name' => '用户所在科室名称'
+                                ],
+                                'job_title' => '职称'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                     '新朋友' => [
                         'url' => $http . '/api/relation/new-friends',
                         'method' => 'GET',
@@ -840,12 +865,12 @@ class ApiController extends BaseController
                                 'progress' => '进度,该项还未做完',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
-                                    0 => [
+                                    '{自增的数组序号0}' => [
                                         'time' => '时间轴左侧的时间',
                                         'info' => [
                                             'text' => '文案描述',
                                             'other' => [
-                                                0 => [
+                                                '{自增的数组序号}' => [
                                                     'name' => '其他的信息名称,例如:期望就诊时间',
                                                     'content' => '其他的信息内容,例如:2016-05-18 上午'
                                                 ]
@@ -853,7 +878,7 @@ class ApiController extends BaseController
                                         ],
                                         'type' => '决定使用什么icon; begin | wait'
                                     ],
-                                    1 => [
+                                    '{自增的数组序号1}' => [
                                         'time' => '时间轴左侧的时间, null为没有',
                                         'info' => [
                                             'text' => '文案描述',
