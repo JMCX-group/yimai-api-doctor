@@ -36,9 +36,8 @@ class FaceToFaceAdviceController extends BaseController
             'doctor_id' => $user->id,
             'phone' => $request['phone'],
             'name' => $request['name'],
-            'price' => $user->fee_face_to_face,
-            'transaction_id' => '', //TODO 接入微信支付后需要生成订单号和二维码
-            'out_trade_no' => '',
+            'price' => $user->fee_face_to_face, //医生的收入
+            'transaction_id' => '', //TODO 接入微信支付后需要生成订单号和实际支付金额(含平台手续费)
             'status' => 'wait_pay'
         ];
 
@@ -48,12 +47,14 @@ class FaceToFaceAdviceController extends BaseController
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
         }
 
-        $QrCode = ''; //TODO 接入微信支付后需要生成订单号和二维码
+        $QrCode = ''; //TODO 接入微信支付后需要生成二维码
+        
+        $price = intval($faceToFaceAdvice['price']) + 0; //TODO 需要增加平台手续费
 
         return [
             'data' => [
                 'id' => $faceToFaceAdvice->id,
-                'price' => $faceToFaceAdvice->price, //TODO 需要增加平台手续费
+                'price' => $price,
                 'qr_code' => ''
             ]
         ];

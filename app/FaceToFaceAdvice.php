@@ -25,7 +25,6 @@ class FaceToFaceAdvice extends Model
         'name',
         'price',
         'transaction_id',
-        'out_trade_no',
         'status'
     ];
 }
