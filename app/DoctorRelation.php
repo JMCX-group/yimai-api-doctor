@@ -19,7 +19,13 @@ class DoctorRelation extends Model
      *
      * @var array
      */
-    protected $fillable = ['doctor_id', 'doctor_friend_id', 'doctor_read', 'doctor_friend_read'];
+    protected $fillable = [
+        'doctor_id',
+        'doctor_friend_id',
+        'friend_remarks',
+        'doctor_read',
+        'doctor_friend_read'
+    ];
 
     /**
      * 获取和某个医生的共同好友的id list.
@@ -267,5 +273,18 @@ class DoctorRelation extends Model
     {
         DoctorRelation::where('doctor_id', $id)->update(['doctor_read' => 1]);
         DoctorRelation::where('doctor_friend_id', $id)->update(['doctor_friend_read' => 1]);
+    }
+
+    /**
+     * @param $myId
+     * @param $friendId
+     * @return mixed
+     */
+    public static function destroyRelation($myId, $friendId)
+    {
+        return DB::delete(
+            "DELETE FROM doctor_relations " .
+            "WHERE (doctor_id=$myId AND doctor_friend_id=$friendId) OR (doctor_id=$friendId AND doctor_friend_id=$myId)"
+        );
     }
 }

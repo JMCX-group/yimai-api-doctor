@@ -36,7 +36,7 @@ class ApiController extends BaseController
                 'HTTP状态码速记' => [
                     '释义' => 'HTTP状态码有五个不同的类别:',
                     '1xx' => '临时/信息响应',
-                    '2xx' => '成功; 200表示成功获取正确的数据, 204表示执行/通讯成功,但是无返回数据',
+                    '2xx' => '成功; 200表示成功获取正确的数据; 204表示执行/通讯成功,但是无返回数据',
                     '3xx' => '重定向',
                     '4xx' => '客户端/请求错误; 需检查url拼接和参数; 在我们这会出现可以提示的[message]或需要重新登录获取token的[error]',
                     '5xx' => '服务器错误; 可以提示服务器崩溃/很忙啦~',
@@ -690,6 +690,37 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+
+                    '给好友添加备注' => [
+                        'url' => $http . '/api/user/relation/remarks',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'friend_id' => '好友的用户ID',
+                            'remarks' => '备注内容'
+                        ],
+                        'response' => [
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+
+                    '删除好友关系' => [
+                        'url' => $http . '/api/user/relation/del',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'friend_id' => '好友的用户ID'
+                        ],
+                        'response' => [
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
                 ],
 
                 '广播信息' => [
@@ -736,7 +767,6 @@ class ApiController extends BaseController
                             'id' => '广播ID'
                         ],
                         'response' => [
-                            'Status Code' => '204',
                             'message' => '',
                             'error' => ''
                         ]

@@ -9,6 +9,7 @@
 namespace App\Api\Controllers;
 
 use App\Api\Requests\RelationIdRequest;
+use App\Api\Requests\RemarksRequest;
 use App\Api\Transformers\Transformer;
 use App\DoctorContactRecord;
 use App\DoctorRelation;
@@ -84,7 +85,7 @@ class DoctorRelationController extends BaseController
 
     /**
      * 被申请一方确认关系
-     * 
+     *
      * @param RelationIdRequest $request
      * @return \Dingo\Api\Http\Response|\Illuminate\Http\JsonResponse|mixed
      */
@@ -247,5 +248,55 @@ class DoctorRelationController extends BaseController
         }
 
         return $this->response->noContent();
+    }
+
+    /**
+     * @param RemarksRequest $request
+     * @return \Dingo\Api\Http\Response|\Illuminate\Http\JsonResponse|mixed
+     */
+    public function setRemarks(RemarksRequest $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        try {
+            if (DoctorRelation::where('doctor_id', $user->id)
+                ->where('doctor_friend_id', $request['friend_id'])
+                ->update(['friend_remarks' => $request['remarks']])
+            ) {
+                return $this->response->noContent();
+            } else {
+                return response()->json(['message' => '备注失败'], 500);
+            }
+        } catch (\Exception $e) {
+            Log::info('set friend remarks', ['context' => $e->getMessage()]);
+            return response()->json(['message' => '备注失败'], 400);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response|\Illuminate\Http\JsonResponse|mixed
+     */
+    public function destroy(Request $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        try {
+            if (DoctorRelation::destroyRelation($user->id, $request['friend_id'])
+            ) {
+                return $this->response->noContent();
+            } else {
+                return response()->json(['message' => '删除失败'], 500);
+            }
+        } catch (\Exception $e) {
+            Log::info('del friend', ['context' => $e->getMessage()]);
+            return response()->json(['message' => '删除失败'], 400);
+        }
     }
 }
