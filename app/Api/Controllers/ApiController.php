@@ -745,7 +745,7 @@ class ApiController extends BaseController
 
                 '约诊' => [
                     '新建约诊' => [
-                        'url' => $http . '/api/appointment',
+                        'url' => $http . '/api/appointment/new',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
@@ -837,6 +837,29 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ]
+                ],
+
+                '当面咨询' => [
+                    '新建当面咨询' => [
+                        'url' => $http . '/api/f2f-advice/new',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'phone' => '患者手机号',
+                            'name' => '患者姓名'
+                        ],
+                        'response' => [
+                            'data' => [
+                                'id' => '当面咨询ID',
+                                'price' => '总共支付的价格,含医生收入和平台收入',
+                                'qr_code' => '提供扫描支付的二维码url'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                 ],
 
                 '患者信息' => [

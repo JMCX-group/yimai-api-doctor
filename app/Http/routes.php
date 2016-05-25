@@ -99,6 +99,11 @@ $api->version('v1', function ($api) {
             $api->group(['prefix' => 'patient'], function ($api) {
                 $api->get('get-by-phone', 'PatientController@getInfoByPhone');
             });
+
+            //Face-to-face
+            $api->group(['prefix' => 'f2f-advice'], function ($api) {
+                $api->post('new', 'FaceToFaceAdviceController@store');
+            });
         });
     });
 });
