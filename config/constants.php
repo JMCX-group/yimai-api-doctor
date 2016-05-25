@@ -37,5 +37,10 @@ return [
     'DOCTOR_EXPIRED_APPOINTMENT_CLOSE' => '医生过期未接诊,约诊关闭',
     'PATIENT_EXPIRED_APPOINTMENT_CLOSE' => '患者过期未确认,约诊关闭',
 
-    'TREATMENT_TIME' => '期望就诊时间',
+    'DESIRED_TREATMENT_TIME' => '期望就诊时间',
+    
+    'TREATMENT_TIME' => '就诊时间',
+    'TREATMENT_HOSPITAL' => '就诊医院',
+    'SUPPLEMENT' => '补充说明',
+    'TREATMENT_NOTICE' => '就诊须知'
 ];

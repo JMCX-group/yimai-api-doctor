@@ -28,8 +28,11 @@ class Appointment extends Model
         'patient_history',
         'patient_imgs',
         'doctor_id',
+        'expect_visit_time',
+        'expect_am_pm',
         'visit_time',
         'am_pm',
+        'remark',
         'status'
     ];
 }

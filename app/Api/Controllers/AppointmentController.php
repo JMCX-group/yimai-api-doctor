@@ -12,6 +12,8 @@ use App\Api\Requests\AppointmentIdRequest;
 use App\Api\Requests\AppointmentRequest;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
+use App\Hospital;
+use App\PayRecord;
 use App\User;
 use Intervention\Image\Facades\Image;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -58,8 +60,8 @@ class AppointmentController extends BaseController
             'patient_age' => $request['age'],
             'patient_history' => $request['history'],
             'doctor_id' => $request['doctor'],
-            'visit_time' => $request['time'],
-            'am_pm' => $request['am_or_pm'],
+            'expect_visit_time' => $request['time'],
+            'expect_am_pm' => $request['am_or_pm'],
         ];
 
         try {
@@ -147,8 +149,14 @@ class AppointmentController extends BaseController
     }
 
     /**
-     * 生成时间轴及其文案
-     * 
+     * 生成时间轴及其文案。
+     * wait-1: 待患者付款
+     * wait-2: 患者已付款，待医生确认
+     * wait-3: 医生确认接诊，待面诊
+     * wait-4: 医生改期，待患者确认
+     * wait-5: 患者确认改期，待面诊
+     *
+     *
      * @param $appointments
      * @param $doctors
      * @return array
@@ -157,24 +165,47 @@ class AppointmentController extends BaseController
     {
         $retData = array();
 
+        /**
+         * 发起约诊的第一个时间点内容:
+         */
+        $time = $appointments->created_at->format('Y-m-d H:i:s');
+        $infoText = $this->beginText($appointments, $doctors);
+        $infoOther = [[
+            'name' => \Config::get('constants.DESIRED_TREATMENT_TIME'),
+            'content' => $appointments->expect_visit_time . ' ' . (($appointments->expect_am_pm == 'am') ? '上午' : '下午')
+        ]];
+        $retData = $this->copyTransformer($retData, $time, $infoText, $infoOther, 'begin');
+
         switch ($appointments->status) {
             case 'wait-1':
-                $time = $appointments->created_at->format('Y-m-d H:i:s');
-                $infoText = $this->beginText($appointments, $doctors);
-                $infoOther = [0 => [
-                    'name' => \Config::get('constants.TREATMENT_TIME'),
-                    'content' => $appointments->visit_time . ' ' . (($appointments->am_pm == 'am') ? '上午' : '下午')
-                ]];
-                $retData = $this->copyTransformer($retData, $time, $infoText, $infoOther, 'begin');
-
                 $infoText = \Config::get('constants.WAIT_PAYMENT');
                 $retData = $this->copyTransformer($retData, null, $infoText, null, 'wait');
                 break;
             case 'wait-2':
-                $retData = [];
+                $infoText = \Config::get('constants.ALREADY_PAID_WAIT_CONFIRM');
+                $retData = $this->copyTransformer($retData, null, $infoText, null, 'wait');
                 break;
             case 'wait-3':
-                $retData = [];
+                $payRecord = PayRecord::where('transaction_id', $appointments->transaction_id)->get()->first();
+                $time = $payRecord->created_at->format('Y-m-d H:i:s');
+                $infoText = \Config::get('constants.ALREADY_PAID');
+                $retData = $this->copyTransformer($retData, $time, $infoText, null, 'pass');
+
+                $infoText = \Config::get('constants.CONFIRM_ADMISSIONS_WAIT_FACE_CONSULTATION');
+                $infoOther = [[
+                    'name' => \Config::get('constants.TREATMENT_TIME'),
+                    'content' => $appointments->visit_time . ' ' . (($appointments->am_pm == 'am') ? '上午' : '下午')
+                ], [
+                    'name' => \Config::get('constants.TREATMENT_HOSPITAL'),
+                    'content' => $doctors->hospital
+                ], [
+                    'name' => \Config::get('constants.SUPPLEMENT'),
+                    'content' => Hospital::where('id', $doctors->hospital_id)->get()->lists('address')->first()
+                ], [
+                    'name' => \Config::get('constants.TREATMENT_NOTICE'),
+                    'content' => $appointments->remark
+                ], ];
+                $retData = $this->copyTransformer($retData, null, $infoText, $infoOther, 'notepad');
                 break;
             case 'wait-4':
                 $retData = [];
@@ -193,10 +224,20 @@ class AppointmentController extends BaseController
         return $retData;
     }
 
+    /**
+     * 生成顶部的进度状态字。
+     * wait-1: 待患者付款
+     * wait-2: 患者已付款，待医生确认
+     * wait-3: 医生确认接诊，待面诊
+     * wait-4: 医生改期，待患者确认
+     * wait-5: 患者确认改期，待面诊
+     *
+     *
+     * @param $status
+     * @return array
+     */
     public function generateProgressStatus($status)
     {
-        $retData = array();
-
         switch ($status) {
             case 'wait-1':
                 $retData = [
@@ -205,10 +246,16 @@ class AppointmentController extends BaseController
                 ];
                 break;
             case 'wait-2':
-                $retData = [];
+                $retData = [
+                    'milestone' => '患者确认',
+                    'status' => '待确认'
+                ];
                 break;
             case 'wait-3':
-                $retData = [];
+                $retData = [
+                    'milestone' => '医生确认',
+                    'status' => '待面诊'
+                ];
                 break;
             case 'wait-4':
                 $retData = [];
