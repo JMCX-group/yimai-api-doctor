@@ -126,6 +126,11 @@ class AppointmentController extends BaseController
      */
     public function getDetailInfo($id)
     {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
         $appointments = Appointment::where('appointments.id', $id)
             ->leftJoin('doctors', 'doctors.id', '=', 'appointments.locums_id')
             ->leftJoin('patients', 'patients.id', '=', 'appointments.patient_id')
@@ -142,7 +147,24 @@ class AppointmentController extends BaseController
             ->get()
             ->first();
 
-        $appointments['time_line'] = $this->generateTimeLine($appointments, $doctors);
+        /**
+         * 自己不是代约医生的话,需要查询代约医生的信息:
+         */
+        if($user->id != $appointments->locums_id){
+            $locumsDoctor = User::select(
+                'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.title',
+                'hospitals.name AS hospital', 'dept_standards.name AS dept')
+                ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
+                ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
+                ->where('doctors.id', $appointments->locums_id)
+                ->get()
+                ->first();
+
+            $appointments['time_line'] = $this->generateTimeLine($appointments, $doctors, $user->id, $locumsDoctor);
+        } else {
+            $appointments['time_line'] = $this->generateTimeLine($appointments, $doctors, $user->id);
+        }
+
         $appointments['progress'] = $this->generateProgressStatus($appointments->status);
 
         return Transformer::appointmentsTransform($appointments, $doctors);
@@ -159,9 +181,11 @@ class AppointmentController extends BaseController
      *
      * @param $appointments
      * @param $doctors
-     * @return array
+     * @param $myId
+     * @param null $locumsDoctor
+     * @return array|mixed
      */
-    public function generateTimeLine($appointments, $doctors)
+    public function generateTimeLine($appointments, $doctors, $myId, $locumsDoctor=null)
     {
         $retData = array();
 
@@ -175,6 +199,14 @@ class AppointmentController extends BaseController
             'content' => $appointments->expect_visit_time . ' ' . (($appointments->expect_am_pm == 'am') ? '上午' : '下午')
         ]];
         $retData = $this->copyTransformer($retData, $time, $infoText, $infoOther, 'begin');
+        /**
+         * 如果是患者发起代约,多一条信息:
+         */
+        if ($appointments->doctor_or_patient == 'p') {
+            $time = $appointments->confirm_locums_time;
+            $infoText = $this->confirmLocumsText($appointments, $myId, $locumsDoctor);
+            $retData = $this->copyTransformer($retData, $time, $infoText, null, 'pass');
+        }
 
         switch ($appointments->status) {
             case 'wait-1':
@@ -192,26 +224,48 @@ class AppointmentController extends BaseController
                 $retData = $this->copyTransformer($retData, $time, $infoText, null, 'pass');
 
                 $infoText = \Config::get('constants.CONFIRM_ADMISSIONS_WAIT_FACE_CONSULTATION');
-                $infoOther = [[
-                    'name' => \Config::get('constants.TREATMENT_TIME'),
-                    'content' => $appointments->visit_time . ' ' . (($appointments->am_pm == 'am') ? '上午' : '下午')
-                ], [
-                    'name' => \Config::get('constants.TREATMENT_HOSPITAL'),
-                    'content' => $doctors->hospital
-                ], [
-                    'name' => \Config::get('constants.SUPPLEMENT'),
-                    'content' => Hospital::where('id', $doctors->hospital_id)->get()->lists('address')->first()
-                ], [
-                    'name' => \Config::get('constants.TREATMENT_NOTICE'),
-                    'content' => $appointments->remark
-                ], ];
+                $infoOther = $this->infoOther_faceConsultation($appointments, $doctors);
                 $retData = $this->copyTransformer($retData, null, $infoText, $infoOther, 'notepad');
                 break;
             case 'wait-4':
-                $retData = [];
+                $payRecord = PayRecord::where('transaction_id', $appointments->transaction_id)->get()->first();
+                $time = $payRecord->created_at->format('Y-m-d H:i:s');
+                $infoText = \Config::get('constants.ALREADY_PAID');
+                $retData = $this->copyTransformer($retData, $time, $infoText, null, 'pass');
+
+                $time = $appointments->confirm_admissions_time;
+                $infoText = \Config::get('constants.CONFIRM_ADMISSIONS_WAIT_FACE_CONSULTATION');
+                $infoOther = $this->infoOther_faceConsultation($appointments, $doctors);
+                $retData = $this->copyTransformer($retData, $time, $infoText, $infoOther, 'notepad');
+
+                $infoText = \Config::get('constants.DOCTOR_RESCHEDULED_WAIT_CONFIRM');
+                $retData = $this->copyTransformer($retData, null, $infoText, null, 'wait');
                 break;
             case 'wait-5':
-                $retData = [];
+                $payRecord = PayRecord::where('transaction_id', $appointments->transaction_id)->get()->first();
+                $time = $payRecord->created_at->format('Y-m-d H:i:s');
+                $infoText = \Config::get('constants.ALREADY_PAID');
+                $retData = $this->copyTransformer($retData, $time, $infoText, null, 'pass');
+
+                $time = $appointments->confirm_admissions_time;
+                $infoText = \Config::get('constants.CONFIRM_ADMISSIONS_WAIT_FACE_CONSULTATION');
+                $infoOther = $this->infoOther_faceConsultation($appointments, $doctors);
+                $retData = $this->copyTransformer($retData, $time, $infoText, $infoOther, 'notepad');
+
+                $time = $appointments->rescheduled_time;
+                $infoText = \Config::get('constants.DOCTOR_RESCHEDULED');
+                $infoOther = [[
+                    'name' => \Config::get('constants.RESCHEDULED_TIME'),
+                    'content' => $appointments->new_visit_time . ' ' . (($appointments->new_am_pm == 'am') ? '上午' : '下午')
+                ]];
+                $retData = $this->copyTransformer($retData, $time, $infoText, $infoOther, 'time');
+
+                $time = $appointments->confirm_rescheduled_time;
+                $infoText = \Config::get('constants.CONFIRM_RESCHEDULED');
+                $retData = $this->copyTransformer($retData, $time, $infoText, null, 'pass');
+
+                $infoText = \Config::get('constants.WAIT_FACE_CONSULTATION');
+                $retData = $this->copyTransformer($retData, null, $infoText, null, 'wait');
                 break;
             case '':
                 $retData = [];
@@ -222,6 +276,28 @@ class AppointmentController extends BaseController
         }
 
         return $retData;
+    }
+
+    /**
+     * @param $appointments
+     * @param $doctors
+     * @return array
+     */
+    private function infoOther_faceConsultation($appointments, $doctors)
+    {
+        return [[
+            'name' => \Config::get('constants.TREATMENT_TIME'),
+            'content' => $appointments->visit_time . ' ' . (($appointments->am_pm == 'am') ? '上午' : '下午')
+        ], [
+            'name' => \Config::get('constants.TREATMENT_HOSPITAL'),
+            'content' => $doctors->hospital
+        ], [
+            'name' => \Config::get('constants.SUPPLEMENT'),
+            'content' => Hospital::where('id', $doctors->hospital_id)->get()->lists('address')->first()
+        ], [
+            'name' => \Config::get('constants.TREATMENT_NOTICE'),
+            'content' => $appointments->remark
+        ], ];
     }
 
     /**
@@ -258,10 +334,16 @@ class AppointmentController extends BaseController
                 ];
                 break;
             case 'wait-4':
-                $retData = [];
+                $retData = [
+                    'milestone' => '医生确认',
+                    'status' => '改期待确认'
+                ];
                 break;
             case 'wait-5':
-                $retData = [];
+                $retData = [
+                    'milestone' => '医生确认',
+                    'status' => '待面诊'
+                ];
                 break;
             case '':
                 $retData = [];
@@ -291,6 +373,27 @@ class AppointmentController extends BaseController
         } else {
             $text = \Config::get('constants.APPOINTMENT_DEFAULT_REQUEST');
             $text = str_replace('{患者}', $appointments->patient_name, $text);
+        }
+
+        return $text;
+    }
+
+    /**
+     * 确认代约文案的角色名称替换
+     *
+     * @param $appointments
+     * @param $myId
+     * @param null $locumsDoctor
+     * @return mixed
+     */
+    public function confirmLocumsText($appointments, $myId, $locumsDoctor=null)
+    {
+        if ($appointments->locums_id == $myId) {
+            $text = \Config::get('constants.CONFIRM_APPOINTMENT');
+            $text = str_replace('{人称}', '您', $text);
+        } else {
+            $text = \Config::get('constants.CONFIRM_APPOINTMENT');
+            $text = str_replace('{人称}', $locumsDoctor['name'], $text);
         }
 
         return $text;

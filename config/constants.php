@@ -23,7 +23,10 @@ return [
 
     'DOCTOR_RESCHEDULED_WAIT_CONFIRM' => '医生改期,待患者确认',
     'DOCTOR_RESCHEDULED' => '医生改期',
+
     'CONFIRM_RESCHEDULED_WAIT_FACE_CONSULTATION' => '患者确认改期,待面诊',
+    'CONFIRM_RESCHEDULED' => '患者确认改期',
+    'WAIT_FACE_CONSULTATION' => '待面诊',
 
     'UNPAID_APPOINTMENT_CLOSE' => '患者过期未付款,约诊关闭',
 
@@ -42,5 +45,7 @@ return [
     'TREATMENT_TIME' => '就诊时间',
     'TREATMENT_HOSPITAL' => '就诊医院',
     'SUPPLEMENT' => '补充说明',
-    'TREATMENT_NOTICE' => '就诊须知'
+    'TREATMENT_NOTICE' => '就诊须知',
+
+    'RESCHEDULED_TIME' => '改期时间',
 ];
