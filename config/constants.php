@@ -31,6 +31,7 @@ return [
     'UNPAID_APPOINTMENT_CLOSE' => '患者过期未付款,约诊关闭',
 
     'DOCTOR_CANCEL_APPOINTMENT' => '医生取消约诊',
+    'DOCTOR_CANCEL_ADMISSIONS' => '医生取消接诊',
     'PATIENT_CANCEL_APPOINTMENT' => '患者取消约诊',
 
     'DOCTOR_REFUSED_APPOINTMENT' => '医生无法约诊', //等同于医生拒绝
@@ -38,6 +39,7 @@ return [
     'FACE_CONSULTATION_COMPLETE' => '面诊完成',
 
     'DOCTOR_EXPIRED_APPOINTMENT_CLOSE' => '医生过期未接诊,约诊关闭',
+    'DOCTOR_APPOINTMENT_CLOSE' => '医生无法接诊',
     'PATIENT_EXPIRED_APPOINTMENT_CLOSE' => '患者过期未确认,约诊关闭',
 
     'DESIRED_TREATMENT_TIME' => '期望就诊时间',
@@ -48,4 +50,9 @@ return [
     'TREATMENT_NOTICE' => '就诊须知',
 
     'RESCHEDULED_TIME' => '改期时间',
+
+    'NOT_PAY_CLOSE' => '患者过期未付款,约诊关闭',
+    ''
+//    'NOT_PAY_CLOSE' => '患者过期未付款,约诊关闭',
+    
 ];
