@@ -308,7 +308,7 @@ class ApiController extends BaseController
                                     '默认格式说明' => '例如: hospitals[1][1]可以取到1省1市下的医院列表',
                                     '{province_id}' => [
                                         '{city_id}' => [
-                                            '{自增的数据序号}' => [
+                                            '{自增的数据下标,非key}' => [
                                                 'id' => '医院ID',
                                                 'name' => '城市名称',
                                                 'province_id' => '该医院的省id',
@@ -321,10 +321,10 @@ class ApiController extends BaseController
                                     '{自增的数组序号}' => [
                                         'province_id' => '省份ID',
                                         'data' => [
-                                            '{自增的数据序号}' => [
+                                            '{自增的数据下标,非key}' => [
                                                 'city_id' => '城市ID',
                                                 'data' => [
-                                                    '{自增的数据序号}' => [
+                                                    '{自增的数据下标,非key}' => [
                                                         'id' => '医院ID',
                                                         'name' => '城市名称',
                                                         'province_id' => '该医院的省id',
@@ -869,27 +869,27 @@ class ApiController extends BaseController
                                 'progress' => '进度,该项还未做完',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
-                                    '{自增的数组序号0}' => [
+                                    '内容' => [[
                                         'time' => '时间轴左侧的时间',
                                         'info' => [
                                             'text' => '文案描述',
                                             'other' => [
-                                                '{自增的数组序号}' => [
+                                                '内容' => [[
                                                     'name' => '其他的信息名称,例如:期望就诊时间',
                                                     'content' => '其他的信息内容,例如:2016-05-18 上午'
-                                                ]
+                                                ],[]]
                                             ]
                                         ],
                                         'type' => '决定使用什么icon; begin | wait'
                                     ],
-                                    '{自增的数组序号1}' => [
-                                        'time' => '时间轴左侧的时间, null为没有',
-                                        'info' => [
-                                            'text' => '文案描述',
-                                            'other' => 'null为没有'
-                                        ],
-                                        'type' => '决定使用什么icon; begin | wait'
-                                    ]
+                                        [
+                                            'time' => '时间轴左侧的时间, null为没有',
+                                            'info' => [
+                                                'text' => '文案描述',
+                                                'other' => 'null为没有'
+                                            ],
+                                            'type' => '决定使用什么icon; begin | wait'
+                                        ]]
                                 ]
                             ],
                             'message' => '',
