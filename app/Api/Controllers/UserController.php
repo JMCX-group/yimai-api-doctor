@@ -37,6 +37,9 @@ class UserController extends BaseController
             return $user;
         }
 
+        if (isset($request['password']) && !empty($request['password'])) {
+            $user->password = bcrypt($request->get('password'));
+        }
         if (isset($request['name']) && !empty($request['name'])) {
             $user->name = $request['name'];
         }

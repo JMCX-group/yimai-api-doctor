@@ -360,13 +360,15 @@ class ApiController extends BaseController
                                 'error' => ''
                             ]
                     ],
-                    '修改个人信息' => [
+                    '修改个人信息/修改密码/修改接诊收费信息' => [
                         'url' => $http . '/api/user',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
                         ],
+                        '说明' => '以下form-data项均为可选项,修改任意一个或几个都可以,有什么数据加什么字段',
                         'form-data' => [
+                            'password' => '用户密码',
                             'name' => '用户姓名',
                             'head_img' => '用户头像; 直接POST文件,支持后缀:jpg/jpeg/png',
                             'sex' => '性别',
@@ -383,7 +385,6 @@ class ApiController extends BaseController
                             'fee' => '接诊收费金额,默认300',
                             'fee_face_to_face' => '当面咨询收费金额,默认100'
                         ],
-                        '说明' => '以上form-data项均为可选项,修改任意一个或几个都可以,有什么数据加什么字段',
                         'response' => [
                             'user' => [
                                 'id' => '用户id',
