@@ -98,6 +98,11 @@ $api->version('v1', function ($api) {
                 $api->get('detail/{appointment}', 'AppointmentController@getDetailInfo');
                 $api->get('list', 'AppointmentController@getReservationRecord');
             });
+            
+            //Admissions
+            $api->group(['prefix' => 'admissions'], function ($api) {
+                $api->get('list', 'AdmissionsController@getAdmissionsRecord');
+            });
 
             //Patient
             $api->group(['prefix' => 'patient'], function ($api) {

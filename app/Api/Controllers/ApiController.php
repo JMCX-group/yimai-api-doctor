@@ -843,7 +843,7 @@ class ApiController extends BaseController
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => '用phone:18612345678,password:123456登陆可以获得所有测试数据',
+                        '说明' => '用phone:18712345678,password:123456登陆可以获得所有测试数据',
                         'response' => [
                             'data' => [
                                 'wait' => [
@@ -943,6 +943,50 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ]
+                ],
+
+                '我的接诊' => [
+                    '我的接诊列表(待回复/待完成/已结束)' => [
+                        'url' => $http . '/api/admissions/list',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        '说明' => '用phone:18612345678,password:123456登陆可以获得所有测试数据',
+                        'response' => [
+                            'data' => [
+                                'wait_reply' => [
+                                    [
+                                        'id' => '约诊ID',
+                                        'doctor_id' => '医生ID',
+                                        'doctor_name' => '医生姓名',
+                                        'doctor_head_url' => '医生头像',
+                                        'doctor_job_title' => '医生头衔',
+                                        'doctor_is_auth' => '医生是否认证',
+                                        'patient_name' => '患者姓名',
+                                        'patient_head_url' => '患者头像',
+                                        'patient_gender' => '患者性别,1:男,0:女',
+                                        'patient_age' => '患者年龄',
+                                        'time' => '时间',
+                                        'status' => '状态',
+                                        'who' => '谁发起的代约',
+                                    ]
+                                ],
+                                'wait_complete' => [
+                                    [
+                                        '结构' => '同上'
+                                    ]
+                                ],
+                                'completed' => [
+                                    [
+                                        '结构' => '同上'
+                                    ]
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                 ],
 
                 '当面咨询' => [
