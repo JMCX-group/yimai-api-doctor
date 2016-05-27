@@ -96,6 +96,7 @@ $api->version('v1', function ($api) {
                 $api->post('new', 'AppointmentController@store');
                 $api->post('upload-img', 'AppointmentController@uploadImg');
                 $api->get('detail/{appointment}', 'AppointmentController@getDetailInfo');
+                $api->get('list', 'AppointmentController@getReservationRecord');
             });
 
             //Patient

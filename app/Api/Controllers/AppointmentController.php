@@ -10,6 +10,7 @@ namespace App\Api\Controllers;
 
 use App\Api\Requests\AppointmentIdRequest;
 use App\Api\Requests\AppointmentRequest;
+use App\Api\Transformers\ReservationRecordTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
 use App\Hospital;
@@ -616,5 +617,40 @@ class AppointmentController extends BaseController
         );
 
         return $retData;
+    }
+
+    /**
+     * 约诊记录。
+     * 
+     * @return array|mixed
+     */
+    public function getReservationRecord()
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $appointments = Appointment::where('appointments.locums_id', $user->id)
+            ->leftJoin('doctors', 'doctors.id', '=', 'appointments.doctor_id')
+            ->select('appointments.*', 'doctors.name', 'doctors.avatar', 'doctors.title', 'doctors.auth')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        if($appointments->isEmpty()){
+            return $this->response->noContent();
+        }
+
+        $waitingForReply = array();
+        $alreadyReply = array();
+        foreach ($appointments as $appointment) {
+            if (strstr($appointment['status'], 'wait')) {
+                array_push($waitingForReply, ReservationRecordTransformer::appointmentTransform($appointment));
+            } else {
+                array_push($alreadyReply, ReservationRecordTransformer::appointmentTransform($appointment));
+            }
+        }
+
+        return ['data' => ['wait' => $waitingForReply, 'already' => $alreadyReply]];
     }
 }
