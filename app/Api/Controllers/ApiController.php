@@ -548,7 +548,7 @@ class ApiController extends BaseController
 
                 '医脉资源' => [
                     '新增朋友/申请好友' => [
-                        'url' => $http . '/api/user/relation/add-friend',
+                        'url' => $http . '/api/relation/add-friend',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
@@ -703,7 +703,7 @@ class ApiController extends BaseController
                     ],
 
                     '同步最近联系人记录到服务器' => [
-                        'url' => $http . '/api/user/relation/push-recent-contacts',
+                        'url' => $http . '/api/relation/push-recent-contacts',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
@@ -718,7 +718,7 @@ class ApiController extends BaseController
                     ],
 
                     '给好友添加备注' => [
-                        'url' => $http . '/api/user/relation/remarks',
+                        'url' => $http . '/api/relation/remarks',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
@@ -734,7 +734,7 @@ class ApiController extends BaseController
                     ],
 
                     '删除好友关系' => [
-                        'url' => $http . '/api/user/relation/del',
+                        'url' => $http . '/api/relation/del',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
