@@ -102,6 +102,7 @@ $api->version('v1', function ($api) {
             //Admissions
             $api->group(['prefix' => 'admissions'], function ($api) {
                 $api->get('list', 'AdmissionsController@getAdmissionsRecord');
+                $api->get('detail/{admissions}', 'AdmissionsController@getDetailInfo');
             });
 
             //Patient

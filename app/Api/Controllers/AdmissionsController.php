@@ -58,4 +58,51 @@ class AdmissionsController extends BaseController
             'completed' => $completed,
         ]];
     }
+    
+    //TODO 获取详细信息
+    public function getDetailInfo()
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $appointments = Appointment::where('appointments.id', $id)
+            ->leftJoin('doctors', 'doctors.id', '=', 'appointments.locums_id')
+            ->leftJoin('patients', 'patients.id', '=', 'appointments.patient_id')
+            ->select('appointments.*', 'doctors.name as locums_name', 'patients.avatar as patient_avatar')
+            ->get()
+            ->first();
+
+        $doctors = User::select(
+            'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.title',
+            'hospitals.name AS hospital', 'dept_standards.name AS dept')
+            ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
+            ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
+            ->where('doctors.id', $appointments->doctor_id)
+            ->get()
+            ->first();
+
+        /**
+         * 自己不是代约医生的话,需要查询代约医生的信息:
+         */
+        if ($user->id != $appointments->locums_id) {
+            $locumsDoctor = User::select(
+                'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.title',
+                'hospitals.name AS hospital', 'dept_standards.name AS dept')
+                ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
+                ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
+                ->where('doctors.id', $appointments->locums_id)
+                ->get()
+                ->first();
+
+            $appointments['time_line'] = $this->generateTimeLine($appointments, $doctors, $user->id, $locumsDoctor);
+        } else {
+            $appointments['time_line'] = $this->generateTimeLine($appointments, $doctors, $user->id);
+        }
+
+        $appointments['progress'] = $this->generateProgressStatus($appointments->status);
+
+        return Transformer::appointmentsTransform($appointments, $doctors);
+    }
 }
