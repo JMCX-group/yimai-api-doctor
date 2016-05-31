@@ -29,29 +29,10 @@ class AdmissionsRecordTransformer extends TransformerAbstract
             'patient_head_url' => $appointment['patient_avatar'],
             'patient_gender' => $appointment['patient_gender'],
             'patient_age' => $appointment['patient_age'],
-            'time' => self::generateTreatmentTime($appointment),
+            'time' => PublicTransformer::generateTreatmentTime($appointment),
             'status' => self::generateStatus($appointment['status']),
             'who' => ($appointment['doctor_or_patient'] == 'd') ? '医生代约' : '患者约诊'
         ];
-    }
-
-    /**
-     * @param $appointment
-     * @return string
-     */
-    public static function generateTreatmentTime($appointment)
-    {
-        if ($appointment['new_visit_time'] != '0000-00-00') {
-            $retData = $appointment['new_visit_time'] . ' ' . (($appointment['new_am_pm'] == 'am') ? '上午' : '下午');
-        } elseif ($appointment['visit_time'] != '0000-00-00') {
-            $retData = $appointment['visit_time'] . ' ' . (($appointment['am_pm'] == 'am') ? '上午' : '下午');
-        } elseif ($appointment['expect_visit_time'] == '0000-00-00') {
-            $retData = '由专家决定约诊时间';
-        } else {
-            $retData = $appointment['expect_visit_time'] . ' ' . (($appointment['expect_am_pm'] == 'am') ? '上午' : '下午');
-        }
-
-        return $retData;
     }
 
     /**

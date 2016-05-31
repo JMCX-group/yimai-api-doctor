@@ -10,6 +10,7 @@ namespace App\Api\Controllers;
 
 use App\Api\Requests\AppointmentIdRequest;
 use App\Api\Requests\AppointmentRequest;
+use App\Api\Transformers\PublicTransformer;
 use App\Api\Transformers\ReservationRecordTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
@@ -61,7 +62,7 @@ class AppointmentController extends BaseController
             'patient_age' => $request['age'],
             'patient_history' => $request['history'],
             'doctor_id' => $request['doctor'],
-            'expect_visit_time' => $request['time'],
+            'expect_visit_date' => $request['date'],
             'expect_am_pm' => $request['am_or_pm'],
         ];
 
@@ -187,13 +188,8 @@ class AppointmentController extends BaseController
         /**
          * 发起约诊的第一个时间点内容:
          */
-        $time = $appointments->created_at->format('Y-m-d H:i:s');
-        $infoText = $this->beginText($appointments, $doctors);
-        $infoOther = [[
-            'name' => \Config::get('constants.DESIRED_TREATMENT_TIME'),
-            'content' => $appointments->expect_visit_time . ' ' . (($appointments->expect_am_pm == 'am') ? '上午' : '下午')
-        ]];
-        $retData = $this->copyTransformer($retData, $time, $infoText, $infoOther, 'begin');
+        $retData = $this->otherInfoContent_firstInfo($appointments, $doctors, $retData);
+
         /**
          * 如果是患者发起代约,多一条信息:
          */
@@ -366,6 +362,25 @@ class AppointmentController extends BaseController
         }
 
         return $retData;
+    }
+
+    /**
+     * 发起约诊的第一个时间点内容。
+     *
+     * @param $appointments
+     * @param $doctors
+     * @param $retData
+     * @return mixed
+     */
+    private function otherInfoContent_firstInfo($appointments, $doctors, $retData)
+    {
+        $time = $appointments->created_at->format('Y-m-d H:i:s');
+        $infoText = $this->beginText($appointments, $doctors);
+        $infoOther = [[
+            'name' => \Config::get('constants.DESIRED_TREATMENT_TIME'),
+            'content' => PublicTransformer::expectVisitDateTransform($appointments->expect_visit_date, $appointments->expect_am_pm)
+        ]];
+        return $this->copyTransformer($retData, $time, $infoText, $infoOther, 'begin');
     }
 
     /**
@@ -621,7 +636,7 @@ class AppointmentController extends BaseController
 
     /**
      * 约诊记录。
-     * 
+     *
      * @return array|mixed
      */
     public function getReservationRecord()
@@ -637,7 +652,7 @@ class AppointmentController extends BaseController
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        if($appointments->isEmpty()){
+        if ($appointments->isEmpty()) {
             return $this->response->noContent();
         }
 
