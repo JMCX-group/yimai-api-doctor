@@ -70,7 +70,7 @@ class Transformer
         return [
             'id' => $user['id'],
             'name' => $user['name'],
-            'head_url' => $user['avatar'],
+            'head_url' => ($user->avatar == '') ? null : $user->avatar,
             'hospital' => $user['hospital_id'],
             'department' => $user['dept_id'],
             'job_title' => $user['title']
@@ -88,7 +88,7 @@ class Transformer
         return [
             'id' => $user['id'],
             'name' => $user['name'],
-            'head_url' => $user['avatar'],
+            'head_url' => ($user->avatar == '') ? null : $user->avatar,
             'department' => $user['dept_id'],
             'is_auth' => $user['auth']
         ];
@@ -103,11 +103,11 @@ class Transformer
         return [
             'user' => [
                 'is_friend' => $user->is_friend,
-                
+
                 'id' => $user->id,
                 'code' => $user->dp_code,
                 'name' => $user->name,
-                'head_url' => $user->avatar,
+                'head_url' => ($user->avatar == '') ? null : $user->avatar,
                 'job_title' => $user->title,
                 'province' => $user->province,
                 'city' => $user->city,
@@ -127,12 +127,12 @@ class Transformer
      * @param $relation
      * @return array
      */
-    public static function searchDoctorTransform($user, $relation=null)
+    public static function searchDoctorTransform($user, $relation = null)
     {
         return [
             'id' => $user->id,
             'name' => $user->name,
-            'head_url' => $user->avatar,
+            'head_url' => ($user->avatar == '') ? null : $user->avatar,
             'job_title' => $user->title,
             'city' => $user->city,
             'hospital' => [
@@ -179,7 +179,7 @@ class Transformer
 
     /**
      * ID to ID:Name.
-     * 
+     *
      * @param $users
      * @param $hospitalIdList
      * @param $deptIdList
@@ -233,7 +233,7 @@ class Transformer
                         [
                             'id' => $user->id,
                             'name' => $user->name,
-                            'head_url' => $user->avatar,
+                            'head_url' => ($user->avatar == '') ? null : $user->avatar,
                             'hospital' => $user->hospital_id,
                             'department' => $user->dept_id,
                             'unread' => ($id == $item->doctor_id) ? $item->doctor_read : $item->doctor_friend_read,
@@ -282,7 +282,7 @@ class Transformer
 
     /**
      * 格式化约诊详细信息
-     * 
+     *
      * @param $appointments
      * @param $doctor
      * @return array
@@ -293,14 +293,14 @@ class Transformer
             'doctor_info' => [
                 'id' => $doctor->id,
                 'name' => $doctor->name,
-                'head_url' => $doctor->avatar,
+                'head_url' => ($doctor->avatar == '') ? null : $doctor->avatar,
                 'job_title' => $doctor->title,
                 'hospital' => $doctor->hospital,
                 'department' => $doctor->dept
             ],
             'patient_info' => [
                 'name' => $appointments->patient_name,
-                'head_url' => $appointments->patient_avatar,
+                'head_url' => ($appointments->patient_avatar == '') ? null : $appointments->patient_avatar,
                 'sex' => $appointments->patient_gender,
                 'age' => $appointments->patient_age,
                 'phone' => $appointments->patient_phone,
