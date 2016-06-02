@@ -10,11 +10,17 @@ namespace App\Api\Transformers;
 
 class PublicTransformer
 {
-
+    /**
+     * 多个期望就诊时间格式转换。
+     * 
+     * @param $dates
+     * @param $am_pm
+     * @return string
+     */
     public static function expectVisitDateTransform($dates, $am_pm)
     {
         if ($dates == 0 || $dates == '' || $dates == null) {
-            $expectVisitDate = '由专家决定';
+            $expectVisitDate = '由专家决定约诊时间';
         } else {
             $expectVisitDateArr = explode(',', $dates);
             $expectVisitAmPmArr = explode(',', $am_pm);
@@ -29,6 +35,12 @@ class PublicTransformer
         return $expectVisitDate;
     }
 
+    /**
+     * 我的约诊列表上显示的时间。
+     * 
+     * @param $appointment
+     * @return string
+     */
     public static function generateTreatmentTime($appointment)
     {
         if ($appointment['new_visit_time'] != '0000-00-00') {
@@ -38,7 +50,7 @@ class PublicTransformer
         } elseif ($appointment['expect_visit_date'] == '0000-00-00' || $appointment['expect_visit_date'] == '' || $appointment['expect_visit_date'] == null) {
             $retData = '由专家决定约诊时间';
         } else {
-            $retData = PublicTransformer::expectVisitDateTransform($appointment['expect_visit_date'], $appointment['expect_am_pm']);
+            $retData = self::expectVisitDateTransform($appointment['expect_visit_date'], $appointment['expect_am_pm']);
         }
 
         return $retData;
