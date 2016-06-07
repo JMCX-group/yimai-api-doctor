@@ -198,12 +198,15 @@ class UserController extends BaseController
         }
 
         /**
-         * 获取辅助数据: 最近通讯记录 / 好友ID列表
+         * 获取辅助数据: 最近通讯记录 / 好友ID列表 / 好友的好友ID列表
          */
         $contactRecords = DoctorContactRecord::where('doctor_id', $user->id)->lists('contacts_id_list');
         $contactRecordsIdList = (count($contactRecords) != 0) ? explode(',', $contactRecords[0]) : $contactRecords;
 
         $friendsIdList = DoctorRelation::getFriendIdList($user->id);
+
+        $friendsFriendsIdList = DoctorRelation::getFriendsFriendsIdList($friendsIdList, $user->id);
+
 
         /**
          * 排序/分组
@@ -220,6 +223,7 @@ class UserController extends BaseController
 
         $recentContactsArr = array();
         $friendArr = array();
+        $friendsFriendsArr = array();
         $sameCityArr = array();
         $b_s_g_threeA = array();
         $otherArr = array();
@@ -237,6 +241,11 @@ class UserController extends BaseController
 
             if (in_array($userItem->id, $friendsIdList)) {
                 array_push($friendArr, Transformer::searchDoctorTransform($userItem, 1));
+                continue;
+            }
+
+            if (in_array($userItem->id, $friendsFriendsIdList)) {
+                array_push($friendsFriendsArr, Transformer::searchDoctorTransform($userItem, 2));
                 continue;
             }
 
@@ -274,15 +283,21 @@ class UserController extends BaseController
             }
         }
 
-        $retData = array_merge($recentContactsArr, $friendArr, $sameCityArr, $b_s_g_threeA, $otherArr);
+        $retData_1 = array_merge($recentContactsArr, $friendArr);
+        $retData_2 = $friendsFriendsArr;
+        $retData_other = array_merge($sameCityArr, $b_s_g_threeA, $otherArr);
 
         return [
             'provinces' => $provinces,
             'citys' => $citys,
             'hospitals' => isset($newHospital) ? $newHospital : $hospitals,
             'departments' => $departments,
-            'count' => count($retData),
-            'users' => $retData
+            'count' => (count($retData_1) + count($retData_2) + count($retData_other)),
+            'users' => [
+                'friends' => $retData_1,
+                'friends-friends' => $retData_2,
+                'other' => $retData_other,
+            ]
         ];
     }
 
