@@ -9,6 +9,8 @@
 namespace App\Api\Controllers;
 
 use App\Api\Transformers\AdmissionsRecordTransformer;
+use App\Api\Transformers\TimeLineTransformer;
+use App\Api\Transformers\Transformer;
 use App\Appointment;
 use App\User;
 
@@ -58,9 +60,12 @@ class AdmissionsController extends BaseController
             'completed' => $completed,
         ]];
     }
-    
-    //TODO 获取详细信息
-    public function getDetailInfo()
+
+    /**
+     * @param $id
+     * @return array|mixed
+     */
+    public function getDetailInfo($id)
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
@@ -74,34 +79,21 @@ class AdmissionsController extends BaseController
             ->get()
             ->first();
 
+        /**
+         * 查询代约医生的信息:
+         */
         $doctors = User::select(
             'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.title',
             'hospitals.name AS hospital', 'dept_standards.name AS dept')
             ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
             ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
-            ->where('doctors.id', $appointments->doctor_id)
+            ->where('doctors.id', $appointments->locums_id)
             ->get()
             ->first();
 
-        /**
-         * 自己不是代约医生的话,需要查询代约医生的信息:
-         */
-        if ($user->id != $appointments->locums_id) {
-            $locumsDoctor = User::select(
-                'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.title',
-                'hospitals.name AS hospital', 'dept_standards.name AS dept')
-                ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
-                ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
-                ->where('doctors.id', $appointments->locums_id)
-                ->get()
-                ->first();
+        $appointments['time_line'] = TimeLineTransformer::generateTimeLine($appointments, $doctors, $user->id, $doctors);
 
-            $appointments['time_line'] = $this->generateTimeLine($appointments, $doctors, $user->id, $locumsDoctor);
-        } else {
-            $appointments['time_line'] = $this->generateTimeLine($appointments, $doctors, $user->id);
-        }
-
-        $appointments['progress'] = $this->generateProgressStatus($appointments->status);
+        $appointments['progress'] = TimeLineTransformer::generateProgressStatus($appointments->status);
 
         return Transformer::appointmentsTransform($appointments, $doctors);
     }
