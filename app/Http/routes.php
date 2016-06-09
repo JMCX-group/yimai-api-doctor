@@ -103,6 +103,7 @@ $api->version('v1', function ($api) {
             $api->group(['prefix' => 'admissions'], function ($api) {
                 $api->get('list', 'AdmissionsController@getAdmissionsRecord');
                 $api->get('detail/{admissions}', 'AdmissionsController@getDetailInfo');
+                $api->post('agree-refusal', 'AdmissionsController@agreeOrRefusalAdmissions');
             });
 
             //Patient

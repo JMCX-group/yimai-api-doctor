@@ -322,6 +322,12 @@ class TimeLineTransformer
      */
     private static function infoOther_faceConsultation($appointments, $doctors)
     {
+        if ($appointments->supplement == null || $appointments->supplement == '') {
+            $supplement = Hospital::where('id', $doctors->hospital_id)->get()->lists('address')->first();
+        } else {
+            $supplement = $appointments->supplement;
+        }
+
         return [[
             'name' => \Config::get('constants.TREATMENT_TIME'),
             'content' => $appointments->visit_time . ' ' . (($appointments->am_pm == 'am') ? '上午' : '下午')
@@ -330,7 +336,7 @@ class TimeLineTransformer
             'content' => $doctors->hospital
         ], [
             'name' => \Config::get('constants.SUPPLEMENT'),
-            'content' => Hospital::where('id', $doctors->hospital_id)->get()->lists('address')->first()
+            'content' => $supplement
         ], [
             'name' => \Config::get('constants.TREATMENT_NOTICE'),
             'content' => $appointments->remark
