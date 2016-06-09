@@ -9,6 +9,7 @@
 namespace App\Api\Controllers;
 
 use App\Api\Requests\AgreeAdmissionsRequest;
+use App\Api\Requests\RefusalAdmissionsRequest;
 use App\Api\Transformers\AdmissionsRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
@@ -18,27 +19,45 @@ use App\User;
 class AdmissionsController extends BaseController
 {
     /**
-     * 同意/拒绝接诊。
+     * 同意接诊。
      * 
      * @param AgreeAdmissionsRequest $request
      * @return array|\Illuminate\Http\JsonResponse|mixed
      */
-    public function agreeOrRefusalAdmissions(AgreeAdmissionsRequest $request)
+    public function agreeAdmissions(AgreeAdmissionsRequest $request)
     {
         $appointment = Appointment::find($request['id']);
 
         if ($appointment->status == 'wait-2') {
-            if (isset($request['status']) && $request['status'] == 'no') {
-                $appointment->status = 'close-3'; //医生拒绝接诊
-                $appointment->refusal_reason = $request['reason'];
-            } else {
-                $appointment->status = 'wait-3'; //医生确认接诊
-                $appointment->visit_time = date('Y-m-d', strtotime($request['visit_time']));
-                $amOrPm = date('H', strtotime($request['visit_time']));
-                $appointment->am_pm = $amOrPm <= 12 ? 'am' : 'pm';
-                $appointment->supplement = (isset($request['supplement']) && $request['supplement'] != null) ? $request['supplement'] : ''; //补充说明
-                $appointment->remark = (isset($request['remark']) && $request['remark'] != null) ? $request['remark'] : ''; //附加信息
-            }
+            $appointment->status = 'wait-3'; //医生确认接诊
+            $appointment->visit_time = date('Y-m-d', strtotime($request['visit_time']));
+            $amOrPm = date('H', strtotime($request['visit_time']));
+            $appointment->am_pm = $amOrPm <= 12 ? 'am' : 'pm';
+            $appointment->supplement = (isset($request['supplement']) && $request['supplement'] != null) ? $request['supplement'] : ''; //补充说明
+            $appointment->remark = (isset($request['remark']) && $request['remark'] != null) ? $request['remark'] : ''; //附加信息
+
+            $appointment->confirm_admissions_time = date('Y-m-d H:i:s'); //确认接诊时间
+            $appointment->save();
+
+            return $this->getDetailInfo($request['id']);
+        } else {
+            return response()->json(['message' => '状态错误'], 400);
+        }
+    }
+    
+    /**
+     * 拒绝接诊。
+     * 
+     * @param RefusalAdmissionsRequest $request
+     * @return array|\Illuminate\Http\JsonResponse|mixed
+     */
+    public function refusalAdmissions(RefusalAdmissionsRequest $request)
+    {
+        $appointment = Appointment::find($request['id']);
+
+        if ($appointment->status == 'wait-2') {
+            $appointment->status = 'close-3'; //医生拒绝接诊
+            $appointment->refusal_reason = $request['reason'];
 
             $appointment->confirm_admissions_time = date('Y-m-d H:i:s'); //确认接诊时间
             $appointment->save();

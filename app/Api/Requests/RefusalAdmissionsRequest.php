@@ -10,7 +10,7 @@ namespace App\Api\Requests;
 
 use App\Http\Requests\Request;
 
-class AgreeAdmissionsRequest extends Request
+class RefusalAdmissionsRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +31,7 @@ class AgreeAdmissionsRequest extends Request
     {
         $rules = [
             'id' => 'required',
-            'visit_time' => 'required'
+            'reason' => 'required'
         ];
 
         return $rules;
@@ -55,7 +55,7 @@ class AgreeAdmissionsRequest extends Request
     {
         return [
             'id' => '接诊号',
-            'visit_time' => '约诊时间'
+            'reason' => '拒绝理由'
         ];
     }
 

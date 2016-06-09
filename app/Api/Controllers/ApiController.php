@@ -954,19 +954,77 @@ class ApiController extends BaseController
                 ],
 
                 '我的接诊' => [
-                    '同意/拒绝接诊' => [
-                        'url' => $http . '/api/admissions/agree-refusal',
+                    '同意接诊' => [
+                        'url' => $http . '/api/admissions/agree',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
                         ],
                         'form-data' => [
-                            'id' => '约诊ID; 必填项',
-                            'status' => '接诊或拒绝的状态; 拒绝:no,传其他内容或不传该参数为同意接诊; 可选项',
-                            'visit_time' => '接诊时间; 当status不为no时,为必填项',
+                            'id' => '约诊ID',
+                            'visit_time' => '接诊时间',
                             'supplement' => '附加信息; 可选项',
-                            'remark' => '补充说明; 可选项',
-                            'reason' => '拒绝原因; 当status为no时,为必填项',
+                            'remark' => '补充说明; 可选项'
+                        ],
+                        '说明' => '用phone:18612345678,password:123456登陆可以操作所有测试数据; 返回数据格式和【获取我的约诊详细信息】一模一样',
+                        'response' => [
+                            'doctor_info' => [
+                                'id' => '用户ID; 这个是代约医生或平台的信息',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'job_title' => '职称',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室'
+                            ],
+                            'patient_info' => [
+                                'name' => '患者姓名',
+                                'head_url' => '患者头像URL',
+                                'sex' => '患者性别',
+                                'age' => '患者年龄',
+                                'phone' => '所属科室',
+                                'history' => '病情描述',
+                                'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
+                            ],
+                            'detail_info' => [
+                                'progress' => '进度,该项还未做完',
+                                'time_line' => [
+                                    '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
+                                    '内容' => [[
+                                        'time' => '时间轴左侧的时间',
+                                        'info' => [
+                                            'text' => '文案描述',
+                                            'other' => [
+                                                '内容' => [[
+                                                    'name' => '其他的信息名称,例如:期望就诊时间',
+                                                    'content' => '其他的信息内容,例如:2016-05-18 上午; 多条时间信息用逗号隔开,展示时则是换行展示,例如:2016-05-12 上午,2016-05-13 下午'
+                                                ], []]
+                                            ]
+                                        ],
+                                        'type' => '决定使用什么icon; begin | wait'
+                                    ],
+                                        [
+                                            'time' => '时间轴左侧的时间, null为没有',
+                                            'info' => [
+                                                'text' => '文案描述',
+                                                'other' => 'null为没有'
+                                            ],
+                                            'type' => '决定使用什么icon; begin | wait'
+                                        ]]
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '拒绝接诊' => [
+                        'url' => $http . '/api/admissions/refusal',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '约诊ID',
+                            'reason' => '拒绝原因'
                         ],
                         '说明' => '用phone:18612345678,password:123456登陆可以操作所有测试数据; 返回数据格式和【获取我的约诊详细信息】一模一样',
                         'response' => [
