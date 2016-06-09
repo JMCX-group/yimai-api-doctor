@@ -105,6 +105,9 @@ $api->version('v1', function ($api) {
                 $api->get('detail/{admissions}', 'AdmissionsController@getDetailInfo');
                 $api->post('agree', 'AdmissionsController@agreeAdmissions');
                 $api->post('refusal', 'AdmissionsController@refusalAdmissions');
+                $api->post('complete', 'AdmissionsController@completeAdmissions');
+                $api->post('rescheduled', 'AdmissionsController@rescheduledAdmissions');
+                $api->post('cancel', 'AdmissionsController@cancelAdmissions');
             });
 
             //Patient

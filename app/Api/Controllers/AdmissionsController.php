@@ -9,6 +9,7 @@
 namespace App\Api\Controllers;
 
 use App\Api\Requests\AgreeAdmissionsRequest;
+use App\Api\Requests\CompleteAdmissionsRequest;
 use App\Api\Requests\RefusalAdmissionsRequest;
 use App\Api\Transformers\AdmissionsRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
@@ -66,6 +67,76 @@ class AdmissionsController extends BaseController
         } else {
             return response()->json(['message' => '状态错误'], 400);
         }
+    }
+
+    /**
+     * 完成接诊/面诊。
+     *
+     * @param CompleteAdmissionsRequest $request
+     * @return array|\Illuminate\Http\JsonResponse|mixed
+     */
+    public function completeAdmissions(CompleteAdmissionsRequest $request)
+    {
+        $appointment = Appointment::find($request['id']);
+
+        if ($appointment->status == 'wait-5') {
+            if ($appointment->new_am_pm == null || $appointment->new_am_pm == '') {
+                $appointment->status = 'completed-1'; //正常完成面诊
+            } else {
+                $appointment->status = 'completed-2'; //改期后完成面诊
+            }
+
+            $appointment->refusal_reason = $request['reason'];
+            $appointment->completed_admissions_time = date('Y-m-d H:i:s'); //完成面诊时间
+            $appointment->save();
+
+            return $this->getDetailInfo($request['id']);
+        } else {
+            return response()->json(['message' => '状态错误'], 400);
+        }
+    }
+
+    /**
+     * 医生改期。
+     * 
+     * @param AgreeAdmissionsRequest $request
+     * @return array|mixed
+     */
+    public function rescheduledAdmissions(AgreeAdmissionsRequest $request)
+    {
+        $appointment = Appointment::find($request['id']);
+        $appointment->status = 'wait-4'; //医生改期
+        $appointment->rescheduled_time = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+        $appointment->save();
+
+        return $this->getDetailInfo($request['id']);
+    }
+
+    /**
+     * 医生取消约诊。
+     * 
+     * @param RefusalAdmissionsRequest $request
+     * @return array|mixed
+     */
+    public function cancelAdmissions(RefusalAdmissionsRequest $request)
+    {
+        $appointment = Appointment::find($request['id']);
+
+        if ($appointment->new_am_pm == null || $appointment->new_am_pm == '') {
+            $appointment->status = 'cancel-2'; //医生取消约诊
+        } else {
+            if ($appointment->confirm_rescheduled_time == null || strtotime($appointment->confirm_rescheduled_time) == strtotime('0000-00-00 00:00:00')) {
+                $appointment->status = 'cancel-4'; //医生改期之后,医生取消约诊    
+            } else {
+                $appointment->status = 'cancel-7'; //医生改期之后,患者确认之后,医生取消约诊;
+            }
+        }
+
+        $appointment->refusal_reason = $request['reason'];
+        $appointment->confirm_admissions_time = date('Y-m-d H:i:s'); //确认接诊时间
+        $appointment->save();
+
+        return $this->getDetailInfo($request['id']);
     }
 
     /**
