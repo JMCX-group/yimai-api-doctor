@@ -892,7 +892,6 @@ class ApiController extends BaseController
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => '还未做完,可以测试:/api/appointment/detail/011605130001?token= ',
                         '特别说明1' => '设计样式图《约诊回复3-3、3-4、3-5》内容条目有些不对,参照样式即可,以API返回数据为准',
                         '特别说明2' => '设计样式图中患者电话部分,全部参照《约诊回复3-5》的患者电话样式',
                         '测试数据1' => '5个等待状态1的可测试约诊号:011605130001,011605130002,011605130003,011605130004,011605130005',
@@ -922,7 +921,7 @@ class ApiController extends BaseController
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
                             'detail_info' => [
-                                'progress' => '进度,该项还未做完',
+                                'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
                                     '内容' => [[
@@ -987,7 +986,7 @@ class ApiController extends BaseController
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
                             'detail_info' => [
-                                'progress' => '进度,该项还未做完',
+                                'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
                                     '内容' => [[
@@ -1047,7 +1046,7 @@ class ApiController extends BaseController
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
                             'detail_info' => [
-                                'progress' => '进度,该项还未做完',
+                                'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
                                     '内容' => [[
@@ -1106,7 +1105,7 @@ class ApiController extends BaseController
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
                             'detail_info' => [
-                                'progress' => '进度,该项还未做完',
+                                'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
                                     '内容' => [[
@@ -1166,7 +1165,7 @@ class ApiController extends BaseController
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
                             'detail_info' => [
-                                'progress' => '进度,该项还未做完',
+                                'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
                                     '内容' => [[
@@ -1226,7 +1225,7 @@ class ApiController extends BaseController
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
                             'detail_info' => [
-                                'progress' => '进度,该项还未做完',
+                                'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
                                     '内容' => [[
@@ -1333,7 +1332,7 @@ class ApiController extends BaseController
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
                             'detail_info' => [
-                                'progress' => '进度,该项还未做完',
+                                'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
                                     '内容' => [[
