@@ -837,6 +837,7 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'form-data' => [
+                            'id' => '约诊预约码',
                             'img' => '病历照片,一张张传; 直接POST文件,支持后缀:jpg/jpeg/png'
                         ],
                         'response' => [
