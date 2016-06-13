@@ -177,8 +177,7 @@ class UserController extends BaseController
          *
          */
         if (isset($request['type']) && !empty($request['type'])) {
-            switch ($request['type'])
-            {
+            switch ($request['type']) {
                 case 'same_hospital':
                     $users = User::searchDoctor_sameHospital($data['field'], $user->hospital_id);
                     break;
@@ -283,22 +282,38 @@ class UserController extends BaseController
             }
         }
 
-        $retData_1 = array_merge($recentContactsArr, $friendArr);
-        $retData_2 = $friendsFriendsArr;
-        $retData_other = array_merge($sameCityArr, $b_s_g_threeA, $otherArr);
+        /**
+         * 只有普通搜索有分组:
+         */
+        if ($request['type'] == 'same_hospital' || $request['type'] == 'same_department' || $request['type'] == 'same_college') {
+            $retData = array_merge($recentContactsArr, $friendArr, $sameCityArr, $b_s_g_threeA, $otherArr);
 
-        return [
-            'provinces' => $provinces,
-            'citys' => $citys,
-            'hospitals' => isset($newHospital) ? $newHospital : $hospitals,
-            'departments' => $departments,
-            'count' => (count($retData_1) + count($retData_2) + count($retData_other)),
-            'users' => [
-                'friends' => $retData_1,
-                'friends-friends' => $retData_2,
-                'other' => $retData_other,
-            ]
-        ];
+            return [
+                'provinces' => $provinces,
+                'citys' => $citys,
+                'hospitals' => isset($newHospital) ? $newHospital : $hospitals,
+                'departments' => $departments,
+                'count' => count($retData),
+                'users' => $retData
+            ];
+        } else {
+            $retData_1 = array_merge($recentContactsArr, $friendArr);
+            $retData_2 = $friendsFriendsArr;
+            $retData_other = array_merge($sameCityArr, $b_s_g_threeA, $otherArr);
+
+            return [
+                'provinces' => $provinces,
+                'citys' => $citys,
+                'hospitals' => isset($newHospital) ? $newHospital : $hospitals,
+                'departments' => $departments,
+                'count' => (count($retData_1) + count($retData_2) + count($retData_other)),
+                'users' => [
+                    'friends' => $retData_1,
+                    'friends-friends' => $retData_2,
+                    'other' => $retData_other,
+                ]
+            ];
+        }
     }
 
     /**

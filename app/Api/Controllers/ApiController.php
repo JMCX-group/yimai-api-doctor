@@ -323,7 +323,8 @@ class ApiController extends BaseController
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式',
                             'type' => '普通搜索,可以不填该项或内容置空; 同医院:same_hospital; 同领域:same_department; 同院校:same_college; 可选项'
                         ],
-                        '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
+                        '说明1' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
+                        '说明2' => '当type符合同医院:same_hospital; 同领域:same_department; 同院校:same_college时,返回的users部分没有分组',
                         'response' =>
                             [
                                 'provinces' => [
