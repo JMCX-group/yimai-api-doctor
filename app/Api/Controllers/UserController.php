@@ -149,13 +149,41 @@ class UserController extends BaseController
     }
 
     /**
-     * Search for doctors.
-     * Order by.
-     *
      * @param SearchUserRequest $request
      * @return mixed
      */
-    public function searchUser(SearchUserRequest $request)
+    public function searchUser_sameHospital(SearchUserRequest $request)
+    {
+        return $this->searchUser($request, 'same_hospital');
+    }
+
+    /**
+     * @param SearchUserRequest $request
+     * @return mixed
+     */
+    public function searchUser_sameDept(SearchUserRequest $request)
+    {
+        return $this->searchUser($request, 'same_department');
+    }
+
+    /**
+     * @param SearchUserRequest $request
+     * @return mixed
+     */
+    public function searchUser_sameCollege(SearchUserRequest $request)
+    {
+        return $this->searchUser($request, 'same_college');
+    }
+
+    /**
+     * Search for doctors.
+     * Order by.
+     * 
+     * @param SearchUserRequest $request
+     * @param null $type
+     * @return array
+     */
+    public function searchUser(SearchUserRequest $request, $type=null)
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
@@ -177,7 +205,8 @@ class UserController extends BaseController
          *
          */
         if (isset($request['type']) && !empty($request['type'])) {
-            switch ($request['type']) {
+            $searchType = ($type == null) ? $request['type'] : $type;
+            switch ($searchType) {
                 case 'same_hospital':
                     $users = User::searchDoctor_sameHospital($data['field'], $user->hospital_id);
                     break;
@@ -201,11 +230,8 @@ class UserController extends BaseController
          */
         $contactRecords = DoctorContactRecord::where('doctor_id', $user->id)->lists('contacts_id_list');
         $contactRecordsIdList = (count($contactRecords) != 0) ? explode(',', $contactRecords[0]) : $contactRecords;
-
         $friendsIdList = DoctorRelation::getFriendIdList($user->id);
-
         $friendsFriendsIdList = DoctorRelation::getFriendsFriendsIdList($friendsIdList, $user->id);
-
 
         /**
          * 排序/分组
@@ -285,7 +311,7 @@ class UserController extends BaseController
         /**
          * 只有普通搜索有分组:
          */
-        if ($request['type'] == 'same_hospital' || $request['type'] == 'same_department' || $request['type'] == 'same_college') {
+        if ($request['type'] == 'same_hospital' || $request['type'] == 'same_department' || $request['type'] == 'same_college' || $type != null) {
             $retData = array_merge($recentContactsArr, $friendArr, $sameCityArr, $b_s_g_threeA, $otherArr);
 
             return [
