@@ -196,7 +196,7 @@ class ApiController extends BaseController
                 ],
 
                 '用户信息' => [
-                    '查询个人信息' => [
+                    '查询登陆用户自己的信息' => [
                         'url' => $http . '/api/user/me',
                         'method' => 'GET',
                         'params' => [
@@ -244,7 +244,7 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
-                    '查询其他医生的信息' => [
+                    '通过用户ID查询其他医生的信息' => [
                         'url' => $http . '/api/user/{doctor_id}',
                         'method' => 'GET',
                         'params' => [
@@ -254,6 +254,38 @@ class ApiController extends BaseController
                         'response' => [
                             'user' => [
                                 'is_friend' => '决定按钮的布局; true | false',
+                                'id' => '用户id',
+                                'code' => '医脉码',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'job_title' => '用户职称',
+                                'province' => '用户所在省份名称',
+                                'city' => '用户所在城市名称',
+                                'hospital' => '用户所在医院名称',
+                                'department' => '用户所在科室名称',
+                                'college' => '用户所在院校名称',
+                                'tags' => '特长/标签',
+                                'personal_introduction' => '个人简介',
+                                'is_auth' => '是否认证,1为认证,0为未认证',
+                                'common_friend_list' => [
+                                    'id' => '用户id',
+                                    'head_url' => '头像URL',
+                                    'is_auth' => '是否认证,1为认证,0为未认证'
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '通过用户手机号查询其他医生的信息' => [
+                        'url' => $http . '/api/user/phone/{phone}',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'user' => [
+                                'is_friend' => 'true | false',
                                 'id' => '用户id',
                                 'code' => '医脉码',
                                 'name' => '用户姓名',

@@ -292,4 +292,29 @@ class User extends Model implements AuthenticatableContract,
             ->get()
             ->first();
     }
+
+    /**
+     * 通过手机号获取医生信息
+     * 
+     * @param $phone
+     * @return mixed
+     */
+    public static function findDoctor_byPhone($phone)
+    {
+        return User::select(
+            'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.title', 'doctors.auth',
+            'doctors.province_id', 'doctors.city_id', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.college_id',
+            'doctors.tag_list', 'doctors.profile',
+            'provinces.name AS province', 'citys.name AS city',
+            'hospitals.name AS hospital', 'dept_standards.name AS dept',
+            'colleges.name AS college')
+            ->leftJoin('provinces', 'provinces.id', '=', 'doctors.province_id')
+            ->leftJoin('citys', 'citys.id', '=', 'doctors.city_id')
+            ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
+            ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
+            ->leftJoin('colleges', 'colleges.id', '=', 'doctors.college_id')
+            ->where('doctors.phone', $phone)
+            ->get()
+            ->first();
+    }
 }
