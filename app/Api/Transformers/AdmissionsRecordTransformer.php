@@ -25,6 +25,7 @@ class AdmissionsRecordTransformer extends TransformerAbstract
             'doctor_head_url' => ($appointment['avatar'] == '') ? null : $appointment['avatar'],
             'doctor_job_title' => $appointment['title'],
             'doctor_is_auth' => $appointment['auth'],
+            'hospital' => $appointment['hospital'],
             'patient_name' => $appointment['patient_name'],
             'patient_head_url' => ($appointment['patient_avatar'] == '') ? null : $appointment['patient_avatar'],
             'patient_gender' => $appointment['patient_gender'],

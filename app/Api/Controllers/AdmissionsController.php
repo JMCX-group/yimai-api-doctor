@@ -15,6 +15,7 @@ use App\Api\Transformers\AdmissionsRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
+use App\Hospital;
 use App\User;
 
 class AdmissionsController extends BaseController
@@ -164,10 +165,12 @@ class AdmissionsController extends BaseController
             return $this->response->noContent();
         }
 
+        $hospital = Hospital::find($user->hospital_id)->name;
         $waitingForReply = array();
         $waitingForComplete = array();
         $completed = array();
         foreach ($appointments as $appointment) {
+            $appointment['hospital'] = $hospital;
             if ($appointment['status'] == 'wait-2') {
                 array_push($waitingForReply, AdmissionsRecordTransformer::admissionsTransform($appointment));
             } elseif (in_array($appointment['status'], array('wait-3', 'wait-4', 'wait-5'))) {

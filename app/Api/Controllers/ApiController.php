@@ -1565,6 +1565,7 @@ class ApiController extends BaseController
                                         'doctor_head_url' => '医生头像',
                                         'doctor_job_title' => '医生头衔',
                                         'doctor_is_auth' => '医生是否认证',
+                                        'hospital' => '医院',
                                         'patient_name' => '患者姓名',
                                         'patient_head_url' => '患者头像',
                                         'patient_gender' => '患者性别,1:男,0:女',
