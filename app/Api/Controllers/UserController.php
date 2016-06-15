@@ -178,12 +178,12 @@ class UserController extends BaseController
     /**
      * Search for doctors.
      * Order by.
-     * 
+     *
      * @param SearchUserRequest $request
      * @param null $type
      * @return array
      */
-    public function searchUser(SearchUserRequest $request, $type=null)
+    public function searchUser(SearchUserRequest $request, $type = null)
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
@@ -450,7 +450,7 @@ class UserController extends BaseController
 
     /**
      * 通过手机号查看其他医生的信息
-     * 
+     *
      * @param $phone
      * @return array|mixed
      */
@@ -462,12 +462,16 @@ class UserController extends BaseController
         }
 
         $user = User::findDoctor_byPhone($phone);
-        $user['dp_code'] = User::getDpCode($user['id']);
-        $user['is_friend'] = (DoctorRelation::getIsFriend($my->id, $user['id'])[0]->count) == 2 ? true : false;
-        $idList = DoctorRelation::getCommonFriendIdList($my->id, $user['id']);
-        $retData = User::select('id', 'avatar as head_url', 'auth as is_auth')->find($idList);
-        $user['common_friend_list'] = $retData;
+        if (isset($user['dp_code']) && $user['dp_code'] != '' && $user['dp_code'] != null) {
+            $user['dp_code'] = User::getDpCode($user['id']);
+            $user['is_friend'] = (DoctorRelation::getIsFriend($my->id, $user['id'])[0]->count) == 2 ? true : false;
+            $idList = DoctorRelation::getCommonFriendIdList($my->id, $user['id']);
+            $retData = User::select('id', 'avatar as head_url', 'auth as is_auth')->find($idList);
+            $user['common_friend_list'] = $retData;
 
-        return Transformer::findDoctorTransform($user);
+            return Transformer::findDoctorTransform($user);
+        } else {
+            return ['user' => null];
+        }
     }
 }
