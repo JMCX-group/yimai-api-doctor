@@ -471,7 +471,7 @@ class UserController extends BaseController
 
             return Transformer::findDoctorTransform($user);
         } else {
-            return ['user' => null];
+            return response()->json(['success' => ''], 204); //给肠媳适配。。
         }
     }
 }
