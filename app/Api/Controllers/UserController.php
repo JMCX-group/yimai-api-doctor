@@ -462,7 +462,7 @@ class UserController extends BaseController
         }
 
         $user = User::findDoctor_byPhone($phone);
-        if (isset($user['dp_code']) && $user['dp_code'] != '' && $user['dp_code'] != null) {
+        if (isset($user['id']) && $user['id'] != '' && $user['id'] != null) {
             $user['dp_code'] = User::getDpCode($user['id']);
             $user['is_friend'] = (DoctorRelation::getIsFriend($my->id, $user['id'])[0]->count) == 2 ? true : false;
             $idList = DoctorRelation::getCommonFriendIdList($my->id, $user['id']);
