@@ -37,6 +37,10 @@ class DoctorRelationController extends BaseController
             return $user;
         }
 
+        if ($request['id'] == $user->id) {
+            return response()->json(['message' => '不可以添加自己'], 400);
+        }
+
         /**
          * 可以通过ID、电话、医脉码来添加好友。
          */
@@ -73,7 +77,7 @@ class DoctorRelationController extends BaseController
 //                    return $this->response->noContent();
                     return response()->json(['success' => ''], 204); //给肠媳适配。。
                 } else {
-                    return response()->json(['message' => '添加失败'], 500);
+                    return response()->json(['message' => '已添加过'], 500);
                 }
             } catch (\Exception $e) {
                 Log::info('add friend', ['context' => $e->getMessage()]);
