@@ -70,7 +70,8 @@ class DoctorRelationController extends BaseController
 
             try {
                 if (DoctorRelation::create($data)) {
-                    return $this->response->noContent();
+//                    return $this->response->noContent();
+                    return response()->json(['success' => ''], 204); //给肠媳适配。。
                 } else {
                     return response()->json(['message' => '添加失败'], 500);
                 }
