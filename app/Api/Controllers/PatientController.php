@@ -30,7 +30,8 @@ class PatientController extends BaseController
             ->toArray();
 
         if (Empty($patientInfo)) {
-            return $this->response->noContent();
+//            return $this->response->noContent();
+            return response()->json(['success' => ''], 204); //给肠媳适配。。
         } else {
             $patientInfo[0]['birthday'] = $this->age($patientInfo[0]['birthday']);
             return $this->response->array($patientInfo, new PatientTransformer());

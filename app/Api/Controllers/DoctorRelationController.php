@@ -112,7 +112,8 @@ class DoctorRelationController extends BaseController
 
                 try {
                     if (DoctorRelation::create($data)) {
-                        return $this->response->noContent();
+//                        return $this->response->noContent();
+                        return response()->json(['success' => ''], 204); //给肠媳适配。。
                     } else {
                         return response()->json(['message' => '添加失败'], 500);
                     }
@@ -238,7 +239,8 @@ class DoctorRelationController extends BaseController
 
         $data = DoctorRelation::getNewFriends($user->id);
         if (empty($data)) {
-            return $this->response->noContent();
+//            return $this->response->noContent();
+            return response()->json(['success' => ''], 204); //给肠媳适配。。
         } else {
             DoctorRelation::setReadStatus($user->id);
 
@@ -271,7 +273,8 @@ class DoctorRelationController extends BaseController
                 ->update(['contacts_id_list' => $request['id_list']]);
         }
 
-        return $this->response->noContent();
+//        return $this->response->noContent();
+        return response()->json(['success' => ''], 204); //给肠媳适配。。
     }
 
     /**
@@ -290,7 +293,8 @@ class DoctorRelationController extends BaseController
                 ->where('doctor_friend_id', $request['friend_id'])
                 ->update(['friend_remarks' => $request['remarks']])
             ) {
-                return $this->response->noContent();
+//                return $this->response->noContent();
+                return response()->json(['success' => ''], 204); //给肠媳适配。。
             } else {
                 return response()->json(['message' => '备注失败'], 500);
             }
@@ -314,7 +318,8 @@ class DoctorRelationController extends BaseController
         try {
             if (DoctorRelation::destroyRelation($user->id, $request['friend_id'])
             ) {
-                return $this->response->noContent();
+//                return $this->response->noContent();
+                return response()->json(['success' => ''], 204); //给肠媳适配。。
             } else {
                 return response()->json(['message' => '删除失败'], 500);
             }

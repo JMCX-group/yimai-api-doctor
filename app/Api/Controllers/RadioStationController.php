@@ -55,6 +55,7 @@ class RadioStationController extends BaseController
             ->where('radio_station_id', $request->id)
             ->delete();
 
-        return $this->response->noContent();
+//        return $this->response->noContent();
+        return response()->json(['success' => ''], 204); //给肠媳适配。。
     }
 }

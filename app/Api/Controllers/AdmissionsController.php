@@ -162,7 +162,8 @@ class AdmissionsController extends BaseController
             ->get();
 
         if ($appointments->isEmpty()) {
-            return $this->response->noContent();
+//                    return $this->response->noContent();
+            return response()->json(['success' => ''], 204); //给肠媳适配。。
         }
 
         $hospital = Hospital::find($user->hospital_id)->name;
