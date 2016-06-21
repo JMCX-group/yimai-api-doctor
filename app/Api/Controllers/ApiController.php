@@ -745,7 +745,7 @@ class ApiController extends BaseController
                             'img-5' => '认证图片; 直接POST文件,支持后缀:jpg/jpeg/png; 可选',
                         ],
                         'response' => [
-                            'url' => '压缩后的图片访问url链接,可直接用于阅览',
+                            'url' => '压缩后的图片访问url链接,可直接用于阅览; 多个链接由逗号分隔',
                             'message' => '',
                             'error' => ''
                         ]
