@@ -17,6 +17,7 @@ use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\Hospital;
 use App\User;
+use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
@@ -24,6 +25,61 @@ use JWTAuth;
 
 class UserController extends BaseController
 {
+    /**
+     * 上传认证需要的图片。
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function uploadAuthPhotos(Request $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $imgUrl_1 = isset($request['img_1']) ? $this->saveImg($user->id, $request->file('img_1')) : '';
+        $imgUrl_2 = isset($request['img_2']) ? $this->saveImg($user->id, $request->file('img_2')) : '';
+        $imgUrl_3 = isset($request['img_3']) ? $this->saveImg($user->id, $request->file('img_3')) : '';
+        $imgUrl_4 = isset($request['img_4']) ? $this->saveImg($user->id, $request->file('img_4')) : '';
+        $imgUrl_5 = isset($request['img_5']) ? $this->saveImg($user->id, $request->file('img_5')) : '';
+
+        $user->auth_img = ($imgUrl_1 != '') ? $imgUrl_1 . ',' : '';
+        $user->auth_img .= ($imgUrl_2 != '') ? $imgUrl_2 . ',' : '';
+        $user->auth_img .= ($imgUrl_3 != '') ? $imgUrl_3 . ',' : '';
+        $user->auth_img .= ($imgUrl_4 != '') ? $imgUrl_4 . ',' : '';
+        $user->auth_img .= ($imgUrl_5 != '') ? $imgUrl_5 . ',' : '';
+        $user->auth_img = substr($user->auth_img, 0, strlen($user->auth_img) - 1);
+
+        $user->save();
+
+        return ['url' => $user->auth_img];
+    }
+
+    /**
+     * 保存图像。
+     *
+     * @param $userId
+     * @param $imgFile
+     * @return string
+     */
+    public function saveImg($userId, $imgFile)
+    {
+        $destinationPath =
+            \Config::get('constants.AUTH_PATH') .
+            $userId . '/';
+        $filename = time() . '.jpg';
+
+        $imgFile->move($destinationPath, $filename);
+
+        $fullPath = $destinationPath . $filename;
+        $newPath = str_replace('.jpg', '_thumb.jpg', $fullPath);
+
+        Image::make($fullPath)->encode('jpg', 50)->save($newPath); //按50的品质压缩图片
+
+        return '/' . $newPath;
+    }
+
     /**
      * Update user info.
      *

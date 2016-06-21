@@ -50,6 +50,7 @@ class User extends Model implements AuthenticatableContract,
         'tag_list',
         'profile',
         'auth',
+        'auth_img',
         'fee_switch',
         'fee',
         'fee_face_to_face'

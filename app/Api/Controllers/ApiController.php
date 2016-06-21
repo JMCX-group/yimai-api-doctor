@@ -155,6 +155,7 @@ class ApiController extends BaseController
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
                                 'is_auth' => '是否认证,1为认证,0为未认证',
+                                'auth_img' => '认证图片url,相对路径',
                                 'inviter' => '邀请者'
                             ],
                             'relations' => [
@@ -235,6 +236,7 @@ class ApiController extends BaseController
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
                                 'is_auth' => '是否认证,1为认证,0为未认证',
+                                'auth_img' => '认证图片url,相对路径',
                                 'fee_switch' => '1:开, 0:关',
                                 'fee' => '接诊收费金额',
                                 'fee_face_to_face' => '当面咨询收费金额',
@@ -719,11 +721,31 @@ class ApiController extends BaseController
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
                                 'is_auth' => '是否认证,1为认证,0为未认证',
+                                'auth_img' => '认证图片url,相对路径',
                                 'fee_switch' => '1:开, 0:关',
                                 'fee' => '接诊收费金额',
                                 'fee_face_to_face' => '当面咨询收费金额',
                                 'inviter' => '邀请者'
                             ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '上传认证图片' => [
+                        'url' => $http . '/api/user/upload-auth-img',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'img-1' => '认证图片; 直接POST文件,支持后缀:jpg/jpeg/png',
+                            'img-2' => '认证图片; 直接POST文件,支持后缀:jpg/jpeg/png; 可选',
+                            'img-3' => '认证图片; 直接POST文件,支持后缀:jpg/jpeg/png; 可选',
+                            'img-4' => '认证图片; 直接POST文件,支持后缀:jpg/jpeg/png; 可选',
+                            'img-5' => '认证图片; 直接POST文件,支持后缀:jpg/jpeg/png; 可选',
+                        ],
+                        'response' => [
+                            'url' => '压缩后的图片访问url链接,可直接用于阅览',
                             'message' => '',
                             'error' => ''
                         ]
