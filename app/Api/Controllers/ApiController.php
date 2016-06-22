@@ -869,6 +869,24 @@ class ApiController extends BaseController
                     ]
                 ],
 
+                '特长标签信息' => [
+                    '所有标签' => [
+                        'url' => $http . '/api/tag/all',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                'id' => '特长标签ID',
+                                'name' => '特长标签名称'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
+                ],
+
                 '医脉资源' => [
                     '新增朋友/申请好友' => [
                         'url' => $http . '/api/relation/add-friend',

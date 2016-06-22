@@ -76,6 +76,11 @@ $api->version('v1', function ($api) {
                 $api->get('/', 'DeptStandardController@index');
             });
             
+            // Tag
+            $api->group(['prefix' => 'tag'], function ($api) {
+                $api->get('/all', 'TagController@index');
+            });
+            
             // Relation
             $api->group(['prefix' => 'relation'], function ($api) {
                 $api->post('add-friend', 'DoctorRelationController@store');
