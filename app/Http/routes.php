@@ -71,6 +71,11 @@ $api->version('v1', function ($api) {
                 $api->get('search/{search_field}', 'HospitalsController@findHospital');
             });
 
+            // College
+            $api->group(['prefix' => 'college'], function ($api) {
+                $api->get('/all', 'CollegeController@index');
+            });
+
             // Dept
             $api->group(['prefix' => 'dept'], function ($api) {
                 $api->get('/', 'DeptStandardController@index');

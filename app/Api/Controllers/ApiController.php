@@ -851,6 +851,24 @@ class ApiController extends BaseController
                     ]
                 ],
 
+                '院校信息' => [
+                    '所有院校' => [
+                        'url' => $http . '/api/college/all',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                'id' => '院校ID',
+                                'name' => '院校名称'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
+                ],
+
                 '科室信息' => [
                     '所有科室' => [
                         'url' => $http . '/api/dept',
