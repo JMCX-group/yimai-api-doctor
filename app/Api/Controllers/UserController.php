@@ -70,11 +70,11 @@ class UserController extends BaseController
             $userId . '/';
         $filename = time() . '.jpg';
 
-        try {
+//        try {
             $imgFile->move($destinationPath, $filename);
-        } catch (\Exception $e) {
-            Log::info('save img', ['context' => $e->getMessage()]);
-        }
+//        } catch (\Exception $e) {
+//            Log::info('save img', ['context' => $e->getMessage()]);
+//        }
 
         $fullPath = $destinationPath . $filename;
         $newPath = str_replace('.jpg', '_thumb.jpg', $fullPath);
