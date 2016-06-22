@@ -37,12 +37,12 @@ class UserController extends BaseController
         if (!isset($user->id)) {
             return $user;
         }
-
-        $imgUrl_1 = isset($request['img_1']) ? $this->saveImg($user->id, $request->file('img_1')) : '';
-        $imgUrl_2 = isset($request['img_2']) ? $this->saveImg($user->id, $request->file('img_2')) : '';
-        $imgUrl_3 = isset($request['img_3']) ? $this->saveImg($user->id, $request->file('img_3')) : '';
-        $imgUrl_4 = isset($request['img_4']) ? $this->saveImg($user->id, $request->file('img_4')) : '';
-        $imgUrl_5 = isset($request['img_5']) ? $this->saveImg($user->id, $request->file('img_5')) : '';
+dd($request['img-1']);
+        $imgUrl_1 = isset($request['img-1']) ? $this->saveImg($user->id, $request->file('img-1')) : '';
+        $imgUrl_2 = isset($request['img-2']) ? $this->saveImg($user->id, $request->file('img-2')) : '';
+        $imgUrl_3 = isset($request['img-3']) ? $this->saveImg($user->id, $request->file('img-3')) : '';
+        $imgUrl_4 = isset($request['img-4']) ? $this->saveImg($user->id, $request->file('img-4')) : '';
+        $imgUrl_5 = isset($request['img-5']) ? $this->saveImg($user->id, $request->file('img-5')) : '';
 
         $user->auth_img = ($imgUrl_1 != '') ? $imgUrl_1 . ',' : '';
         $user->auth_img .= ($imgUrl_2 != '') ? $imgUrl_2 . ',' : '';
