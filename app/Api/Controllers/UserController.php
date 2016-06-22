@@ -37,7 +37,7 @@ class UserController extends BaseController
         if (!isset($user->id)) {
             return $user;
         }
-dd($request['img-1']);
+
         $imgUrl_1 = isset($request['img-1']) ? $this->saveImg($user->id, $request->file('img-1')) : '';
         $imgUrl_2 = isset($request['img-2']) ? $this->saveImg($user->id, $request->file('img-2')) : '';
         $imgUrl_3 = isset($request['img-3']) ? $this->saveImg($user->id, $request->file('img-3')) : '';
@@ -70,7 +70,11 @@ dd($request['img-1']);
             $userId . '/';
         $filename = time() . '.jpg';
 
-        $imgFile->move($destinationPath, $filename);
+        try {
+            $imgFile->move($destinationPath, $filename);
+        } catch (\Exception $e) {
+            Log::info('save img', ['context' => $e->getMessage()]);
+        }
 
         $fullPath = $destinationPath . $filename;
         $newPath = str_replace('.jpg', '_thumb.jpg', $fullPath);
