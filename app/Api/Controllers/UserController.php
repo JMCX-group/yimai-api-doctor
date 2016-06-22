@@ -102,7 +102,8 @@ class UserController extends BaseController
         if (isset($request['head_img']) && !empty($request['head_img'])) {
             $user->avatar = $this->avatar($user->id, $request->file('head_img'));
         }
-        if (isset($request['sex']) && !empty($request['sex'])) {
+        // 传0会判断成false,需要判断:
+        if (isset($request['sex']) && (!empty($request['sex']) || $request['sex']== 0)) {
             // 1:男; 0:女
             $user->gender = $request['sex'];
         }
