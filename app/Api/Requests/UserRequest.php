@@ -35,7 +35,8 @@ class UserRequest extends Request
     {
         return [
             'name' => 'between:1,10',
-            'head_img' => 'mimes:jpg,jpeg,png'
+            'head_img' => 'mimes:jpg,jpeg,png',
+            'email' => 'email'
         ];
     }
 
@@ -48,6 +49,7 @@ class UserRequest extends Request
             'required' => ':attribute不能为空',
             'between' => ':attribute长度必须在:min和:max之间',
             'mimes' => ':attribute需为jpg/jpeg/png文件',
+            'email' => '电子邮箱格式错误'
         ];
     }
 
