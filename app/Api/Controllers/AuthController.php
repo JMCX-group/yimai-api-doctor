@@ -65,7 +65,9 @@ class AuthController extends BaseController
     {
         $newUser = [
             'phone' => $request->get('phone'),
-            'password' => bcrypt($request->get('password'))
+            'password' => bcrypt($request->get('password')),
+
+            'admission_set_fixed' => "[{'week':'sun','am':'false','pm':'false'},{'week':'mon','am':'false','pm':'false'},{'week':'tue','am':'false','pm':'false'},{'week':'wed','am':'false','pm':'false'},{'week':'thu','am':'false','pm':'false'},{'week':'fri','am':'false','pm':'false'},{'week':'sat','am':'false','pm':'false'}]"
         ];
         $user = User::create($newUser);
         $token = JWTAuth::fromUser($user);
