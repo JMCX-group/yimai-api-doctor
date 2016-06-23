@@ -160,8 +160,22 @@ class ApiController extends BaseController
                                 'fee_switch' => '1:开, 0:关',
                                 'fee' => '接诊收费金额',
                                 'fee_face_to_face' => '当面咨询收费金额',
-                                'admission_set_fixed' => '接诊时间设置,固定排班; 接收json,直接存库; 格式案例:[{"week"=>"sun"，"am"=>true, "pm"=>false},{"week"=>"mon"，"am"=>true, "pm"=>false},{"week"=>"tue"，"am"=>true, "pm"=>false},{"week"=>"wed"，"am"=>true, "pm"=>false},{"week"=>"thu"，"am"=>true, "pm"=>false},{"week"=>"fri"，"am"=>true, "pm"=>false},{"week"=>"sat"，"am"=>true, "pm"=>false}]',
-                                'admission_set_flexible' => '接诊时间设置,灵活排班; 接收json,读取时会自动过滤过期时间; 格式案例:[{"date":"2016-06-15","am":true,"pm":false},{"date":"2016-06-16","am":true,"pm":false},{"date":"2016-06-18","am":true,"pm":false},{"date":"2016-06-25","am":true,"pm":true}]',
+                                'admission_set_fixed' => [
+                                    '说明' => '接诊时间设置,固定排班; 接收json,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                    '格式案例' => [
+                                        'week' => 'sun',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
+                                'admission_set_flexible' => [
+                                    '说明' => '接诊时间设置,灵活排班; 接收json,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                    '格式案例' => [
+                                        'date' => '2016-06-23',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
                                 'inviter' => '邀请者'
                             ],
                             'relations' => [
@@ -247,8 +261,22 @@ class ApiController extends BaseController
                                 'fee_switch' => '1:开, 0:关',
                                 'fee' => '接诊收费金额',
                                 'fee_face_to_face' => '当面咨询收费金额',
-                                'admission_set_fixed' => '接诊时间设置,固定排班; 接收json,直接存库; 格式案例:[{"week"=>"sun"，"am"=>true, "pm"=>false},{"week"=>"mon"，"am"=>true, "pm"=>false},{"week"=>"tue"，"am"=>true, "pm"=>false},{"week"=>"wed"，"am"=>true, "pm"=>false},{"week"=>"thu"，"am"=>true, "pm"=>false},{"week"=>"fri"，"am"=>true, "pm"=>false},{"week"=>"sat"，"am"=>true, "pm"=>false}]',
-                                'admission_set_flexible' => '接诊时间设置,灵活排班; 接收json,读取时会自动过滤过期时间; 格式案例:[{"date":"2016-06-15","am":true,"pm":false},{"date":"2016-06-16","am":true,"pm":false},{"date":"2016-06-18","am":true,"pm":false},{"date":"2016-06-25","am":true,"pm":true}]',
+                                'admission_set_fixed' => [
+                                    '说明' => '接诊时间设置,固定排班; 接收json,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                    '格式案例' => [
+                                        'week' => 'sun',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
+                                'admission_set_flexible' => [
+                                    '说明' => '接诊时间设置,灵活排班; 接收json,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                    '格式案例' => [
+                                        'date' => '2016-06-23',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',
@@ -735,9 +763,22 @@ class ApiController extends BaseController
                                 'fee_switch' => '1:开, 0:关',
                                 'fee' => '接诊收费金额',
                                 'fee_face_to_face' => '当面咨询收费金额',
-                                'admission_set_fixed' => '接诊时间设置,固定排班; 接收json,直接存库; 格式案例:[{"week"=>"sun"，"am"=>true, "pm"=>false},{"week"=>"mon"，"am"=>true, "pm"=>false},{"week"=>"tue"，"am"=>true, "pm"=>false},{"week"=>"wed"，"am"=>true, "pm"=>false},{"week"=>"thu"，"am"=>true, "pm"=>false},{"week"=>"fri"，"am"=>true, "pm"=>false},{"week"=>"sat"，"am"=>true, "pm"=>false}]',
-                                'admission_set_flexible' => '接诊时间设置,灵活排班; 接收json,读取时会自动过滤过期时间; 格式案例:[{"date":"2016-06-15","am":true,"pm":false},{"date":"2016-06-16","am":true,"pm":false},{"date":"2016-06-18","am":true,"pm":false},{"date":"2016-06-25","am":true,"pm":true}]',
-
+                                'admission_set_fixed' => [
+                                    '说明' => '接诊时间设置,固定排班; 接收json,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                    '格式案例' => [
+                                        'week' => 'sun',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
+                                'admission_set_flexible' => [
+                                    '说明' => '接诊时间设置,灵活排班; 接收json,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                    '格式案例' => [
+                                        'date' => '2016-06-23',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',
