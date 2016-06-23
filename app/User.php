@@ -39,7 +39,8 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $fillable = [
         'dp_code', 
-        'phone', 
+        'phone',
+        'email',
         'password', 
         'name', 
         'gender', 
@@ -53,7 +54,9 @@ class User extends Model implements AuthenticatableContract,
         'auth_img',
         'fee_switch',
         'fee',
-        'fee_face_to_face'
+        'fee_face_to_face',
+        'admission_set_fixed',
+        'admission_set_flexible'
     ];
 
     /**

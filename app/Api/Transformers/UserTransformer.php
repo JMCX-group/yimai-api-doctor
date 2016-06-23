@@ -53,8 +53,29 @@ class UserTransformer extends TransformerAbstract
             'fee_switch' => $user['fee_switch'],
             'fee' => $user['fee'],
             'fee_face_to_face' => $user['fee_face_to_face'],
+            'admission_set_fixed' => $user['admission_set_fixed'],
+            'admission_set_flexible' => $this->delOutdated(json_decode($user['admission_set_flexible'], true)),
             'inviter' => $user['inviter_dp_code']
         ];
+    }
+
+    /**
+     * 删除过期时间
+     *
+     * @param $data
+     * @return string
+     */
+    public function delOutdated($data)
+    {
+        $now = time();
+        $newData = array();
+        foreach ($data as $item){
+            if(strtotime($item['date']) > $now){
+                array_push($newData, $item);
+            }
+        }
+
+        return json_encode($newData);
     }
 
     /**

@@ -150,13 +150,19 @@ class UserController extends BaseController
          * 接诊收费设置。
          */
         if (isset($request['fee_switch']) && !empty($request['fee_switch'])) {
-            $user->name = $request['fee_switch'];
+            $user->fee_switch = $request['fee_switch'];
         }
         if (isset($request['fee']) && !empty($request['fee'])) {
-            $user->name = $request['fee'];
+            $user->fee = $request['fee'];
         }
         if (isset($request['fee_face_to_face']) && !empty($request['fee_face_to_face'])) {
-            $user->name = $request['fee_face_to_face'];
+            $user->fee_face_to_face = $request['fee_face_to_face'];
+        }
+        if (isset($request['admission_set_fixed']) && !empty($request['admission_set_fixed'])) {
+            $user->admission_set_fixed = $request['admission_set_fixed'];
+        }
+        if (isset($request['admission_set_flexible']) && !empty($request['admission_set_flexible'])) {
+            $user->admission_set_flexible = $this->delOutdated(json_decode($request['admission_set_flexible'], true));
         }
 
         /**
@@ -175,6 +181,25 @@ class UserController extends BaseController
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
         }
+    }
+
+    /**
+     * 删除过期时间
+     * 
+     * @param $data
+     * @return string
+     */
+    public function delOutdated($data)
+    {
+        $now = time();
+        $newData = array();
+        foreach ($data as $item){
+            if(strtotime($item['date']) > $now){
+                array_push($newData, $item);
+            }
+        }
+
+        return json_encode($newData);
     }
 
     /**
