@@ -797,6 +797,39 @@ class ApiController extends BaseController
                 ],
 
                 '医院信息' => [
+                    '全部医院' => [
+                        'url' => $http . '/api/hospital',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => '',
+                            'page' => '页码,一页100; 没有填页码默认是第一页'
+                        ],
+                        'response' => [
+                            'data' => [
+                                'id' => '医院ID',
+                                'area' => '所属地区',
+                                'province' => '省份',
+                                'city' => '城市',
+                                'name' => '医院名称',
+                                '3a' => '是否为三甲医院; 1:三甲, 0:非三甲',
+                                'top' => '顶级科室的数量',
+                            ],
+                            'meta' => [
+                                'pagination' => [
+                                    'total' => '医院总共的数量',
+                                    'count' => '该次请求获取的数量',
+                                    'per_page' => '每页将请求数据量',
+                                    'current_page' => '当前页码(page)',
+                                    'total_pages' => '总共页码(page)',
+                                    'links' => [
+                                        'next' => '会自动生成下一页链接,:http://localhost/api/hospital?page=2'
+                                    ]
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                     '单个医院' => [
                         'url' => $http . '/api/hospital/{hospital_id}',
                         'method' => 'GET',

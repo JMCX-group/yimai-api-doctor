@@ -19,7 +19,7 @@ class HospitalsController extends BaseController
      */
     public function index()
     {
-        $hospitals = Hospital::paginate(15);
+        $hospitals = Hospital::paginate(100);
 
         return $this->response->paginator($hospitals, new HospitalTransformer());
     }
