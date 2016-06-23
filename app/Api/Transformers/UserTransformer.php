@@ -67,6 +67,10 @@ class UserTransformer extends TransformerAbstract
      */
     public function delOutdated($data)
     {
+        if($data == '' || $data == null) {
+            return null;
+        }
+
         $now = time();
         $newData = array();
         foreach ($data as $item){
