@@ -54,7 +54,7 @@ class UserTransformer extends TransformerAbstract
             'fee' => $user['fee'],
             'fee_face_to_face' => $user['fee_face_to_face'],
             'admission_set_fixed' => $user['admission_set_fixed'],
-            'admission_set_flexible' => $this->delOutdated(json_decode($user['admission_set_flexible'], true)),
+            'admission_set_flexible' => self::delOutdated(json_decode($user['admission_set_flexible'], true)),
             'inviter' => $user['inviter_dp_code']
         ];
     }
@@ -65,16 +65,16 @@ class UserTransformer extends TransformerAbstract
      * @param $data
      * @return string
      */
-    public function delOutdated($data)
+    public static function delOutdated($data)
     {
-        if($data == '' || $data == null) {
+        if ($data == '' || $data == null) {
             return null;
         }
 
         $now = time();
         $newData = array();
-        foreach ($data as $item){
-            if(strtotime($item['date']) > $now){
+        foreach ($data as $item) {
+            if (strtotime($item['date']) > $now) {
                 array_push($newData, $item);
             }
         }
@@ -146,6 +146,11 @@ class UserTransformer extends TransformerAbstract
             'personal_introduction' => $user['profile'],
             'is_auth' => $user['auth'],
             'auth_img' => $user['auth_img'],
+            'fee_switch' => $user['fee_switch'],
+            'fee' => $user['fee'],
+            'fee_face_to_face' => $user['fee_face_to_face'],
+            'admission_set_fixed' => $user['admission_set_fixed'],
+            'admission_set_flexible' => self::delOutdated(json_decode($user['admission_set_flexible'], true)),
             'inviter' => $user['inviter_dp_code']
         ];
     }
