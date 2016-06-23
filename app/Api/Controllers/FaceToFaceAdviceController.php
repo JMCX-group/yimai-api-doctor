@@ -55,7 +55,7 @@ class FaceToFaceAdviceController extends BaseController
             'data' => [
                 'id' => $faceToFaceAdvice->id,
                 'price' => $price,
-                'qr_code' => ''
+                'qr_code' => '/qrcode/test.png'
             ]
         ];
     }

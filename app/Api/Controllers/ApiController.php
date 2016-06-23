@@ -1767,7 +1767,7 @@ class ApiController extends BaseController
                             'data' => [
                                 'id' => '当面咨询ID',
                                 'price' => '总共支付的价格,含医生收入和平台收入',
-                                'qr_code' => '提供扫描支付的二维码url'
+                                'qr_code' => '提供扫描支付的二维码url; 相对地址;'
                             ],
                             'message' => '',
                             'error' => ''
