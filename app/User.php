@@ -208,7 +208,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function searchDoctor_admissions($field, $cityId)
     {
-        $condition = "where `city_id` = '$cityId' ";
+        $condition = "where `doctors.city_id` = '$cityId' ";
         $condition .= $field ? "and (doctors.name like '%$field%' ) " : "";
 
         return self::defaultSearchSql($condition);
