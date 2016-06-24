@@ -51,6 +51,7 @@ $api->version('v1', function ($api) {
                 $api->get('phone/{doctor}', 'UserController@findDoctor_byPhone');
                 $api->post('/', 'UserController@update');
                 $api->post('search', 'UserController@searchUser');
+                $api->post('search/admissions', 'UserController@searchUser_admissions');
                 $api->post('search/same-hospital', 'UserController@searchUser_sameHospital');
                 $api->post('search/same-department', 'UserController@searchUser_sameDept');
                 $api->post('search/same-college', 'UserController@searchUser_sameCollege');

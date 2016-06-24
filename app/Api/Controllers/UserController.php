@@ -241,6 +241,15 @@ class UserController extends BaseController
      * @param SearchUserRequest $request
      * @return mixed
      */
+    public function searchUser_admissions(SearchUserRequest $request)
+    {
+        return $this->searchUser($request, 'admissions');
+    }
+
+    /**
+     * @param SearchUserRequest $request
+     * @return mixed
+     */
     public function searchUser_sameHospital(SearchUserRequest $request)
     {
         return $this->searchUser($request, 'same_hospital');
@@ -293,25 +302,25 @@ class UserController extends BaseController
          * same_hospital: 医脉处进行同医院搜索;
          *
          */
-        if (isset($request['type']) && !empty($request['type'])) {
-            $searchType = ($type == null) ? $request['type'] : $type;
-            switch ($searchType) {
-                case 'same_hospital':
-                    $users = User::searchDoctor_sameHospital($data['field'], $user->hospital_id);
-                    break;
-                case 'same_department':
-                    $deptIdList = DeptStandard::getSameFirstLevelDeptIdList($user->dept_id);
-                    $users = User::searchDoctor_sameDept($data['field'], $deptIdList);
-                    break;
-                case 'same_college':
-                    $users = User::searchDoctor_sameCollege($data['field'], $user->college_id);
-                    break;
-                default:
-                    $users = User::searchDoctor($data['field'], $data['city_id'], $data['hospital_id'], $data['dept_id']);
-                    break;
-            }
-        } else {
-            $users = User::searchDoctor($data['field'], $data['city_id'], $data['hospital_id'], $data['dept_id']);
+        $searchType = (($type == null || $type == '') && isset($request['type']) && !empty($request['type'])) ? $request['type'] : $type;
+
+        switch ($searchType) {
+            case 'admissions':
+                $users = User::searchDoctor_admissions($data['field'], $user->city_id);
+                break;
+            case 'same_hospital':
+                $users = User::searchDoctor_sameHospital($data['field'], $user->hospital_id);
+                break;
+            case 'same_department':
+                $deptIdList = DeptStandard::getSameFirstLevelDeptIdList($user->dept_id);
+                $users = User::searchDoctor_sameDept($data['field'], $deptIdList);
+                break;
+            case 'same_college':
+                $users = User::searchDoctor_sameCollege($data['field'], $user->college_id);
+                break;
+            default:
+                $users = User::searchDoctor($data['field'], $data['city_id'], $data['hospital_id'], $data['dept_id']);
+                break;
         }
 
         /**
@@ -400,7 +409,7 @@ class UserController extends BaseController
         /**
          * 只有普通搜索有分组:
          */
-        if ($request['type'] == 'same_hospital' || $request['type'] == 'same_department' || $request['type'] == 'same_college' || $type != null) {
+        if ($request['type'] == 'same_hospital' || $request['type'] == 'same_department' || $request['type'] == 'same_college' || ($type != null && $type != 'admissions')) {
             $retData = array_merge($recentContactsArr, $friendArr, $sameCityArr, $b_s_g_threeA, $otherArr);
 
             return [
@@ -412,9 +421,15 @@ class UserController extends BaseController
                 'users' => $retData
             ];
         } else {
-            $retData_1 = array_merge($recentContactsArr, $friendArr);
-            $retData_2 = $friendsFriendsArr;
-            $retData_other = array_merge($sameCityArr, $b_s_g_threeA, $otherArr);
+            if ($type == 'admissions') {
+                $retData_1 = array_merge($recentContactsArr, $friendArr);
+                $retData_2 = $friendsFriendsArr;
+                $retData_other = array();
+            } else {
+                $retData_1 = array_merge($recentContactsArr, $friendArr);
+                $retData_2 = $friendsFriendsArr;
+                $retData_other = array_merge($sameCityArr, $b_s_g_threeA, $otherArr);
+            }
 
             return [
                 'provinces' => $provinces,

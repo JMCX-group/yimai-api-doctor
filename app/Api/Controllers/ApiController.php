@@ -432,6 +432,93 @@ class ApiController extends BaseController
                                 'error' => ''
                             ]
                     ],
+                    '搜索医生信息，预约医生' => [
+                        'url' => $http . '/api/user/search/admissions',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'field' => '搜索的关键字; 必填项,当type为指定内容时为可选项,不过此时将会是全局搜索,返回信息量巨大',
+                            'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式'
+                        ],
+                        '说明' => '默认是同城搜索; 会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
+                        'response' =>
+                            [
+                                'provinces' => [
+                                    'id' => '省份ID, province_id',
+                                    'name' => '省份/直辖市名称'
+                                ],
+                                'citys' => [
+                                    '{province_id}' => [
+                                        'id' => '城市ID, city_id',
+                                        'name' => '城市名称'
+                                    ]
+                                ],
+                                'hospitals' => [
+                                    '默认格式说明' => '例如: hospitals[1][1]可以取到1省1市下的医院列表',
+                                    '{province_id}' => [
+                                        '{city_id}' => [
+                                            '{自增的数据下标,非key}' => [
+                                                'id' => '医院ID',
+                                                'name' => '城市名称',
+                                                'province_id' => '该医院的省id',
+                                                'city_id' => '该医院的市id'
+                                            ]
+                                        ]
+                                    ],
+
+                                    '安卓格式说明' => '提交format字段,且值为android时,hospitals会返回该格式 :',
+                                    '{自增的数组序号}' => [
+                                        'province_id' => '省份ID',
+                                        'data' => [
+                                            '{自增的数据下标,非key}' => [
+                                                'city_id' => '城市ID',
+                                                'data' => [
+                                                    '{自增的数据下标,非key}' => [
+                                                        'id' => '医院ID',
+                                                        'name' => '城市名称',
+                                                        'province_id' => '该医院的省id',
+                                                        'city_id' => '该医院的市id'
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ],
+                                ],
+                                'departments' => [
+                                    'id' => '科室ID',
+                                    'name' => '科室名称'
+                                ],
+                                'count' => '满足条件的医生数量',
+                                'users' => [
+                                    'friends' => [
+                                        'id' => '用户ID',
+                                        'name' => '用户姓名',
+                                        'head_url' => '头像URL',
+                                        'job_title' => '职称',
+                                        'city' => '所属城市',
+                                        'hospital' => [
+                                            'id' => '用户所在医院ID',
+                                            'name' => '用户所在医院名称'
+                                        ],
+                                        'department' => [
+                                            'id' => '用户所在科室ID',
+                                            'name' => '用户所在科室名称'
+                                        ],
+                                        'relation' => '1:一度人脉; 2:二度人脉; null:没关系'
+                                    ],
+                                    'friends-friends' => [
+                                        '用户结构' => '同上'
+                                    ],
+                                    'others' => [
+                                        '用户结构' => '在该搜索项中,该数据永远为空数组'
+                                    ]
+                                ],
+                                'message' => '',
+                                'error' => ''
+                            ]
+                    ],
                     '搜索医生信息，同医院' => [
                         'url' => $http . '/api/user/search/same-hospital',
                         'method' => 'POST',

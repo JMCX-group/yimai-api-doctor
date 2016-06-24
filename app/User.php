@@ -199,6 +199,22 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * 搜索同城市的医生信息.
+     * id转name.
+     * 
+     * @param $field
+     * @param $cityId
+     * @return mixed
+     */
+    public static function searchDoctor_admissions($field, $cityId)
+    {
+        $condition = "where `city_id` = '$cityId' ";
+        $condition .= $field ? "and (doctors.name like '%$field%' ) " : "";
+
+        return self::defaultSearchSql($condition);
+    }
+
+    /**
      * 搜索同医院的医生信息.
      * id转name.
      *
