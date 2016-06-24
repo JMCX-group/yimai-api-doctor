@@ -33,4 +33,25 @@ class HospitalTransformer extends TransformerAbstract
             'top' => $hospital['top_dept_num']
         ];
     }
+
+    /**
+     * @param Hospital $hospital
+     * @return array
+     */
+    public static function transformHospitals($hospital)
+    {
+        return [
+            'id' => $hospital['id'],
+            'province' => [
+                'id' => $hospital['province_id'],  
+                'name' => $hospital['province'],  
+            ],
+            'city' => [
+                'id' => $hospital['city_id'],  
+                'name' => $hospital['city'],  
+            ],
+            'name' => $hospital['name'],
+            'address' => $hospital['address']
+        ];
+    }
 }

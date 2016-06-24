@@ -1022,7 +1022,67 @@ class ApiController extends BaseController
                             'message' => '',
                             'error' => ''
                         ]
-                    ]
+                    ],
+                    '医院搜索,约诊确定后专用' => [
+                        'url' => $http . '/api/hospital/search/admissions',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'field' => '搜索的关键字; 必填项,当type为指定内容时为可选项,不过此时将会是全局搜索,返回信息量巨大',
+                            'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式',
+                        ],
+                        '说明' => '如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
+                        'response' =>
+                            [
+                                'provinces' => [
+                                    'id' => '省份ID, province_id',
+                                    'name' => '省份/直辖市名称'
+                                ],
+                                'citys' => [
+                                    '{province_id}' => [
+                                        'id' => '城市ID, city_id',
+                                        'name' => '城市名称'
+                                    ]
+                                ],
+                                'hospitals' => [
+                                    '默认格式说明' => '例如: hospitals[1][1]可以取到1省1市下的医院列表',
+                                    '{province_id}' => [
+                                        '{city_id}' => [
+                                            '{自增的数据下标,非key}' => [
+                                                'id' => '医院ID',
+                                                'name' => '城市名称',
+                                                'address' => '医院地址',
+                                                'province_id' => '该医院的省id',
+                                                'city_id' => '该医院的市id'
+                                            ]
+                                        ]
+                                    ],
+
+                                    '安卓格式说明' => '提交format字段,且值为android时,hospitals会返回该格式 :',
+                                    '{自增的数组序号}' => [
+                                        'province_id' => '省份ID',
+                                        'data' => [
+                                            '{自增的数据下标,非key}' => [
+                                                'city_id' => '城市ID',
+                                                'data' => [
+                                                    '{自增的数据下标,非key}' => [
+                                                        'id' => '医院ID',
+                                                        'name' => '城市名称',
+                                                        'address' => '医院地址',
+                                                        'province_id' => '该医院的省id',
+                                                        'city_id' => '该医院的市id'
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ],
+                                ],
+                                'message' => '',
+                                'error' => ''
+                            ]
+                    ],
                 ],
 
                 '院校信息' => [

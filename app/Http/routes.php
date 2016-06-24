@@ -70,6 +70,7 @@ $api->version('v1', function ($api) {
                 $api->get('city/{city}', 'HospitalsController@inCityHospital');
                 $api->get('{hospital}', 'HospitalsController@show');
                 $api->get('search/{search_field}', 'HospitalsController@findHospital');
+                $api->post('search/admissions', 'HospitalsController@findHospital_provinces');
             });
 
             // College
