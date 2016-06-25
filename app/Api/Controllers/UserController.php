@@ -357,7 +357,7 @@ class UserController extends BaseController
             $this->groupByHospitals($userItem, $hospitals, $hospitalIdList);
             $this->groupByDepartments($userItem, $departments, $departmentIdList);
 
-            if (in_array($userItem->id, $contactRecordsIdList)) {
+            if (empty($contactRecordsIdList) && in_array($userItem->id, $contactRecordsIdList)) {
                 array_push($recentContactsArr, Transformer::searchDoctorTransform($userItem, 1));
                 continue;
             }
