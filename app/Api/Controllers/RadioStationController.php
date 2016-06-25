@@ -32,7 +32,7 @@ class RadioStationController extends BaseController
                 ->where('radio_read.user_id', '=', $user->id);
         })
             ->where('status', 0)
-            ->where('valid', '>', date('Y-m-d H:i:s'))
+//            ->where('valid', '>', date('Y-m-d H:i:s'))
             ->paginate(4);
 
         return $this->response->paginator($radioStations, new RadioStationTransformer());

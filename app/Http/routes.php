@@ -11,6 +11,8 @@
 |
 */
 
+Route::get('article/{article_id}', 'ArticleController@getArticle');
+
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
@@ -19,7 +21,6 @@ $api->version('v1', function ($api) {
          * Api Doc
          */
         $api->get('/', 'ApiController@index');
-        $api->get('index', 'TestController@index');
 
         /**
          * Register & Login

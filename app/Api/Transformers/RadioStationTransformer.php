@@ -24,7 +24,8 @@ class RadioStationTransformer extends TransformerAbstract
         return [
             'id' => $radioStation['id'],
             'name' => $radioStation['name'],
-            'content' => $radioStation['content'],
+            'url' => '/article/' . $radioStation['id'],
+//            'content' => $radioStation['content'],
             'img_url' => $radioStation['img_url'],
             'author' => $radioStation['author'],
             'time' => $radioStation['time'],
@@ -54,7 +55,8 @@ class RadioStationTransformer extends TransformerAbstract
         return [
             'id' => $radioStation['id'],
             'name' => $radioStation['name'],
-            'content' => $radioStation['content'],
+            'url' => '/article/' . $radioStation['id'],
+//            'content' => $radioStation['content'],
             'img_url' => $radioStation['img_url'],
             'author' => $radioStation['author'],
             'time' => $radioStation['time'],
