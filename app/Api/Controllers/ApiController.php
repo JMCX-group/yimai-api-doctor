@@ -1357,7 +1357,7 @@ class ApiController extends BaseController
                                 'id' => '广播ID',
                                 'name' => '广播标题',
                                 'url' => '广播链接; 相对地址; 例如:/article/1, 前台请拼成: http://101.201.40.220/article/1 , 即可直接访问,不需要其他get参数',
-                                'img_url' => '首页图片URL',
+                                'img_url' => '首页图片URL; 相对地址; 例如:/uploads/article/1.png, 前台请拼成: http://101.201.40.220/uploads/article/1.png ,即可直接访问',
                                 'author' => '发表人',
                                 'time' => '发表时间',
                                 'unread' => '是否未读,1为未读,null为已读'
