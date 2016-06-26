@@ -8,8 +8,10 @@
 
 namespace App\Api\Controllers;
 
+use App\AdmissionsMsg;
 use App\Api\Transformers\Transformer;
 use App\Api\Transformers\UserTransformer;
+use App\AppointmentMsg;
 use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\RadioStation;
@@ -71,14 +73,28 @@ class InitController extends BaseController
             ->where('radio_read.value', 1)
             ->count();
 
+        /**
+         * Get all admissions msg.
+         */
+        $admissionsUnreadCount = AdmissionsMsg::where('doctor_id', $user->id)
+            ->where('read_status', 0)
+            ->count();
+
+        /**
+         * Get all appointment msg.
+         */
+        $appointmentUnreadCount = AppointmentMsg::where('locums_id', $user->id)
+            ->where('read_status', 0)
+            ->count();
+
         return [
             'user' => $retUser,
             'relations' => $relations,
             'recent_contacts' => $retContact,
             'sys_info' => [
                 'radio_unread_count' => $radioStationUnreadCount,
-                'admissions_unread_count' => '开发中',
-                'appointment_unread_count' => '开发中'
+                'admissions_unread_count' => $admissionsUnreadCount,
+                'appointment_unread_count' => $appointmentUnreadCount
             ]
         ];
     }

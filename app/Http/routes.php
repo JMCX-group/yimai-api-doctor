@@ -137,6 +137,16 @@ $api->version('v1', function ($api) {
             $api->group(['prefix' => 'f2f-advice'], function ($api) {
                 $api->post('new', 'FaceToFaceAdviceController@store');
             });
+
+            //Message
+            $api->group(['prefix' => 'msg'], function ($api) {
+                $api->get('appointment/all', 'AppointmentMsgController@index');
+                $api->get('appointment/new', 'AppointmentMsgController@newMessage');
+                $api->post('appointment/read', 'AppointmentMsgController@readMessage');
+                $api->get('admissions/all', 'AdmissionsMsgController@index');
+                $api->get('admissions/new', 'AdmissionsMsgController@newMessage');
+                $api->post('admissions/read', 'AdmissionsMsgController@readMessage');
+            });
         });
     });
 });

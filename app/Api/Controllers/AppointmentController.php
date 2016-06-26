@@ -14,6 +14,7 @@ use App\Api\Transformers\ReservationRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
+use App\AppointmentMsg;
 use App\User;
 use Intervention\Image\Facades\Image;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -51,6 +52,9 @@ class AppointmentController extends BaseController
             $nowId = str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
         }
 
+        /**
+         * 发起约诊信息记录
+         */
         $data = [
             'id' => $frontId . $nowId,
             'locums_id' => $user->id, //代理医生ID
@@ -65,8 +69,22 @@ class AppointmentController extends BaseController
             'status' => 'wait-1' //新建约诊之后,进入待患者付款阶段
         ];
 
+        /**
+         * 推送消息记录
+         */
+        $msgData = [
+            'appointment_id' => $frontId . $nowId,
+            'locums_id' => $user->id, //代理医生ID
+            'locums_name' => $user->name, //代理医生姓名
+            'patient_name' => $request['name'],
+            'doctor_id' => $request['doctor'],
+            'doctor_name' => User::find($request['doctor'])->first()->name,
+            'status' => 'wait-1' //新建约诊之后,进入待患者付款阶段
+        ];
+
         try {
             Appointment::create($data);
+            AppointmentMsg::create($msgData);
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
         }
