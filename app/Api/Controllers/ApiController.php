@@ -530,7 +530,7 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'form-data' => [
-                            'field' => '搜索的关键字; 必填项,当type为指定内容时为可选项,不过此时将会是全局搜索,返回信息量巨大',
+                            'field' => '搜索的关键字; 可选项,为空时将会是全局搜索,返回信息量巨大',
                             'city' => '下拉框选择的城市ID; 可选项',
                             'department' => '下拉框选择的科室ID; 可选项',
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式'
@@ -619,7 +619,7 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'form-data' => [
-                            'field' => '搜索的关键字; 必填项,当type为指定内容时为可选项,不过此时将会是全局搜索,返回信息量巨大',
+                            'field' => '搜索的关键字; 可选项,为空时将会是全局搜索,返回信息量巨大',
                             'city' => '下拉框选择的城市ID; 可选项',
                             'hospital' => '下拉框选择的医院ID; 可选项',
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式'
@@ -708,7 +708,7 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'form-data' => [
-                            'field' => '搜索的关键字; 必填项,当type为指定内容时为可选项,不过此时将会是全局搜索,返回信息量巨大',
+                            'field' => '搜索的关键字; 可选项,为空时将会是全局搜索,返回信息量巨大',
                             'city' => '下拉框选择的城市ID; 可选项',
                             'hospital' => '下拉框选择的医院ID; 可选项',
                             'department' => '下拉框选择的科室ID; 可选项',

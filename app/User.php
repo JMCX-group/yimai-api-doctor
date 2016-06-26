@@ -228,11 +228,11 @@ class User extends Model implements AuthenticatableContract,
     public static function searchDoctor_sameHospital($field, $hospitalId, $cityId, $deptId)
     {
         $condition = "where ";
-        $condition .= $cityId ? "city_id = '$cityId' " : "";
+        $condition .= $cityId ? "doctors.city_id = '$cityId' " : "";
         $condition .= $cityId ? "and " : "";
-        $condition .= $deptId ? "`dept_id` = '$deptId' " : "";
+        $condition .= $deptId ? "doctors.dept_id = '$deptId' " : "";
         $condition .= $deptId ? "and " : "";
-        $condition .= "`hospital_id` = '$hospitalId' ";
+        $condition .= "doctors.hospital_id = '$hospitalId' ";
         $condition .= $field ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' ) " : "";
 
         return self::defaultSearchSql($condition);
@@ -252,11 +252,11 @@ class User extends Model implements AuthenticatableContract,
         $deptList = implode(',', $deptList);
         
         $condition = "where ";
-        $condition .= $cityId ? "city_id = '$cityId' " : "";
+        $condition .= $cityId ? "doctors.city_id = '$cityId' " : "";
         $condition .= $cityId ? "and " : "";
-        $condition .= $hospitalId ? "`hospital_id` = '$hospitalId' " : "";
+        $condition .= $hospitalId ? "doctors.hospital_id = '$hospitalId' " : "";
         $condition .= $hospitalId ? "and " : "";
-        $condition .= "`dept_id` IN ($deptList) ";
+        $condition .= "doctors.dept_id IN ($deptList) ";
         $condition .= $field ? "and (doctors.name like '%$field%' or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') " : "";
 
         return self::defaultSearchSql($condition);
@@ -275,13 +275,13 @@ class User extends Model implements AuthenticatableContract,
     public static function searchDoctor_sameCollege($field, $collegeId, $cityId, $hospitalId, $deptId)
     {
         $condition = "where ";
-        $condition .= $cityId ? "city_id = '$cityId' " : "";
+        $condition .= $cityId ? "doctors.city_id = '$cityId' " : "";
         $condition .= $cityId ? "and " : "";
-        $condition .= $hospitalId ? "`hospital_id` = '$hospitalId' " : "";
+        $condition .= $hospitalId ? "doctors.hospital_id = '$hospitalId' " : "";
         $condition .= $hospitalId ? "and " : "";
-        $condition .= $deptId ? "`dept_id` = '$deptId' " : "";
+        $condition .= $deptId ? "doctors.dept_id = '$deptId' " : "";
         $condition .= $deptId ? "and " : "";
-        $condition .= "`college_id` = '$collegeId' ";
+        $condition .= "doctors.college_id = '$collegeId' ";
         $condition .= $field
             ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' " .
             "or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') "
