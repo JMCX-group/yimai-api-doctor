@@ -218,15 +218,21 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * 搜索同医院的医生信息.
-     * id转name.
-     *
+     * 
      * @param $field
      * @param $hospitalId
+     * @param $cityId
+     * @param $deptId
      * @return mixed
      */
-    public static function searchDoctor_sameHospital($field, $hospitalId)
+    public static function searchDoctor_sameHospital($field, $hospitalId, $cityId, $deptId)
     {
-        $condition = "where `hospital_id` = '$hospitalId' ";
+        $condition = "where ";
+        $condition .= $cityId ? "city_id = '$cityId' " : "";
+        $condition .= $cityId ? "and " : "";
+        $condition .= $deptId ? "`dept_id` = '$deptId' " : "";
+        $condition .= $deptId ? "and " : "";
+        $condition .= "`hospital_id` = '$hospitalId' ";
         $condition .= $field ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' ) " : "";
 
         return self::defaultSearchSql($condition);
@@ -234,16 +240,23 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * 搜索相同一级科室的所有一二级科室的医生信息。
-     * id转name。
-     *
+     * 
      * @param $field
      * @param $deptList
+     * @param $cityId
+     * @param $hospitalId
      * @return mixed
      */
-    public static function searchDoctor_sameDept($field, $deptList)
+    public static function searchDoctor_sameDept($field, $deptList, $cityId, $hospitalId)
     {
         $deptList = implode(',', $deptList);
-        $condition = "where `dept_id` IN ($deptList) ";
+        
+        $condition = "where ";
+        $condition .= $cityId ? "city_id = '$cityId' " : "";
+        $condition .= $cityId ? "and " : "";
+        $condition .= $hospitalId ? "`hospital_id` = '$hospitalId' " : "";
+        $condition .= $hospitalId ? "and " : "";
+        $condition .= "`dept_id` IN ($deptList) ";
         $condition .= $field ? "and (doctors.name like '%$field%' or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') " : "";
 
         return self::defaultSearchSql($condition);
@@ -251,15 +264,24 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * 搜索同院校下的医生信息。
-     * id转name。
-     *
+     * 
      * @param $field
      * @param $collegeId
+     * @param $cityId
+     * @param $hospitalId
+     * @param $deptId
      * @return mixed
      */
-    public static function searchDoctor_sameCollege($field, $collegeId)
+    public static function searchDoctor_sameCollege($field, $collegeId, $cityId, $hospitalId, $deptId)
     {
-        $condition = "where `college_id` = '$collegeId' ";
+        $condition = "where ";
+        $condition .= $cityId ? "city_id = '$cityId' " : "";
+        $condition .= $cityId ? "and " : "";
+        $condition .= $hospitalId ? "`hospital_id` = '$hospitalId' " : "";
+        $condition .= $hospitalId ? "and " : "";
+        $condition .= $deptId ? "`dept_id` = '$deptId' " : "";
+        $condition .= $deptId ? "and " : "";
+        $condition .= "`college_id` = '$collegeId' ";
         $condition .= $field
             ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' " .
             "or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') "

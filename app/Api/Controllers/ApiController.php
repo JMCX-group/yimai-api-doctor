@@ -531,8 +531,8 @@ class ApiController extends BaseController
                         ],
                         'form-data' => [
                             'field' => '搜索的关键字; 必填项,当type为指定内容时为可选项,不过此时将会是全局搜索,返回信息量巨大',
-                            'city_id' => '下拉框选择的城市ID; 可选项',
-                            'dept_id' => '下拉框选择的科室ID; 可选项',
+                            'city' => '下拉框选择的城市ID; 可选项',
+                            'department' => '下拉框选择的科室ID; 可选项',
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式'
                         ],
                         '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
@@ -620,8 +620,8 @@ class ApiController extends BaseController
                         ],
                         'form-data' => [
                             'field' => '搜索的关键字; 必填项,当type为指定内容时为可选项,不过此时将会是全局搜索,返回信息量巨大',
-                            'city_id' => '下拉框选择的城市ID; 可选项',
-                            'hospital_id' => '下拉框选择的医院ID; 可选项',
+                            'city' => '下拉框选择的城市ID; 可选项',
+                            'hospital' => '下拉框选择的医院ID; 可选项',
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式'
                         ],
                         '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
@@ -709,9 +709,9 @@ class ApiController extends BaseController
                         ],
                         'form-data' => [
                             'field' => '搜索的关键字; 必填项,当type为指定内容时为可选项,不过此时将会是全局搜索,返回信息量巨大',
-                            'city_id' => '下拉框选择的城市ID; 可选项',
-                            'hospital_id' => '下拉框选择的医院ID; 可选项',
-                            'dept_id' => '下拉框选择的科室ID; 可选项',
+                            'city' => '下拉框选择的城市ID; 可选项',
+                            'hospital' => '下拉框选择的医院ID; 可选项',
+                            'department' => '下拉框选择的科室ID; 可选项',
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式'
                         ],
                         '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
