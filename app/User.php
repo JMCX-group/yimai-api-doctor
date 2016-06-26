@@ -56,7 +56,9 @@ class User extends Model implements AuthenticatableContract,
         'fee',
         'fee_face_to_face',
         'admission_set_fixed',
-        'admission_set_flexible'
+        'admission_set_flexible',
+        'verify_switch',
+        'friends_friends_appointment_switch'
     ];
 
     /**

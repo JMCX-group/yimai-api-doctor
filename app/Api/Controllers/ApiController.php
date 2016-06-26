@@ -176,6 +176,8 @@ class ApiController extends BaseController
                                         'pm' => 'false',
                                     ]
                                 ],
+                                'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
+                                'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
                                 'inviter' => '邀请者'
                             ],
                             'relations' => [
@@ -277,6 +279,8 @@ class ApiController extends BaseController
                                         'pm' => 'false',
                                     ]
                                 ],
+                                'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
+                                'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',
@@ -866,6 +870,8 @@ class ApiController extends BaseController
                                         'pm' => 'false',
                                     ]
                                 ],
+                                'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
+                                'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',

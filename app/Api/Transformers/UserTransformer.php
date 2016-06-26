@@ -55,6 +55,8 @@ class UserTransformer extends TransformerAbstract
             'fee_face_to_face' => $user['fee_face_to_face'],
             'admission_set_fixed' => $user['admission_set_fixed'],
             'admission_set_flexible' => self::delOutdated(json_decode($user['admission_set_flexible'], true)),
+            'verify_switch' => $user['verify_switch'],
+            'friends_friends_appointment_switch' => $user['friends_friends_appointment_switch'],
             'inviter' => $user['inviter_dp_code']
         ];
     }
@@ -151,6 +153,8 @@ class UserTransformer extends TransformerAbstract
             'fee_face_to_face' => $user['fee_face_to_face'],
             'admission_set_fixed' => $user['admission_set_fixed'],
             'admission_set_flexible' => self::delOutdated(json_decode($user['admission_set_flexible'], true)),
+            'verify_switch' => $user['verify_switch'],
+            'friends_friends_appointment_switch' => $user['friends_friends_appointment_switch'],
             'inviter' => $user['inviter_dp_code']
         ];
     }
