@@ -2120,6 +2120,13 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                ],
+
+                '静态资源' => [
+                    '说明' => '和图片一样是相对链接，前面拼域名或IP即可访问； 例如：http://101.201.40.220/about/contact-us ，可以访问关于我们',
+                    '关于我们' => '/about/contact-us',
+                    '医脉简介' => '/about/introduction',
+                    '律师信息' => '/about/lawyer'
                 ]
             ]
         ];

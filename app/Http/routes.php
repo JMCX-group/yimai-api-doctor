@@ -12,6 +12,9 @@
 */
 
 Route::get('article/{article_id}', 'ArticleController@getArticle');
+Route::get('about/contact-us', 'AboutController@contactUs');
+Route::get('about/introduction', 'AboutController@introduction');
+Route::get('about/lawyer', 'AboutController@lawyer');
 
 $api = app('Dingo\Api\Routing\Router');
 
