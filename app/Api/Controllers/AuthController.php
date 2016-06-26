@@ -85,14 +85,33 @@ class AuthController extends BaseController
     {
         $userId = User::where('phone', $request->get('phone'))
             ->update(['password' => bcrypt($request->get('password'))]);
+
         if (!$userId) {
             return response()->json(['message' => '该手机号未注册'], 404);
         }
 
-        $user = User::find($userId);
-        $token = JWTAuth::fromUser($user);
+        $credentials = [
+            'phone' => $request->get('phone'),
+            'password' => $request->get('password')
+        ];
 
+        try {
+            // attempt to verify the credentials and create a token for the user
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['message' => 'invalid_credentials'], 401);
+            }
+        } catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+            return response()->json(['message' => 'could_not_create_token'], 500);
+        }
+
+        // all good so return the token
         return response()->json(compact('token'));
+
+//        $user = User::where('phone', $request->get('phone'))->get();
+//        $token = JWTAuth::fromUser($user);
+//
+//        return response()->json(compact('token'));
     }
 
     /**
