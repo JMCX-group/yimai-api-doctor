@@ -2015,7 +2015,7 @@ class ApiController extends BaseController
                         'response' => [
                             'data' => [
                                 'id' => '消息ID',
-                                'appointment_id' => '约诊号',
+                                'appointment_id' => '约诊号; 用来跳转到对应的【我的接诊】记录',
                                 'text' => '显示文案',
                                 'type' => '是否重要,0为不重要,1为重要; 重要的内容必须点开告知服务器变为已读; 不重要内容点开列表就全部变已读',
                                 'read' => '是否已读,0为未读,1为已读; 该状态后期会将type为0的,获取时直接全部置为已读',
@@ -2035,7 +2035,7 @@ class ApiController extends BaseController
                         'response' => [
                             'data' => [
                                 'id' => '消息ID',
-                                'appointment_id' => '约诊号',
+                                'appointment_id' => '约诊号; 用来跳转到对应的【我的接诊】记录',
                                 'text' => '显示文案',
                                 'type' => '是否重要,0为不重要,1为重要; 重要的内容必须点开告知服务器变为已读; 不重要内容点开列表就全部变已读',
                                 'read' => '是否已读,0为未读,1为已读; 该状态后期会将type为0的,获取时直接全部置为已读',
@@ -2074,7 +2074,7 @@ class ApiController extends BaseController
                         'response' => [
                             'data' => [
                                 'id' => '消息ID',
-                                'appointment_id' => '约诊号',
+                                'appointment_id' => '约诊号; 用来跳转到对应的【预约记录】记录',
                                 'text' => '显示文案',
                                 'type' => '是否重要,0为不重要,1为重要; 重要的内容必须点开告知服务器变为已读; 不重要内容点开列表就全部变已读',
                                 'read' => '是否已读,0为未读,1为已读; 该状态后期会将type为0的,获取时直接全部置为已读',
@@ -2094,7 +2094,7 @@ class ApiController extends BaseController
                         'response' => [
                             'data' => [
                                 'id' => '消息ID',
-                                'appointment_id' => '约诊号',
+                                'appointment_id' => '约诊号; 用来跳转到对应的【预约记录】记录',
                                 'text' => '显示文案',
                                 'type' => '是否重要,0为不重要,1为重要; 重要的内容必须点开告知服务器变为已读; 不重要内容点开列表就全部变已读',
                                 'read' => '是否已读,0为未读,1为已读; 该状态后期会将type为0的,获取时直接全部置为已读',
