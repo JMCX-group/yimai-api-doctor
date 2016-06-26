@@ -213,7 +213,7 @@ class UserController extends BaseController
     }
 
     /**
-     * 存储头像文件并压缩成200*200
+     * 存储头像文件并压缩成150*150
      *
      * @param $userId
      * @param $avatarFile
@@ -225,7 +225,7 @@ class UserController extends BaseController
         $filename = $userId . '.jpg';
         $avatarFile->move($destinationPath, $filename);
 
-        Image::make($destinationPath . $filename)->fit(200)->save();
+        Image::make($destinationPath . $filename)->fit(150)->save();
 
         return '/' . $destinationPath . $filename;
     }
