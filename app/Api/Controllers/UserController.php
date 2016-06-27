@@ -168,10 +168,12 @@ class UserController extends BaseController
         /**
          * 隐私设置: 加好友验证开关 | 好友的好友发起约诊开关。
          */
-        if (isset($request['verify_switch']) && !empty($request['verify_switch'])) {
+
+        if (isset($request['verify_switch']) && (!empty($request['verify_switch']) || $request['verify_switch']== 0)) {
             $user->verify_switch = $request['verify_switch'];
         }
-        if (isset($request['friends_friends_appointment_switch']) && !empty($request['friends_friends_appointment_switch'])) {
+
+        if (isset($request['friends_friends_appointment_switch']) && (!empty($request['friends_friends_appointment_switch']) || $request['friends_friends_appointment_switch']== 0)) {
             $user->friends_friends_appointment_switch = $request['friends_friends_appointment_switch'];
         }
 

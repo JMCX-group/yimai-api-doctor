@@ -797,7 +797,7 @@ class ApiController extends BaseController
                                 'error' => ''
                             ]
                     ],
-                    '修改个人信息/修改密码/修改接诊收费信息' => [
+                    '修改个人信息/修改密码/修改接诊收费信息/修改隐私设置' => [
                         'url' => $http . '/api/user',
                         'method' => 'POST',
                         'params' => [
@@ -820,7 +820,9 @@ class ApiController extends BaseController
                             'personal_introduction' => '个人简介',
                             'fee_switch' => '接诊收费开关, 1:开, 0:关(默认值)',
                             'fee' => '接诊收费金额,默认300',
-                            'fee_face_to_face' => '当面咨询收费金额,默认100'
+                            'fee_face_to_face' => '当面咨询收费金额,默认100',
+                            'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
+                            'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关'
                         ],
                         'response' => [
                             'user' => [
