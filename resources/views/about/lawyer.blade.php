@@ -1,13 +1,10 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: mvp_xuan
- * Date: 2016-6-26
- * Time: 22:07
- */
-?>
-<html>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+</head>
 <body>
-<p style="text-align:center;"> <img src="/about/lawyer.png"> </p>
+    <p style="text-align:center; width: 100%;"> <img src="/about/lawyer.png"> </p>
 </body>
 </html>
