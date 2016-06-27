@@ -184,11 +184,11 @@ class User extends Model implements AuthenticatableContract,
     public static function searchDoctor($field, $cityId, $hospitalId, $deptId)
     {
         $condition = "where ";
-        $condition .= $cityId ? "city_id = '$cityId' " : "";
+        $condition .= $cityId ? "doctors.city_id = '$cityId' " : "";
         $condition .= $cityId ? "and " : "";
-        $condition .= $hospitalId ? "`hospital_id` = '$hospitalId' " : "";
+        $condition .= $hospitalId ? "doctors.hospital_id = '$hospitalId' " : "";
         $condition .= $hospitalId ? "and " : "";
-        $condition .= $deptId ? "`dept_id` = '$deptId' " : "";
+        $condition .= $deptId ? "doctors.dept_id = '$deptId' " : "";
         $condition .= $deptId ? "and " : "";
         $condition .= " (";
         $condition .= "doctors.name like '%$field%' ";

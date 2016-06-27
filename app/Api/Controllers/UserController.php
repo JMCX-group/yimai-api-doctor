@@ -298,11 +298,36 @@ class UserController extends BaseController
             return $user;
         }
 
+        /**
+         * 获取前台传参:
+         * 兼容不同形式的……蛋疼:
+         */
+        if(isset($request['city']) && !empty($request['city'])){
+            $cityID = $request['city'];
+        } elseif(isset($request['city_id']) && !empty($request['city_id'])){
+            $cityID = $request['city_id'];
+        } else {
+            $cityID = false;
+        }
+        if(isset($request['hospital']) && !empty($request['hospital'])){
+            $hospitalID = $request['hospital'];
+        } elseif(isset($request['hospital_id']) && !empty($request['hospital_id'])){
+            $hospitalID = $request['hospital_id'];
+        } else {
+            $hospitalID = false;
+        }
+        if(isset($request['department']) && !empty($request['department'])){
+            $deptID = $request['department'];
+        } elseif(isset($request['dept_id']) && !empty($request['dept_id'])){
+            $deptID = $request['dept_id'];
+        } else {
+            $deptID = false;
+        }
         $data = [
             'field' => isset($request['field']) && !empty($request['field']) ? $request['field'] : false,
-            'city_id' => isset($request['city']) && !empty($request['city']) ? $request['city'] : false,
-            'hospital_id' => isset($request['hospital']) && !empty($request['hospital']) ? $request['hospital'] : false,
-            'dept_id' => isset($request['department']) && !empty($request['department']) ? $request['department'] : false
+            'city_id' => $cityID,
+            'hospital_id' => $hospitalID,
+            'dept_id' => $deptID
         ];
 
         /**
