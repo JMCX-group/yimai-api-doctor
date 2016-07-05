@@ -151,6 +151,11 @@ $api->version('v1', function ($api) {
                 $api->get('admissions/new', 'AdmissionsMsgController@newMessage');
                 $api->post('admissions/read', 'AdmissionsMsgController@readMessage');
             });
+
+            //Contacts
+            $api->group(['prefix' => 'contacts'], function ($api) {
+                $api->get('all', 'ContactController@index');
+            });
         });
     });
 });

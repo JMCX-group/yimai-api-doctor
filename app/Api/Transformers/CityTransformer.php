@@ -11,10 +11,6 @@ namespace App\Api\Transformers;
 use App\City;
 use League\Fractal\TransformerAbstract;
 
-/**
- * Class CityTransformer
- * @package App\Api\Transformers
- */
 class CityTransformer extends TransformerAbstract
 {
     /**
