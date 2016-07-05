@@ -129,6 +129,7 @@ $api->version('v1', function ($api) {
                 $api->post('complete', 'AdmissionsController@completeAdmissions');
                 $api->post('rescheduled', 'AdmissionsController@rescheduledAdmissions');
                 $api->post('cancel', 'AdmissionsController@cancelAdmissions');
+                $api->post('transfer', 'AdmissionsController@transferAdmissions');
             });
 
             //Patient

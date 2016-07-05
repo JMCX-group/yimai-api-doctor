@@ -15,6 +15,7 @@ use App\Api\Transformers\AdmissionsRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
+use App\AppointmentMsg;
 use App\Hospital;
 use App\User;
 
@@ -65,6 +66,41 @@ class AdmissionsController extends BaseController
             $appointment->save();
 
             return $this->getDetailInfo($request['id']);
+        } else {
+            return response()->json(['message' => '状态错误'], 400);
+        }
+    }
+
+    /**
+     * 转诊。
+     * 
+     * @param RefusalAdmissionsRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function transferAdmissions(RefusalAdmissionsRequest $request)
+    {
+        $appointment = Appointment::find($request['id']);
+
+        if ($appointment->status == 'wait-2') {
+            $appointment->doctor_id = $request['doctor_id']; //修改医生信息
+            $appointment->save();
+            
+            /**
+             * 推送消息记录
+             */
+            $msgData = [
+                'appointment_id' => $request['id'],
+                'locums_id' => $appointment->locums_id, //代理医生ID
+                'locums_name' => User::find($appointment->locums_id)->first()->name, //代理医生姓名
+                'patient_name' => $appointment->patient_name,
+                'doctor_id' => $request['doctor_id'],
+                'doctor_name' => User::find($request['doctor_id'])->first()->name,
+                'status' => 'wait-2' //患者已付款，待医生确认
+            ];
+            
+            AppointmentMsg::create($msgData);
+
+            return response()->json(['success' => ''], 204); //给肠媳适配。。
         } else {
             return response()->json(['message' => '状态错误'], 400);
         }

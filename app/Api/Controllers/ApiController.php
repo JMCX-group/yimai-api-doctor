@@ -1677,6 +1677,23 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '转诊' => [
+                        'url' => $http . '/api/admissions/transfer',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '约诊ID',
+                            'doctor_id' => '转诊至哪个医生的ID'
+                        ],
+                        '说明' => 'HTTP状态204; 会触发一个通知给新的医生; 点击转诊跳转到:2.4-约诊 =》预约_0006_预约医生7.png,只有医生可以修改',
+                        'response' => [
+                            'success' => '',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                     '完成接诊' => [
                         'url' => $http . '/api/admissions/complete',
                         'method' => 'POST',
