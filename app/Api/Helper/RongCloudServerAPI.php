@@ -1,20 +1,24 @@
 <?php
 /**
+ * Created by PhpStorm.
+ * User: lyx
+ * Date: 16/7/18
+ * Time: 下午5:45
+ */
+
+namespace App\Api\Helper;
+
+/**
  * 融云server API 接口 新版 1.0
  * Class ServerAPI
  * @author  caolong
  * @date    2014-12-10  15:30
  * @modify  2015-02-02  10:21
- *
-//使用
-$p = new ServerAPI('appKey','AppSecret');
-$r = $p->getToken('11','22','33');
-print_r($r);
  */
-class ServerAPI
+class RongCloudServerAPI
 {
-    private $appKey;                //appKey
-    private $appSecret;             //secret
+    private $appKey = 'sfci50a7c75di';                //appKey
+    private $appSecret = '0nSirFWWxVPi';             //secret
     const   SERVERAPIURL = 'http://api.cn.ronghub.com';    //请求服务地址
     private $format = 'json';                //数据格式 json/xml
 
@@ -1144,8 +1148,7 @@ class ServerAPI
 
     /**
      * 创建http header参数
-     * @param array $data
-     * @return bool
+     * @return array
      */
     private function createHttpHeader()
     {
@@ -1203,8 +1206,8 @@ class ServerAPI
      * 发起 server 请求
      * @param $action
      * @param $params
-     * @param $httpHeader
-     * @return mixed
+     * @param string $contentType
+     * @return int|mixed
      */
     public function curl($action, $params, $contentType = 'urlencoded')
     {

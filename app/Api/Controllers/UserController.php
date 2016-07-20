@@ -8,6 +8,7 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Helper\RongCloudServerAPI;
 use App\Api\Requests\SearchUserRequest;
 use App\Api\Requests\UserRequest;
 use App\Api\Transformers\Transformer;
@@ -25,6 +26,16 @@ use JWTAuth;
 
 class UserController extends BaseController
 {
+    private $rongYunSer;
+
+    public function __construct()
+    {
+        $appKey = 'sfci50a7c75di';
+        $appSecret = '0nSirFWWxVPi';
+        $format = 'json';
+        $this->rongYunSer = new RongCloudServerAPI($appKey, $appSecret, $format);
+    }
+
     /**
      * 上传认证需要的图片。
      *
@@ -110,7 +121,7 @@ class UserController extends BaseController
             $user->avatar = $this->avatar($user->id, $request->file('head_img'));
         }
         // 传0会判断成false,需要判断:
-        if (isset($request['sex']) && (!empty($request['sex']) || $request['sex']== 0)) {
+        if (isset($request['sex']) && (!empty($request['sex']) || $request['sex'] == 0)) {
             // 1:男; 0:女
             $user->gender = $request['sex'];
         }
@@ -168,10 +179,10 @@ class UserController extends BaseController
         /**
          * 隐私设置: 加好友验证开关 | 好友的好友发起约诊开关。
          */
-        if (isset($request['verify_switch']) && (!empty($request['verify_switch']) || $request['verify_switch']== 0)) {
+        if (isset($request['verify_switch']) && (!empty($request['verify_switch']) || $request['verify_switch'] == 0)) {
             $user->verify_switch = $request['verify_switch'];
         }
-        if (isset($request['friends_friends_appointment_switch']) && (!empty($request['friends_friends_appointment_switch']) || $request['friends_friends_appointment_switch']== 0)) {
+        if (isset($request['friends_friends_appointment_switch']) && (!empty($request['friends_friends_appointment_switch']) || $request['friends_friends_appointment_switch'] == 0)) {
             $user->friends_friends_appointment_switch = $request['friends_friends_appointment_switch'];
         }
 
@@ -180,6 +191,18 @@ class UserController extends BaseController
          */
         if (empty($user->dp_code) && !empty($user->dept_id)) {
             $user->dp_code = User::generateDpCode($user->dept_id);
+        }
+
+        /**
+         * Get rong yun token.
+         */
+        if (($user->rong_yun_token == '' || $user->rong_yun_token == null) && ($user->name != '' && $user->name != null)) {
+            //获取云信token
+            $rongCloudRet = $this->rongYunSer->getToken($user->id, $user->name, $user->avatar);
+            $rongCloudRet = json_decode($rongCloudRet, true);
+            if ($rongCloudRet['code'] == 200 && $rongCloudRet['userId'] == $user->id) {
+                $user->rong_yun_token = $rongCloudRet['token'];
+            }
         }
 
         try {

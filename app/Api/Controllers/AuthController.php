@@ -19,10 +19,6 @@ use Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
-/**
- * Class AuthController
- * @package App\Api\Controllers
- */
 class AuthController extends BaseController
 {
     /**
