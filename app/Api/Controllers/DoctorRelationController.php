@@ -11,6 +11,7 @@ namespace App\Api\Controllers;
 use App\Api\Requests\RelationIdRequest;
 use App\Api\Requests\RemarksRequest;
 use App\Api\Transformers\Transformer;
+use App\DoctorAddressBook;
 use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\User;
@@ -207,7 +208,7 @@ class DoctorRelationController extends BaseController
 
     /**
      * Get common friends.
-     * 
+     *
      * @param $friendId
      * @return array|mixed
      */
@@ -224,7 +225,7 @@ class DoctorRelationController extends BaseController
             ->lists('doctor_friend_id')
             ->toArray();
         $commonFriends = User::find($commonFriendsIdList);
-        
+
         return Transformer::usersTransform($commonFriends);
     }
 
@@ -331,5 +332,27 @@ class DoctorRelationController extends BaseController
             Log::info('del friend', ['context' => $e->getMessage()]);
             return response()->json(['message' => '删除失败'], 400);
         }
+    }
+
+    /**
+     * 上传通讯录
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function uploadAddressBook(Request $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $addressBook = [
+            'doctor_id' => $user->id,
+            'content' => $request->get('content') //直接json入库
+        ];
+        DoctorAddressBook::create($addressBook);
+
+        return response()->json(['success' => ''], 204); //给肠媳适配。。
     }
 }

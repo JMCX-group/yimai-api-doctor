@@ -4,24 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+class DoctorAddressBook extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'citys';
+    protected $table = 'doctor_address_book';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['province_id', 'name', 'code'];
-    
-    /**
-     * @var bool
-     */
-    public $timestamps = false;
+    protected $fillable = ['doctor_id', 'content'];
 }
