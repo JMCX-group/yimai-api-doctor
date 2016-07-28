@@ -1358,6 +1358,22 @@ class ApiController extends BaseController
                             'message' => '',
                             'error' => ''
                         ]
+                    ],
+
+                    '上传通讯录信息' => [
+                        'url' => $http . '/api/relation/upload-address-book',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'content' => 'json格式的全部通讯录信息; 格式:[["name":"","phone":""],["name":"","phone":""]]'
+                        ],
+                        'response' => [
+                            'success' => '',
+                            'message' => '',
+                            'error' => ''
+                        ]
                     ]
                 ],
 
