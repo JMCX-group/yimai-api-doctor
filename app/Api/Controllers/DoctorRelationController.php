@@ -347,12 +347,47 @@ class DoctorRelationController extends BaseController
             return $user;
         }
 
-        $addressBook = [
-            'doctor_id' => $user->id,
-            'content' => $request->get('content') //直接json入库
-        ];
-        DoctorAddressBook::create($addressBook);
+        $addressBook = DoctorAddressBook::find($user->id);
+        if (!isset($addressBook->id)) {
+            $addressBook = new DoctorAddressBook();
+            $addressBook->id = $user->id;
+        }
+        $addressBook->content = $request->get('content'); //直接json入库
+        $addressBook->save();
 
-        return response()->json(['success' => ''], 204); //给肠媳适配。。
+        $retData = $this->contactsAnalysis($user->id, $addressBook['content']);
+
+        return response()->json(['data' => [
+            'in_yimai_friends' => $retData,
+            'may_be_doctors' => $retData
+        ]]);
+    }
+
+    public function contactsAnalysis($userId, $content)
+    {
+        //获取好友列表:
+        $friendsIdList = DoctorRelation::getFriendIdList($userId);
+
+        //获取已上传通讯录的好友通讯录:
+        $friends = DoctorAddressBook::whereIn('id', $friendsIdList)->get();
+
+        //使用通讯录电话进行全库识别,找到加入医脉但还没有在医脉上互加好友的列表:
+        $phoneList = '';
+        return $content;
+        foreach ($content as $item) {
+            $phoneList .= $item->phone . ',';
+        }
+
+        $notAddFriends = User::whereIn('phone', $phoneList)->get();
+
+
+        //排除已加过的好友,获得"医脉资源中好友列表":
+
+        //交叉对比未加入医脉资源的好友通讯录,获得"可能是医生的列表":
+
+        //返回数据:
+
+
+        return $notAddFriends;
     }
 }

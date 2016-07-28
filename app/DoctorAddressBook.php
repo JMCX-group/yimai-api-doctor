@@ -18,5 +18,5 @@ class DoctorAddressBook extends Model
      *
      * @var array
      */
-    protected $fillable = ['doctor_id', 'content'];
+    protected $fillable = ['id', 'content'];
 }
