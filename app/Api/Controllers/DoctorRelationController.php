@@ -373,11 +373,11 @@ class DoctorRelationController extends BaseController
 
         //使用通讯录电话进行全库识别,找到加入医脉但还没有在医脉上互加好友的列表:
         $phoneList = '';
-        return $content;
         foreach ($content as $item) {
             $phoneList .= $item->phone . ',';
         }
 
+        return $phoneList;
         $notAddFriends = User::whereIn('phone', $phoneList)->get();
 
 

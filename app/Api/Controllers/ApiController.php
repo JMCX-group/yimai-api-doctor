@@ -1370,7 +1370,10 @@ class ApiController extends BaseController
                             'content' => 'json格式的全部通讯录信息; 格式:[["name":"","phone":""],["name":"","phone":""]]'
                         ],
                         'response' => [
-                            'success' => '',
+                            'data' => [
+                                'in_yimai_friends' => '我也不知道是啥,帮我打印出来看看',
+                                'may_be_doctors' => '我也不知道是啥,帮我打印出来看看'
+                            ],
                             'message' => '',
                             'error' => ''
                         ]
