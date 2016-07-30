@@ -1367,7 +1367,7 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'form-data' => [
-                            'content' => 'json格式的全部通讯录信息; 格式:[["name":"","phone":""],["name":"","phone":""]]'
+                            'content' => 'json格式的全部通讯录信息; 格式:[{"name":"","phone":""},{"name":"","phone":""}]'
                         ],
                         'response' => [
                             'data' => [
