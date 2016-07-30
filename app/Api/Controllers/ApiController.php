@@ -1371,8 +1371,18 @@ class ApiController extends BaseController
                         ],
                         'response' => [
                             'data' => [
-                                'in_yimai_friends' => '我也不知道是啥,帮我打印出来看看',
-                                'may_be_doctors' => '我也不知道是啥,帮我打印出来看看'
+                                'in_yimai_friends' => [
+                                    'id' => '用户ID',
+                                    'name' => '用户姓名',
+                                    'head_url' => '头像URL',
+                                    'hospital' => '所属医院',
+                                    'department' => '所属科室',
+                                    'job_title' => '职称'
+                                ],
+                                'may_be_doctors' => [
+                                    'name' => '姓名',
+                                    'phone' => '头像URL'
+                                ]
                             ],
                             'message' => '',
                             'error' => ''
