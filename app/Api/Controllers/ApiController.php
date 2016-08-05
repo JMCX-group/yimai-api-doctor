@@ -1369,9 +1369,14 @@ class ApiController extends BaseController
                         'form-data' => [
                             'content' => 'json格式的全部通讯录信息; 格式:[{"name":"","phone":""},{"name":"","phone":""}]'
                         ],
+                        '测试数据' => [
+                            'data' => '[{"phone":"18712345678","name":"187"},{"phone":"18611175661","name":"187"},{"phone":"18611111111","name":"没有加入"}]',
+                            '说明' => '用186用户登录的话,上面的数据刚好是一个在通讯里且加好友了,一个在通讯里但没在医脉加好友,一个在通讯录里且没加入医脉'
+                        ],
+                        '说明' => 'friends是在通讯里加入了医脉,但没在医脉中互加好友的部分; others是未加入医脉的通讯里好友名单',
                         'response' => [
                             'data' => [
-                                'in_yimai_friends' => [
+                                'friends' => [
                                     'id' => '用户ID',
                                     'name' => '用户姓名',
                                     'head_url' => '头像URL',
@@ -1379,7 +1384,7 @@ class ApiController extends BaseController
                                     'department' => '所属科室',
                                     'job_title' => '职称'
                                 ],
-                                'may_be_doctors' => [
+                                'others' => [
                                     'name' => '姓名',
                                     'phone' => '头像URL'
                                 ]
