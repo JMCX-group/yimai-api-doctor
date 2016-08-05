@@ -1380,8 +1380,14 @@ class ApiController extends BaseController
                                     'id' => '用户ID',
                                     'name' => '用户姓名',
                                     'head_url' => '头像URL',
-                                    'hospital' => '所属医院',
-                                    'department' => '所属科室',
+                                    'hospital' => [
+                                        'id' => '用户所在医院ID',
+                                        'name' => '用户所在医院名称'
+                                    ],
+                                    'department' => [
+                                        'id' => '用户所在科室ID',
+                                        'name' => '用户所在科室名称'
+                                    ],
                                     'job_title' => '职称'
                                 ],
                                 'others' => [
