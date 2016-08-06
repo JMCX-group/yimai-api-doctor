@@ -63,6 +63,7 @@ class AuthController extends BaseController
             'phone' => $request->get('phone'),
             'password' => bcrypt($request->get('password')),
 
+            'avatar' => '/uploads/avatar/default.jpg',
             'admission_set_fixed' => '[{"week":"sun","am":"false","pm":"false"},{"week":"mon","am":"false","pm":"false"},{"week":"tue","am":"false","pm":"false"},{"week":"wed","am":"false","pm":"false"},{"week":"thu","am":"false","pm":"false"},{"week":"fri","am":"false","pm":"false"},{"week":"sat","am":"false","pm":"false"}]'
         ];
         $user = User::create($newUser);
