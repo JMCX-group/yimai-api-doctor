@@ -38,17 +38,18 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $fillable = [
-        'dp_code', 
+        'dp_code',
         'phone',
         'email',
         'password',
         'rong_yun_token',
         'name',
-        'gender', 
-        'city_id', 
-        'hospital_id', 
-        'dept_id', 
-        'college_id', 
+        'avatar',
+        'gender',
+        'city_id',
+        'hospital_id',
+        'dept_id',
+        'college_id',
         'tag_list',
         'profile',
         'auth',
@@ -204,7 +205,7 @@ class User extends Model implements AuthenticatableContract,
     /**
      * 搜索同城市的医生信息.
      * id转name.
-     * 
+     *
      * @param $field
      * @param $cityId
      * @return mixed
@@ -219,7 +220,7 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * 搜索同医院的医生信息.
-     * 
+     *
      * @param $field
      * @param $hospitalId
      * @param $cityId
@@ -241,7 +242,7 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * 搜索相同一级科室的所有一二级科室的医生信息。
-     * 
+     *
      * @param $field
      * @param $deptList
      * @param $cityId
@@ -251,7 +252,7 @@ class User extends Model implements AuthenticatableContract,
     public static function searchDoctor_sameDept($field, $deptList, $cityId, $hospitalId)
     {
         $deptList = implode(',', $deptList);
-        
+
         $condition = "where ";
         $condition .= $cityId ? "doctors.city_id = '$cityId' " : "";
         $condition .= $cityId ? "and " : "";
@@ -265,7 +266,7 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * 搜索同院校下的医生信息。
-     * 
+     *
      * @param $field
      * @param $collegeId
      * @param $cityId
@@ -298,7 +299,7 @@ class User extends Model implements AuthenticatableContract,
      * @param $order
      * @return mixed
      */
-    public static function defaultSearchSql($condition, $order='')
+    public static function defaultSearchSql($condition, $order = '')
     {
         return DB::select(
             "SELECT doctors.id, doctors.name, doctors.avatar, doctors.province_id, doctors.city_id, doctors.hospital_id, doctors.dept_id, doctors.title, " .
@@ -308,7 +309,7 @@ class User extends Model implements AuthenticatableContract,
             "LEFT JOIN dept_standards ON dept_standards.id=doctors.dept_id " .
             "LEFT JOIN citys ON citys.id=doctors.city_id " .
             "LEFT JOIN hospitals ON hospitals.id=doctors.hospital_id " .
-            $condition.
+            $condition .
             $order
         );
     }
@@ -340,7 +341,7 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * 通过手机号获取医生信息
-     * 
+     *
      * @param $phone
      * @return mixed
      */
