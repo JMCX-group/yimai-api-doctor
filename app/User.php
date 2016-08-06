@@ -46,10 +46,13 @@ class User extends Model implements AuthenticatableContract,
         'name',
         'avatar',
         'gender',
+        'province_id',
         'city_id',
         'hospital_id',
         'dept_id',
+        'title',
         'college_id',
+        'id_num',
         'tag_list',
         'profile',
         'auth',
@@ -60,7 +63,9 @@ class User extends Model implements AuthenticatableContract,
         'admission_set_fixed',
         'admission_set_flexible',
         'verify_switch',
-        'friends_friends_appointment_switch'
+        'friends_friends_appointment_switch',
+        'inviter_dp_code',
+        'remember_token'
     ];
 
     /**
