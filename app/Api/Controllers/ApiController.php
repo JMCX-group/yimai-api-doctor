@@ -1392,9 +1392,25 @@ class ApiController extends BaseController
                                 ],
                                 'others' => [
                                     'name' => '姓名',
-                                    'phone' => '头像URL'
+                                    'phone' => '手机号码'
                                 ]
                             ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '短信邀请好友' => [
+                        'url' => $http . '/api/relation/send-invite',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'phone' => '需要发送短信的手机号码'
+                        ],
+                        '说明' => 'HTTP状态204',
+                        'response' => [
+                            'success' => '',
                             'message' => '',
                             'error' => ''
                         ]

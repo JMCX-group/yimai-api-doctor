@@ -105,6 +105,7 @@ $api->version('v1', function ($api) {
                 $api->post('remarks', 'DoctorRelationController@setRemarks');
                 $api->post('del', 'DoctorRelationController@destroy');
                 $api->post('upload-address-book', 'DoctorRelationController@uploadAddressBook');
+                $api->post('send-invite', 'DoctorRelationController@sendInvite');
             });
             
             // Radio

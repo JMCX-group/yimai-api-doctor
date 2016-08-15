@@ -429,4 +429,21 @@ class DoctorRelationController extends BaseController
 
         return $data;
     }
+
+    /**
+     * 给好友发短信邀请加入医脉。
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendInvite(Request $request)
+    {
+        $phone = $request['phone'];
+
+        /**
+         * 调短信接口:
+         */
+
+        return response()->json(['success' => ''], 204); //给肠媳适配。。
+    }
 }
