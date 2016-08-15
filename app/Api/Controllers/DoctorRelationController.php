@@ -91,6 +91,40 @@ class DoctorRelationController extends BaseController
     }
 
     /**
+     * 添加所有通讯录里的所有医生。
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
+    public function addAll(Request $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $idList = $request['id_list'];
+        $idArr = explode(',', $idList);
+        $confirmedIdArr = User::whereIn('id', $idArr)->lists('id')->toArray();
+
+        foreach ($confirmedIdArr as $item){
+            $data['doctor_id'] = $user->id;
+            $data['doctor_friend_id'] = $item;
+            $data['doctor_read'] = 1;
+            $data['doctor_friend_read'] = 0;
+
+            try {
+                DoctorRelation::create($data);
+            } catch (\Exception $e) {
+                Log::info('add friend', ['context' => $e->getMessage()]);
+                continue;
+            }
+        }
+
+        return response()->json(['success' => ''], 204);
+    }
+
+    /**
      * 被申请一方确认关系
      *
      * @param RelationIdRequest $request

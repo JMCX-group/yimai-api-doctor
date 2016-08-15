@@ -95,6 +95,7 @@ $api->version('v1', function ($api) {
             // Relation
             $api->group(['prefix' => 'relation'], function ($api) {
                 $api->post('add-friend', 'DoctorRelationController@store');
+                $api->post('add-all', 'DoctorRelationController@addAll');
                 $api->post('confirm', 'DoctorRelationController@update');
                 $api->get('/', 'DoctorRelationController@getRelations');
                 $api->get('friends', 'DoctorRelationController@getRelationsFriends');

@@ -1170,7 +1170,25 @@ class ApiController extends BaseController
                             'phone' => '用户手机号； 三选一即可',
                             'code' => '用户医脉码； 三选一即可'
                         ],
+                        '说明' => 'HTTP状态204',
                         'response' => [
+                            'success' => '',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '新增全部好友' => [
+                        'url' => $http . '/api/relation/add-all',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '用户ID List; 例:1,3,6,7'
+                        ],
+                        '说明' => 'HTTP状态204',
+                        'response' => [
+                            'success' => '',
                             'message' => '',
                             'error' => ''
                         ]
