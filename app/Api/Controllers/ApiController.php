@@ -1406,7 +1406,7 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'form-data' => [
-                            'phone' => '需要发送短信的手机号码'
+                            'phone' => '需要发送短信的手机号码; 例如:18612345678; 如果是添加全部,用逗号隔开,例如:18612345678,18712345678'
                         ],
                         '说明' => 'HTTP状态204',
                         'response' => [

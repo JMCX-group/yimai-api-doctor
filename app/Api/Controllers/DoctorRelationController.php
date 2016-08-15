@@ -438,8 +438,8 @@ class DoctorRelationController extends BaseController
      */
     public function sendInvite(Request $request)
     {
-        $phone = $request['phone'];
-
+        $phoneList = $request['phone'];
+        $phoneArr = explode(',', $phoneList);
         /**
          * 调短信接口:
          */
