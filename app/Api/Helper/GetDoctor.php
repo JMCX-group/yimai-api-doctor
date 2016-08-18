@@ -50,7 +50,7 @@ class GetDoctor
      * 获取医生信息
      * 返回信息有可能被msg pack打包过,需要解包,代码在最后一行注释里。
      *
-     * @param $phoneList
+     * @param $phoneList //多个用','分隔。不能有空格，如 '13738409853,13824912175'
      * @return string
      */
     function get_doctor($phoneList)
@@ -58,10 +58,10 @@ class GetDoctor
         $data = array(
             'auth_id' => $this->auth_id,
             'auth_key' => $this->auth_key,
-            'mobile' => $phoneList  //多个用','分隔。不能有空格，如 '13738409853,13824912175'
+            'mobile' => $phoneList
         );
 
         return trim(curl_post_contents($data));
-//        return msgpack_pack(trim(curl_post_contents("http://121.41.86.156/api.php", $data)));
+//        return msgpack_pack(trim(curl_post_contents($data)));
     }
 }
