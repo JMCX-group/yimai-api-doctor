@@ -60,6 +60,8 @@ $api->version('v1', function ($api) {
                 $api->post('search/same-department', 'UserController@searchUser_sameDept');
                 $api->post('search/same-college', 'UserController@searchUser_sameCollege');
                 $api->post('upload-auth-img', 'UserController@uploadAuthPhotos');
+
+                $api->post('test-get-doctor', 'UserController@verifyDoctor');
             });
 
             // City

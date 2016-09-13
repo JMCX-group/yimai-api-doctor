@@ -8,6 +8,7 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Helper\GetDoctor;
 use App\Api\Helper\RongCloudServerAPI;
 use App\Api\Requests\SearchUserRequest;
 use App\Api\Requests\UserRequest;
@@ -635,5 +636,17 @@ class UserController extends BaseController
         } else {
             return response()->json(['success' => ''], 204); //给肠媳适配。。
         }
+    }
+
+    /**
+     * 验证是否有在库里的医生。
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function verifyDoctor(Request $request)
+    {
+        //TODO 还未完成
+        return GetDoctor::get_doctor($request['phone']);
     }
 }

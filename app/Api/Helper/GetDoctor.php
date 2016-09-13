@@ -16,14 +16,14 @@ namespace App\Api\Helper;
 class GetDoctor
 {
     //Post请求的URL
-    private $url = 'http://121.41.86.156/api.php';
+    private static $url = 'http://121.41.86.156/api.php';
 
     //参数中的ID和KEY
-    private $auth_id = 10021;
-    private $auth_key = '59e30c25d56cad3961b1318e765e0f18';
+    private static $auth_id = 10021;
+    private static $auth_key = '59e30c25d56cad3961b1318e765e0f18';
 
     //Post配置
-    private $timeout = 10;
+    private static $timeout = 10;
 
     /**
      * CURL POST 请求
@@ -31,12 +31,12 @@ class GetDoctor
      * @param $data
      * @return mixed
      */
-    public function curl_post_contents($data)
+    public static function curl_post_contents($data)
     {
         $curlHandle = curl_init();
-        curl_setopt($curlHandle, CURLOPT_URL, $this->url);
+        curl_setopt($curlHandle, CURLOPT_URL, self::$url);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, self::$timeout);
         curl_setopt($curlHandle, CURLOPT_POST, 1);
         curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $data);
 
@@ -53,15 +53,15 @@ class GetDoctor
      * @param $phoneList //多个用','分隔。不能有空格，如 '13738409853,13824912175'
      * @return string
      */
-    function get_doctor($phoneList)
+    public static function get_doctor($phoneList)
     {
         $data = array(
-            'auth_id' => $this->auth_id,
-            'auth_key' => $this->auth_key,
+            'auth_id' => self::$auth_id,
+            'auth_key' => self::$auth_key,
             'mobile' => $phoneList
         );
 
-        return trim(curl_post_contents($data));
-//        return msgpack_pack(trim(curl_post_contents($data)));
+//        return trim(self::curl_post_contents($data));
+        return msgpack_pack(trim(self::curl_post_contents($data)));
     }
 }
