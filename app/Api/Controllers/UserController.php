@@ -83,7 +83,7 @@ class UserController extends BaseController
         $filename = time() . '.jpg';
 
 //        try {
-            $imgFile->move($destinationPath, $filename);
+        $imgFile->move($destinationPath, $filename);
 //        } catch (\Exception $e) {
 //            Log::info('save img', ['context' => $e->getMessage()]);
 //        }
@@ -219,7 +219,7 @@ class UserController extends BaseController
 
     /**
      * 删除过期时间
-     * 
+     *
      * @param $data
      * @return string
      */
@@ -227,8 +227,8 @@ class UserController extends BaseController
     {
         $now = time();
         $newData = array();
-        foreach ($data as $item){
-            if(strtotime($item['date']) > $now){
+        foreach ($data as $item) {
+            if (strtotime($item['date']) > $now) {
                 array_push($newData, $item);
             }
         }
@@ -326,23 +326,23 @@ class UserController extends BaseController
          * 获取前台传参:
          * 兼容不同形式的……蛋疼:
          */
-        if(isset($request['city']) && !empty($request['city'])){
+        if (isset($request['city']) && !empty($request['city'])) {
             $cityID = $request['city'];
-        } elseif(isset($request['city_id']) && !empty($request['city_id'])){
+        } elseif (isset($request['city_id']) && !empty($request['city_id'])) {
             $cityID = $request['city_id'];
         } else {
             $cityID = false;
         }
-        if(isset($request['hospital']) && !empty($request['hospital'])){
+        if (isset($request['hospital']) && !empty($request['hospital'])) {
             $hospitalID = $request['hospital'];
-        } elseif(isset($request['hospital_id']) && !empty($request['hospital_id'])){
+        } elseif (isset($request['hospital_id']) && !empty($request['hospital_id'])) {
             $hospitalID = $request['hospital_id'];
         } else {
             $hospitalID = false;
         }
-        if(isset($request['department']) && !empty($request['department'])){
+        if (isset($request['department']) && !empty($request['department'])) {
             $deptID = $request['department'];
-        } elseif(isset($request['dept_id']) && !empty($request['dept_id'])){
+        } elseif (isset($request['dept_id']) && !empty($request['dept_id'])) {
             $deptID = $request['dept_id'];
         } else {
             $deptID = false;
@@ -647,6 +647,6 @@ class UserController extends BaseController
     public function verifyDoctor(Request $request)
     {
         //TODO 还未完成
-        return GetDoctor::get_doctor($request['phone']);
+        return GetDoctor::getDoctor($request['phone']);
     }
 }

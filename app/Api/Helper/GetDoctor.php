@@ -31,7 +31,7 @@ class GetDoctor
      * @param $data
      * @return mixed
      */
-    public static function curl_post_contents($data)
+    public static function curlPostContents($data)
     {
         $curlHandle = curl_init();
         curl_setopt($curlHandle, CURLOPT_URL, self::$url);
@@ -53,7 +53,7 @@ class GetDoctor
      * @param $phoneList //多个用','分隔。不能有空格，如 '13738409853,13824912175'
      * @return string
      */
-    public static function get_doctor($phoneList)
+    public static function getDoctor($phoneList)
     {
         $data = array(
             'auth_id' => self::$auth_id,
@@ -62,6 +62,16 @@ class GetDoctor
         );
 
 //        return trim(self::curl_post_contents($data));
-        return msgpack_pack(trim(self::curl_post_contents($data)));
+        return msgpack_unpack(trim(self::curlPostContents($data)));
+    }
+
+    /**
+     * 格式化信息。
+     *
+     * @param $data
+     */
+    public static function format($data)
+    {
+
     }
 }
