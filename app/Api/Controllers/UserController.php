@@ -646,7 +646,8 @@ class UserController extends BaseController
      */
     public function verifyDoctor(Request $request)
     {
+        $data = GetDoctor::getDoctor($request['phone']);
         //TODO 还未完成
-        return GetDoctor::getDoctor($request['phone']);
+        return $data;
     }
 }

@@ -61,17 +61,34 @@ class GetDoctor
             'mobile' => $phoneList
         );
 
-//        return trim(self::curl_post_contents($data));
-        return msgpack_unpack(trim(self::curlPostContents($data)));
+        return self::format(msgpack_unpack(trim(self::curlPostContents($data))));
     }
 
     /**
      * 格式化信息。
      *
      * @param $data
+     * @return array|bool
      */
     public static function format($data)
     {
+        if (isset($data['auth']['status']) && $data['auth']['status'] == 'true') {
+            $allData = $data['list'];
+            $tmpData = array();
+            foreach ($allData as $item) {
+                if ($item != '') {
+                    array_push($tmpData, $item);
+                }
+            }
+            if (count($tmpData) == 0) {
+                $newData = false;
+            } else {
+                $newData = $tmpData;
+            }
+        } else {
+            $newData = false;
+        }
 
+        return $newData;
     }
 }
