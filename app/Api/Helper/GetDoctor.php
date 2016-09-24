@@ -102,7 +102,7 @@ class GetDoctor
      */
     public static function push($data)
     {
-        DoctorDb::updateOrCreate($data);
+        DoctorDb::firstOrNew($data);
     }
 
     /**
