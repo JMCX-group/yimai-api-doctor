@@ -32,6 +32,8 @@ class DoctorDb extends Model
         'title',
         'position',
         'license_no',
-        'graduate_school'
+        'graduate_school',
+        'updated_at',
+        'created_at'
     ];
 }

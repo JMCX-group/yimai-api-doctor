@@ -102,10 +102,7 @@ class GetDoctor
      */
     public static function push($data)
     {
-        try {
-            DoctorDb::insert($data);
-        } catch (Exception $e) {
-        }
+        DoctorDb::create($data);
     }
 
     /**
