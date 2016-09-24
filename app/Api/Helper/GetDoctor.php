@@ -84,7 +84,7 @@ class GetDoctor
             if (count($tmpData) == 0) {
                 $newData = false;
             } else {
-                self::push(json_decode($tmpData));
+                self::push($tmpData);
                 $newData = $tmpData;
             }
         } else {
@@ -112,7 +112,7 @@ class GetDoctor
      */
     public static function pushTransform($doctor)
     {
-        return [
+        return array(
             'phone' => $doctor['Mobile'],
             'name' => $doctor['Name'],
             'hospital' => $doctor['Hospital_Name'],
@@ -122,6 +122,6 @@ class GetDoctor
             'position' => $doctor['Position'],
             'license_no' => $doctor['License_No'],
             'graduate_school' => $doctor['Graduate_School']
-        ];
+        );
     }
 }
