@@ -72,7 +72,6 @@ class GetDoctor
      */
     public static function format($data)
     {
-        dd($data['auth']['status']);
         if (isset($data['auth']['status']) && $data['auth']['status'] == 'true') {
             $allData = $data['list'];
             $tmpData = array();
