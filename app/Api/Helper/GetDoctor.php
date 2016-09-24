@@ -61,7 +61,6 @@ class GetDoctor
             'mobile' => $phoneList
         );
 
-        return msgpack_unpack(trim(self::curlPostContents($data)));
         return self::formatDoctor(msgpack_unpack(trim(self::curlPostContents($data))));
     }
 
@@ -73,7 +72,6 @@ class GetDoctor
      */
     public static function formatDoctor($data)
     {
-        return $data;
         if (isset($data['auth']['status']) && $data['auth']['status'] == 'true') {
             $allData = $data['list'];
             $tmpData = array();
