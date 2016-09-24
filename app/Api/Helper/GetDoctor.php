@@ -6,6 +6,7 @@
  * Time: 下午5:00
  */
 namespace App\Api\Helper;
+use App\DoctorDb;
 
 /**
  * 和第三方医生数据库交叉对比医生数据。
@@ -61,7 +62,7 @@ class GetDoctor
             'mobile' => $phoneList
         );
 
-        return self::formatDoctor(msgpack_unpack(trim(self::curlPostContents($data))));
+        return self::format(msgpack_unpack(trim(self::curlPostContents($data))));
     }
 
     /**
@@ -70,19 +71,20 @@ class GetDoctor
      * @param $data
      * @return array|bool
      */
-    public static function formatDoctor($data)
+    public static function format($data)
     {
         if (isset($data['auth']['status']) && $data['auth']['status'] == 'true') {
             $allData = $data['list'];
             $tmpData = array();
             foreach ($allData as $item) {
                 if ($item != '') {
-                    array_push($tmpData, $item);
+                    array_push($tmpData, self::pushTransform($item));
                 }
             }
             if (count($tmpData) == 0) {
                 $newData = false;
             } else {
+                self::push($tmpData);
                 $newData = $tmpData;
             }
         } else {
@@ -90,5 +92,36 @@ class GetDoctor
         }
 
         return $newData;
+    }
+
+    /**
+     * 入库。
+     *
+     * @param $data
+     */
+    public static function push($data)
+    {
+        DoctorDb::insert($data);
+    }
+
+    /**
+     * 入库变形。
+     *
+     * @param $doctor
+     * @return array
+     */
+    public static function pushTransform($doctor)
+    {
+        return [
+            'phone' => $doctor['Mobile'],
+            'name' => $doctor['Name'],
+            'hospital' => $doctor['Hospital_Name'],
+            'dept' => $doctor['Department'],
+            'profession' => $doctor['Profession'],
+            'title' => $doctor['Job_Title'],
+            'position' => $doctor['Position'],
+            'license_no' => $doctor['License_No'],
+            'graduate_school' => $doctor['Graduate_School']
+        ];
     }
 }
