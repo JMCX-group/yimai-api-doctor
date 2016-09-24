@@ -61,6 +61,7 @@ class GetDoctor
             'mobile' => $phoneList
         );
 
+        return msgpack_unpack(trim(self::curlPostContents($data)));
         return self::formatDoctor(msgpack_unpack(trim(self::curlPostContents($data))));
     }
 
