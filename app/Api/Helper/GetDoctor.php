@@ -84,7 +84,7 @@ class GetDoctor
             if (count($tmpData) == 0) {
                 $newData = false;
             } else {
-                self::push($tmpData);
+                self::push(json_decode($tmpData));
                 $newData = $tmpData;
             }
         } else {
