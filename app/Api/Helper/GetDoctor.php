@@ -7,6 +7,7 @@
  */
 namespace App\Api\Helper;
 use App\DoctorDb;
+use League\Flysystem\Exception;
 
 /**
  * 和第三方医生数据库交叉对比医生数据。
@@ -101,7 +102,10 @@ class GetDoctor
      */
     public static function push($data)
     {
-        DoctorDb::insert($data);
+        try {
+            DoctorDb::insert($data);
+        } catch (Exception $e) {
+        }
     }
 
     /**
