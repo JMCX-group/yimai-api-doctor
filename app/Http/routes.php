@@ -40,9 +40,6 @@ $api->version('v1', function ($api) {
          * Token Auth
          */
         $api->group(['middleware' => 'jwt.auth'], function ($api) {
-            // Test
-            $api->post('post', 'TestController@postFun');
-
             // Init
             $api->group(['prefix' => 'init'], function ($api) {
                 $api->get('/', 'InitController@index');
