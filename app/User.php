@@ -64,6 +64,8 @@ class User extends Model implements AuthenticatableContract,
         'admission_set_flexible',
         'verify_switch',
         'friends_friends_appointment_switch',
+        'application_card',
+        'address',
         'inviter_dp_code',
         'remember_token'
     ];

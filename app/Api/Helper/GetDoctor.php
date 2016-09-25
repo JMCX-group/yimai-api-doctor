@@ -6,8 +6,8 @@
  * Time: 下午5:00
  */
 namespace App\Api\Helper;
+
 use App\DoctorDb;
-use League\Flysystem\Exception;
 
 /**
  * 和第三方医生数据库交叉对比医生数据。

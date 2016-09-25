@@ -158,6 +158,11 @@ $api->version('v1', function ($api) {
             $api->group(['prefix' => 'contacts'], function ($api) {
                 $api->get('all', 'ContactController@index');
             });
+
+            //Card
+            $api->group(['prefix' => 'card'], function ($api) {
+                $api->get('submit', 'CardController@submit');
+            });
         });
     });
 });

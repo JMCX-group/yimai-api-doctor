@@ -195,6 +195,13 @@ class UserController extends BaseController
         }
 
         /**
+         * Address.
+         */
+        if (isset($request['address']) && !empty($request['address'])) {
+            $user->address = $request['address'];
+        }
+
+        /**
          * Get rong yun token.
          */
         if (($user->rong_yun_token == '' || $user->rong_yun_token == null) && ($user->name != '' && $user->name != null)) {
