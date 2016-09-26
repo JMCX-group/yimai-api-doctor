@@ -61,6 +61,11 @@ $api->version('v1', function ($api) {
                 $api->post('test-get-doctor', 'UserController@verifyDoctor');
             });
 
+            // Search
+            $api->group(['prefix' => 'search'], function ($api) {
+                $api->post('doctors', 'SearchController@doctors');
+            });
+
             // City
             $api->group(['prefix' => 'city'], function ($api) {
                 $api->get('/', 'CityController@index');
@@ -137,6 +142,7 @@ $api->version('v1', function ($api) {
             //Patient
             $api->group(['prefix' => 'patient'], function ($api) {
                 $api->get('get-by-phone', 'PatientController@getInfoByPhone');
+                $api->get('all', 'PatientController@all');
             });
 
             //Face-to-face

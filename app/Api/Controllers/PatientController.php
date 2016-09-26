@@ -10,14 +10,12 @@ namespace App\Api\Controllers;
 
 use App\Api\Requests\PhoneRequest;
 use App\Api\Transformers\PatientTransformer;
+use App\Appointment;
 use App\Patient;
+use App\User;
 
 class PatientController extends BaseController
 {
-    public function index()
-    {
-    }
-
     /**
      * @param PhoneRequest $request
      * @return \Dingo\Api\Http\Response
@@ -30,8 +28,7 @@ class PatientController extends BaseController
             ->toArray();
 
         if (Empty($patientInfo)) {
-//            return $this->response->noContent();
-            return response()->json(['success' => ''], 204); //给肠媳适配。。
+            return response()->json(['success' => ''], 204);
         } else {
             $patientInfo[0]['birthday'] = $this->age($patientInfo[0]['birthday']);
             return $this->response->array($patientInfo, new PatientTransformer());
@@ -40,7 +37,7 @@ class PatientController extends BaseController
 
     /**
      * 根据生日计算年龄
-     * 
+     *
      * @param $birthday
      * @return mixed
      */
@@ -56,5 +53,29 @@ class PatientController extends BaseController
         }
 
         return date('Y') - $year;
+    }
+
+    public function all()
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $allAppointment = Appointment::where('doctor_id', $user->id)->get();
+        $patientIdList = Appointment::select('patient_id', 'count(*) as count')
+            ->where('doctor_id', $user->id)
+            ->where('patient_id', '!=', 'null')
+            ->groupBy('patient_id')
+//            ->distinct()
+            ->get();
+
+        return $patientIdList;
+
+        foreach ($allAppointment as $item) {
+            if (in_array($item->patient_id, $patientIdList)) {
+
+            }
+        }
     }
 }

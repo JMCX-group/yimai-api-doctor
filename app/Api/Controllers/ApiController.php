@@ -2262,6 +2262,39 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                ],
+
+                '查询' => [
+                    '根据ID List查询医生列表' => [
+                        'url' => $http . '/api/search/doctors',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id_list' => '医生ID list,ID之间用逗号分隔; 例如:1,3,4,5'
+                        ],
+                        'response' => [
+                            'data' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'job_title' => '职称',
+                                'city' => '所属城市',
+                                'hospital' => [
+                                    'id' => '用户所在医院ID',
+                                    'name' => '用户所在医院名称'
+                                ],
+                                'department' => [
+                                    'id' => '用户所在科室ID',
+                                    'name' => '用户所在科室名称'
+                                ],
+                                'relation' => '1:一度人脉; 2:二度人脉; null:没关系'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                 ]
             ]
         ];
