@@ -11,8 +11,10 @@ namespace App\Api\Controllers;
 use App\Api\Requests\PhoneRequest;
 use App\Api\Transformers\PatientTransformer;
 use App\Appointment;
+use App\FaceToFaceAdvice;
 use App\Patient;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class PatientController extends BaseController
 {
@@ -55,6 +57,11 @@ class PatientController extends BaseController
         return date('Y') - $year;
     }
 
+    /**
+     * My patients.
+     *
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
     public function all()
     {
         $user = User::getAuthenticatedUser();
@@ -62,20 +69,40 @@ class PatientController extends BaseController
             return $user;
         }
 
-        $allAppointment = Appointment::where('doctor_id', $user->id)->get();
-        $patientIdList = Appointment::select('patient_id', 'count(*) as count')
+        //约诊数据：
+        $patients = Appointment::select(
+            DB::raw('patient_id as id, patient_name as name, 
+            patient_gender as sex, patient_age as age, patient_phone as phone, patients.avatar,
+            count(*) as appointment_count'))
+            ->join('patients', 'appointments.patient_id', '=', 'patients.id')
             ->where('doctor_id', $user->id)
             ->where('patient_id', '!=', 'null')
             ->groupBy('patient_id')
-//            ->distinct()
             ->get();
 
-        return $patientIdList;
+        //患者数量：
+        $patientCount = count($patients);
 
-        foreach ($allAppointment as $item) {
-            if (in_array($item->patient_id, $patientIdList)) {
-
-            }
+        //约诊数量&面诊数量：
+        $appointmentCount = 0;
+        $faceToFaceCount = 0;
+        foreach ($patients as &$patient) {
+            $appointmentCount += $patient->appointment_count;
+            $count = FaceToFaceAdvice::select(DB::raw('count(*) as count'))
+                ->where('phone', $patient['phone'])
+                ->get();
+            $count = (int)$count[0]['count'];
+            $patient['face_to_face_count'] = $count;
+            $faceToFaceCount += $count;
         }
+
+        $data = [
+            'patient_count' => $patientCount,
+            'appointment_count' => $appointmentCount,
+            'face_to_face_count' => $faceToFaceCount,
+            'patient_list' => $patients
+        ];
+
+        return response()->json(compact('data'));
     }
 }

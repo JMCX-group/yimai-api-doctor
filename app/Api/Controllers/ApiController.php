@@ -2127,6 +2127,32 @@ class ApiController extends BaseController
                             'message' => '',
                             'error' => ''
                         ]
+                    ],
+                    '我的患者' => [
+                        'url' => $http . '/api/patient/all',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                'patient_count' => '患者总数量',
+                                'appointment_count' => '约诊总数量',
+                                'face_to_face_count' => '面诊总数量',
+                                'patient_list' => [
+                                    'id' => '患者ID',
+                                    'name' => '患者姓名',
+                                    'sex' => '患者性别',
+                                    'age' => '患者年龄',
+                                    'phone' => '患者电话',
+                                    'avatar' => '患者头像',
+                                    'appointment_count' => '患者约诊次数',
+                                    'face_to_face_count' => '患者面诊次数'
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
                     ]
                 ],
 
