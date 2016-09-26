@@ -144,7 +144,7 @@ class AuthController extends BaseController
          * 发送短信:
          */
         $sms = new Sms();
-        $txt = '您的验证码是:' . $newCode['code']; //文案
+        $txt = '【医脉】您的验证码是:' . $newCode['code']; //文案
         $result = $sms->sendSMS($newCode['phone'], $txt);
         $result = $sms->execResult($result);
 
