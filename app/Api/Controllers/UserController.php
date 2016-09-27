@@ -329,6 +329,12 @@ class UserController extends BaseController
             return $user;
         }
 
+        if (isset($request['page']) && !empty($request['page'])) {
+            $page = $request['page'];
+        } else {
+            $page = 1;
+        }
+
         /**
          * 获取前台传参:
          * 兼容不同形式的……蛋疼:
@@ -504,9 +510,9 @@ class UserController extends BaseController
                 'departments' => $departments,
                 'count' => (count($retData_1) + count($retData_2) + count($retData_other)),
                 'users' => [
-                    'friends' => $retData_1,
-                    'friends-friends' => $retData_2,
-                    'other' => $retData_other,
+                    'friends' => array_slice($retData_1, ($page - 1) * 100, 100),
+                    'friends-friends' => array_slice($retData_2, ($page - 1) * 100, 100),
+                    'other' => array_slice($retData_other, ($page - 1) * 100, 100)
                 ]
             ];
         }
