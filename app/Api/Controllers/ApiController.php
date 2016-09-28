@@ -1200,6 +1200,7 @@ class ApiController extends BaseController
                             'code' => '用户医脉码； 三选一即可'
                         ],
                         '说明' => 'HTTP状态204',
+                        '二维码好友说明' => '前台生成二维码，内容为：{"data":"实际数据，例如用户ID号", "operation": "操作指令，例如add_friend"}； 然后扫描后调用该接口',
                         'response' => [
                             'success' => '',
                             'message' => '',
