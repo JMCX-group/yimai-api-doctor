@@ -21,6 +21,7 @@ use App\Hospital;
 use App\User;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
 use JWTAuth;
@@ -192,6 +193,18 @@ class UserController extends BaseController
          */
         if (empty($user->dp_code) && !empty($user->dept_id)) {
             $user->dp_code = User::generateDpCode($user->dept_id);
+        }
+
+        /**
+         * Generate qr code.
+         */
+        if (empty($user->qr_code_url) || $user->qr_code_url == '' || $user->qr_code_url == null) {
+            $qrData = [
+                'data' => $user->id,
+                'operation' => 'add_friend'
+            ];
+            QrCode::format('png')->size(200)->generate(json_encode($qrData), 'qrcode/'.$user->id.'.png');
+            $user->qr_code_url = '/qrcode/'.$user->id.'.png';
         }
 
         /**

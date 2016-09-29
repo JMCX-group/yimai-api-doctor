@@ -164,6 +164,7 @@ class ApiController extends BaseController
                                 'personal_introduction' => '个人简介',
                                 'is_auth' => '是否认证,1为认证,0为未认证',
                                 'auth_img' => '认证图片url,相对路径; url用逗号相隔,最多5张;',
+                                'qr_code_url' => '提供给其他用户扫描新增好友，数据格式：{"data":"用户ID号", "operation": "操作指令：add_friend"}; 如果判断没有该数据，请随便提交一次修改用户数据的接口，就可以生成，例如把性别1修改成性别1，返回的数据就有这个了',
                                 'fee_switch' => '1:开, 0:关',
                                 'fee' => '接诊收费金额',
                                 'fee_face_to_face' => '当面咨询收费金额',
@@ -270,6 +271,7 @@ class ApiController extends BaseController
                                 'personal_introduction' => '个人简介',
                                 'is_auth' => '是否认证,1为认证,0为未认证',
                                 'auth_img' => '认证图片url,相对路径; url用逗号相隔,最多5张;',
+                                'qr_code_url' => '提供给其他用户扫描新增好友，数据格式：{"data":"用户ID号", "operation": "操作指令：add_friend"}; 如果判断没有该数据，请随便提交一次修改用户数据的接口，就可以生成，例如把性别1修改成性别1，返回的数据就有这个了',
                                 'fee_switch' => '1:开, 0:关',
                                 'fee' => '接诊收费金额',
                                 'fee_face_to_face' => '当面咨询收费金额',
@@ -889,6 +891,7 @@ class ApiController extends BaseController
                                 'personal_introduction' => '个人简介',
                                 'is_auth' => '是否认证,1为认证,0为未认证',
                                 'auth_img' => '认证图片url,相对路径; url用逗号相隔,最多5张;',
+                                'qr_code_url' => '提供给其他用户扫描新增好友，数据格式：{"data":"用户ID号", "operation": "操作指令：add_friend"}; 如果判断没有该数据，请随便提交一次修改用户数据的接口，就可以生成，例如把性别1修改成性别1，返回的数据就有这个了',
                                 'fee_switch' => '1:开, 0:关',
                                 'fee' => '接诊收费金额',
                                 'fee_face_to_face' => '当面咨询收费金额',
@@ -1200,7 +1203,6 @@ class ApiController extends BaseController
                             'code' => '用户医脉码； 三选一即可'
                         ],
                         '说明' => 'HTTP状态204',
-                        '二维码好友说明' => '前台生成二维码，内容为：{"data":"实际数据，例如用户ID号", "operation": "操作指令，例如add_friend"}； 然后扫描后调用该接口',
                         'response' => [
                             'success' => '',
                             'message' => '',
