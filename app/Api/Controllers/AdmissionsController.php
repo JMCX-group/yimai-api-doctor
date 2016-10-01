@@ -189,39 +189,49 @@ class AdmissionsController extends BaseController
         }
 
         $appointments = Appointment::where('appointments.doctor_id', $user->id)
-            ->leftJoin('doctors', 'doctors.id', '=', 'appointments.locums_id')
-            ->leftJoin('patients', 'patients.id', '=', 'appointments.patient_id')
             ->select('appointments.*',
                 'doctors.name', 'doctors.avatar', 'doctors.title', 'doctors.auth',
                 'patients.avatar as patient_avatar')
+            ->leftJoin('doctors', 'doctors.id', '=', 'appointments.locums_id')
+            ->leftJoin('patients', 'patients.id', '=', 'appointments.patient_id')
             ->orderBy('updated_at', 'desc')
             ->get();
 
         if ($appointments->isEmpty()) {
-//                    return $this->response->noContent();
-            return response()->json(['success' => ''], 204); //给肠媳适配。。
+            return response()->json(['success' => ''], 204);
         }
 
         $hospital = Hospital::find($user->hospital_id)->name;
+
         $waitingForReply = array();
         $waitingForComplete = array();
         $completed = array();
+
         foreach ($appointments as $appointment) {
             $appointment['hospital'] = $hospital;
-            if ($appointment['status'] == 'wait-2') {
-                array_push($waitingForReply, AdmissionsRecordTransformer::admissionsTransform($appointment));
-            } elseif (in_array($appointment['status'], array('wait-3', 'wait-4', 'wait-5'))) {
-                array_push($waitingForComplete, AdmissionsRecordTransformer::admissionsTransform($appointment));
-            } elseif ($appointment['status'] != 'wait-1') {
-                array_push($completed, AdmissionsRecordTransformer::admissionsTransform($appointment));
+            switch ($appointment['status']) {
+                //wait-1需要患者付款:
+                case 'wait-2':
+                    array_push($waitingForReply, AdmissionsRecordTransformer::admissionsTransform($appointment));
+                    break;
+                case 'wait-3':
+                case 'wait-4':
+                case 'wait-5':
+                    array_push($waitingForComplete, AdmissionsRecordTransformer::admissionsTransform($appointment));
+                    break;
+                default:
+                    array_push($completed, AdmissionsRecordTransformer::admissionsTransform($appointment));
+                    break;
             }
         }
 
-        return ['data' => [
+        $data = [
             'wait_reply' => $waitingForReply,
             'wait_complete' => $waitingForComplete,
-            'completed' => $completed,
-        ]];
+            'completed' => $completed
+        ];
+
+        return response()->json(compact('data'));
     }
 
     /**

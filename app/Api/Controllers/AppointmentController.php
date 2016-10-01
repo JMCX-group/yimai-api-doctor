@@ -222,6 +222,11 @@ class AppointmentController extends BaseController
             }
         }
 
-        return ['data' => ['wait' => $waitingForReply, 'already' => $alreadyReply]];
+        $data = [
+            'wait' => $waitingForReply,
+            'already' => $alreadyReply
+        ];
+
+        return response()->json(compact('data'));
     }
 }
