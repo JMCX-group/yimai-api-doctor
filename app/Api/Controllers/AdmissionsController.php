@@ -11,6 +11,7 @@ namespace App\Api\Controllers;
 use App\Api\Requests\AgreeAdmissionsRequest;
 use App\Api\Requests\CompleteAdmissionsRequest;
 use App\Api\Requests\RefusalAdmissionsRequest;
+use App\Api\Requests\RefusalRequest;
 use App\Api\Transformers\AdmissionsRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
@@ -74,10 +75,10 @@ class AdmissionsController extends BaseController
     /**
      * 转诊。
      * 
-     * @param RefusalAdmissionsRequest $request
+     * @param RefusalRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function transferAdmissions(RefusalAdmissionsRequest $request)
+    public function transferAdmissions(RefusalRequest $request)
     {
         $appointment = Appointment::find($request['id']);
 
