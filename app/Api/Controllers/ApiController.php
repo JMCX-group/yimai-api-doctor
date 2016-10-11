@@ -154,7 +154,7 @@ class ApiController extends BaseController
                                     'id' => '用户所在科室ID',
                                     'name' => '用户所在科室名称'
                                 ],
-                                'job_title' => '用户职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'college' => [
                                     'id' => '用户所在院校ID',
                                     'name' => '用户所在院校名称'
@@ -207,7 +207,7 @@ class ApiController extends BaseController
                                     'head_url' => '头像URL',
                                     'hospital' => '所属医院',
                                     'department' => '所属科室',
-                                    'job_title' => '职称'
+                                    'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师'
                                 ]
                             ],
                             'recent_contacts' => [
@@ -261,7 +261,7 @@ class ApiController extends BaseController
                                     'id' => '用户所在科室ID',
                                     'name' => '用户所在科室名称'
                                 ],
-                                'job_title' => '用户职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'college' => [
                                     'id' => '用户所在院校ID',
                                     'name' => '用户所在院校名称'
@@ -315,7 +315,7 @@ class ApiController extends BaseController
                                 'code' => '医脉码',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '用户职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'province' => '用户所在省份名称',
                                 'city' => '用户所在城市名称',
                                 'hospital' => '用户所在医院名称',
@@ -347,7 +347,7 @@ class ApiController extends BaseController
                                 'code' => '医脉码',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '用户职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'province' => '用户所在省份名称',
                                 'city' => '用户所在城市名称',
                                 'hospital' => '用户所在医院名称',
@@ -435,7 +435,7 @@ class ApiController extends BaseController
                                     'id' => '用户ID',
                                     'name' => '用户姓名',
                                     'head_url' => '头像URL',
-                                    'job_title' => '职称',
+                                    'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                     'city' => '所属城市',
                                     'hospital' => [
                                         'id' => '用户所在医院ID',
@@ -516,7 +516,7 @@ class ApiController extends BaseController
                                         'id' => '用户ID',
                                         'name' => '用户姓名',
                                         'head_url' => '头像URL',
-                                        'job_title' => '职称',
+                                        'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                         'city' => '所属城市',
                                         'hospital' => [
                                             'id' => '用户所在医院ID',
@@ -606,7 +606,7 @@ class ApiController extends BaseController
                                         'id' => '用户ID',
                                         'name' => '用户姓名',
                                         'head_url' => '头像URL',
-                                        'job_title' => '职称',
+                                        'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                         'city' => '所属城市',
                                         'hospital' => [
                                             'id' => '用户所在医院ID',
@@ -696,7 +696,7 @@ class ApiController extends BaseController
                                         'id' => '用户ID',
                                         'name' => '用户姓名',
                                         'head_url' => '头像URL',
-                                        'job_title' => '职称',
+                                        'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                         'city' => '所属城市',
                                         'hospital' => [
                                             'id' => '用户所在医院ID',
@@ -787,7 +787,7 @@ class ApiController extends BaseController
                                         'id' => '用户ID',
                                         'name' => '用户姓名',
                                         'head_url' => '头像URL',
-                                        'job_title' => '职称',
+                                        'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                         'city' => '所属城市',
                                         'hospital' => [
                                             'id' => '用户所在医院ID',
@@ -826,7 +826,7 @@ class ApiController extends BaseController
                             'city' => '用户所属城市ID',
                             'hospital' => '用户所属医院ID; 如果该处提交的不是医院ID，则会自动创建该医院后并返回',
                             'department' => '用户所属部门ID',
-                            'job_title' => '用户职称',
+                            'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                             'college' => '用户所属院校ID',
                             'ID_number' => '身份证号',
                             'tags' => '特长/标签',
@@ -881,7 +881,7 @@ class ApiController extends BaseController
                                     'id' => '用户所在科室ID',
                                     'name' => '用户所在科室名称'
                                 ],
-                                'job_title' => '用户职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'college' => [
                                     'id' => '用户所在院校ID',
                                     'name' => '用户所在院校名称'
@@ -1262,7 +1262,7 @@ class ApiController extends BaseController
                                 'head_url' => '头像URL',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室',
-                                'job_title' => '职称'
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师'
                             ],
                             'message' => '',
                             'error' => ''
@@ -1285,7 +1285,7 @@ class ApiController extends BaseController
                                 'head_url' => '头像URL',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室',
-                                'job_title' => '职称'
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师'
                             ],
                             'message' => '',
                             'error' => ''
@@ -1309,7 +1309,7 @@ class ApiController extends BaseController
                                 'head_url' => '头像URL',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室',
-                                'job_title' => '职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'common_friend_count' => '共同好友数量'
                             ],
                             'message' => '',
@@ -1335,7 +1335,7 @@ class ApiController extends BaseController
                                     'id' => '用户所在科室ID',
                                     'name' => '用户所在科室名称'
                                 ],
-                                'job_title' => '职称'
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师'
                             ],
                             'message' => '',
                             'error' => ''
@@ -1438,7 +1438,7 @@ class ApiController extends BaseController
                                         'id' => '用户所在科室ID',
                                         'name' => '用户所在科室名称'
                                     ],
-                                    'job_title' => '职称'
+                                    'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师'
                                 ],
                                 'others' => [
                                     'name' => '姓名',
@@ -1571,7 +1571,7 @@ class ApiController extends BaseController
                                         'doctor_id' => '医生ID',
                                         'doctor_name' => '医生姓名',
                                         'doctor_head_url' => '医生头像',
-                                        'doctor_job_title' => '医生头衔',
+                                        'doctor_job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                         'doctor_is_auth' => '医生是否认证',
                                         'patient_name' => '患者姓名',
                                         'time' => '时间',
@@ -1584,7 +1584,7 @@ class ApiController extends BaseController
                                         'doctor_id' => '医生ID',
                                         'doctor_name' => '医生姓名',
                                         'doctor_head_url' => '医生头像',
-                                        'doctor_job_title' => '医生头衔',
+                                        'doctor_job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                         'doctor_is_auth' => '医生是否认证',
                                         'patient_name' => '患者姓名',
                                         'time' => '时间',
@@ -1617,7 +1617,7 @@ class ApiController extends BaseController
                                 'id' => '用户ID',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室'
                             ],
@@ -1682,7 +1682,7 @@ class ApiController extends BaseController
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室'
                             ],
@@ -1742,7 +1742,7 @@ class ApiController extends BaseController
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室'
                             ],
@@ -1818,7 +1818,7 @@ class ApiController extends BaseController
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室'
                             ],
@@ -1878,7 +1878,7 @@ class ApiController extends BaseController
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室'
                             ],
@@ -1938,7 +1938,7 @@ class ApiController extends BaseController
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室'
                             ],
@@ -1997,7 +1997,7 @@ class ApiController extends BaseController
                                         'doctor_id' => '医生ID',
                                         'doctor_name' => '医生姓名',
                                         'doctor_head_url' => '医生头像',
-                                        'doctor_job_title' => '医生头衔',
+                                        'doctor_job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                         'doctor_is_auth' => '医生是否认证',
                                         'hospital' => '医院',
                                         'patient_name' => '患者姓名',
@@ -2046,7 +2046,7 @@ class ApiController extends BaseController
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室'
                             ],
@@ -2313,7 +2313,7 @@ class ApiController extends BaseController
                                 'id' => '用户ID',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
-                                'job_title' => '职称',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
                                 'city' => '所属城市',
                                 'hospital' => [
                                     'id' => '用户所在医院ID',
