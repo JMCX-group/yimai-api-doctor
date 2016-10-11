@@ -78,6 +78,46 @@ class Transformer
     }
 
     /**
+     * Transform users.
+     * @param $users
+     * @return mixed
+     */
+    public static function addressBookUsersTransform($users)
+    {
+        $hospitalIdList = array();
+        $deptIdList = array();
+        $newUsers = array();
+
+        foreach ($users as $user) {
+            array_push($hospitalIdList, $user->hospital_id);
+            array_push($deptIdList, $user->dept_id);
+
+            array_push($newUsers, self::addressBookUserTransform($user));
+        }
+
+        return self::idToIdName($newUsers, $hospitalIdList, $deptIdList);
+    }
+
+    /**
+     * Transform user.
+     *
+     * @param $user
+     * @return array
+     */
+    public static function addressBookUserTransform($user)
+    {
+        return [
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'head_url' => ($user->avatar == '') ? null : $user->avatar,
+            'hospital' => $user['hospital_id'],
+            'department' => $user['dept_id'],
+            'job_title' => $user['title'],
+            'is_add_friend' => $user['is_add_friend']
+        ];
+    }
+
+    /**
      * Transform contacts.
      *
      * @param $user

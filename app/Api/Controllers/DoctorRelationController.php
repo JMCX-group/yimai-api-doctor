@@ -8,6 +8,7 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Helper\Sms;
 use App\Api\Requests\AddressRequest;
 use App\Api\Requests\RelationIdRequest;
 use App\Api\Requests\RemarksRequest;
@@ -107,7 +108,7 @@ class DoctorRelationController extends BaseController
         $idArr = explode(',', $idList);
         $confirmedIdArr = User::whereIn('id', $idArr)->lists('id')->toArray();
 
-        foreach ($confirmedIdArr as $item){
+        foreach ($confirmedIdArr as $item) {
             $data['doctor_id'] = $user->id;
             $data['doctor_friend_id'] = $item;
             $data['doctor_read'] = 1;
@@ -428,10 +429,12 @@ class DoctorRelationController extends BaseController
         $inYM_addFriends = array();
         $inYM_notAddFriends = array();
         $inYM_phoneList = array();
-        foreach ($allFriends as $allFriend){
-            if(in_array($allFriend['phone'], $inYM_addFriendPhoneList)){
+        foreach ($allFriends as $allFriend) {
+            if (in_array($allFriend['phone'], $inYM_addFriendPhoneList)) {
+                $allFriend->is_add_friend = '1';
                 array_push($inYM_addFriends, $allFriend);
             } else {
+                $allFriend->is_add_friend = '0';
                 array_push($inYM_notAddFriends, $allFriend);
             }
             array_push($inYM_phoneList, $allFriend['phone']);
@@ -452,7 +455,9 @@ class DoctorRelationController extends BaseController
 
         //返回数据:
         $data = [
-            'friends' => Transformer::usersTransform($inYM),
+            'friend_count' => count($inYM),
+            'other_count' => count($others),
+            'friends' => Transformer::addressBookUsersTransform($inYM),
             'others' => $others
         ];
 
@@ -467,12 +472,23 @@ class DoctorRelationController extends BaseController
      */
     public function sendInvite(Request $request)
     {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
         $phoneList = $request['phone'];
         $phoneArr = explode(',', $phoneList);
-        /**
-         * 调短信接口:
-         */
 
-        return response()->json(['success' => ''], 204); //给肠媳适配。。
+        /**
+         * 发送短信:
+         */
+        foreach ($phoneArr as $item) {
+            $sms = new Sms();
+            $txt = '【医脉】您的好友' . $user->name . '邀请您加入医脉。URL:'; //文案
+            $sms->sendSMS($item, $txt);
+        }
+
+        return response()->json(['success' => ''], 204);
     }
 }
