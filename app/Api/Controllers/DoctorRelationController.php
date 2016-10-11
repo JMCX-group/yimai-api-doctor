@@ -456,13 +456,20 @@ class DoctorRelationController extends BaseController
 //        }
 
         //临时,2016年10月11日 20点
-        $notAddFriends = User::whereIn('phone', $phoneArr)->get();
+        $others = array();
+        foreach ($content as $item) {
+            $tmpItem = [
+                'name' => $item['name'],
+                'phone' => $item['phone']
+            ];
+            array_push($others, $tmpItem);
+        }
 
         //返回数据:
         $data = [
-            'friends' => Transformer::usersTransform($notAddFriends),
-//            'others' => $others
-            'others' => null
+//            'friends' => Transformer::usersTransform($notAddFriends),
+            'friends' => null,
+            'others' => $others
         ];
 
         return $data;
