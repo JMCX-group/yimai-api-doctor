@@ -122,6 +122,9 @@ class DoctorRelationController extends BaseController
             }
         }
 
+        //发送短信:
+        $this->sendInviteAllFriends($user->id, $user->name);
+
         return response()->json(['success' => ''], 204);
     }
 
@@ -443,6 +446,7 @@ class DoctorRelationController extends BaseController
 
         //排除已加过和已加入医脉的好友,获得"其他":
         $others = array();
+        $otherPhoneList = array();
         foreach ($content as $item) {
             if (!in_array($item['phone'], $inYM_phoneList)) {
                 $tmpItem = [
@@ -450,8 +454,13 @@ class DoctorRelationController extends BaseController
                     'phone' => $item['phone'],
                 ];
                 array_push($others, $tmpItem);
+                array_push($otherPhoneList, $item['phone']);
             }
         }
+
+        $addressBook = DoctorAddressBook::find($userId);
+        $addressBook->not_in_ym = implode(',', $otherPhoneList);
+        $addressBook->save();
 
         //返回数据:
         $data = [
@@ -479,16 +488,39 @@ class DoctorRelationController extends BaseController
 
         $phoneList = $request['phone'];
         $phoneArr = explode(',', $phoneList);
-
-        /**
-         * 发送短信:
-         */
-        foreach ($phoneArr as $item) {
-            $sms = new Sms();
-            $txt = '【医脉】您的好友' . $user->name . '邀请您加入医脉。URL:'; //文案
-            $sms->sendSMS($item, $txt);
-        }
+        $this->sendSMS($user->name, $phoneArr);
 
         return response()->json(['success' => ''], 204);
+    }
+
+    /**
+     * 发送短信给所有未加入医脉的好友。
+     *
+     * @param $userId
+     * @param $userName
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendInviteAllFriends($userId, $userName)
+    {
+        $allFriends = DoctorAddressBook::find($userId);
+        $phoneArr = explode(',', $allFriends->not_in_ym);
+        $this->sendSMS($userName, $phoneArr);
+
+        return response()->json(['success' => ''], 204);
+    }
+
+    /**
+     * 发送短信。
+     *
+     * @param $name
+     * @param $phoneArr
+     */
+    public function sendSMS($name, $phoneArr)
+    {
+        foreach ($phoneArr as $item) {
+            $sms = new Sms();
+            $txt = '【医脉】您的好友' . $name . '邀请您加入医脉。URL:'; //文案
+            $sms->sendSMS($item, $txt);
+        }
     }
 }
