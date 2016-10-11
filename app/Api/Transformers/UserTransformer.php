@@ -114,6 +114,8 @@ class UserTransformer extends TransformerAbstract
 
         if (!empty($user['college_id'])) {
             $user['college_id'] = College::select('id', 'name')->find($user['college_id']);
+        } else {
+            $user['college_id'] = null;
         }
 
         // Spell dp code.
