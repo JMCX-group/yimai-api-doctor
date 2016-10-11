@@ -406,8 +406,8 @@ class DoctorRelationController extends BaseController
     public function contactsAnalysis($userId, $content)
     {
         //获取好友列表:
-//        $friendsIdList = DoctorRelation::getFriendIdList($userId);
-//        $friends = User::whereIn('id', $friendsIdList)->get();
+        $friendsIdList = DoctorRelation::getFriendIdList($userId);
+        $friends = User::whereIn('id', $friendsIdList)->get();
 
         //获取已上传通讯录的好友通讯录:
 //        $haveUploadedfriends = DoctorAddressBook::whereIn('id', $friendsIdList)->get();
@@ -417,23 +417,36 @@ class DoctorRelationController extends BaseController
         foreach ($content as $item) {
             array_push($phoneArr, $item['phone']);
         }
-//
-//        //找到通讯录中已在医脉加过的好友:
-//        $addPhoneList = array();
-//        foreach ($friends as $friend) {
-//            if (in_array($friend['phone'], $phoneArr)) {
-//                array_push($addPhoneList, $friend['phone']);
-//            }
-//        }
+        $allFriends = User::whereIn('phone', $phoneArr)->get();
+
+        //找到通讯录中已在医脉加过的好友:
+        $inYM_addFriendPhoneList = array();
+        foreach ($friends as $friend) {
+            if (in_array($friend['phone'], $phoneArr)) {
+                array_push($inYM_addFriendPhoneList, $friend['phone']);
+            }
+        }
+
+        //找到在医脉中加了好友和没加好友:
+        $inYM_addFriends = array();
+        $inYM_notAddFriends = array();
+        $inYM_phoneList = array();
+        foreach ($allFriends as $allFriend){
+            if(in_array($allFriend['phone'], $inYM_addFriendPhoneList)){
+                array_push($inYM_addFriends, $allFriend);
+            } else {
+                array_push($inYM_notAddFriends, $allFriend);
+            }
+            array_push($inYM_phoneList, $allFriend['phone']);
+        }
+        $inYM = array_merge($inYM_addFriends, $inYM_notAddFriends);
 //
 //        //排除已加过的好友,找到没有加过好友的电话列表:
 //        $notAddPhoneList = array();
 //        foreach ($content as $item) {
-//            if (!in_array($item['phone'], $addPhoneList)) {
+//            if (!in_array($item['phone'], $inYM_addFriendPhoneList)) {
 //                array_push($notAddPhoneList, $item['phone']);
-//                continue;
 //            }
-//
 //        }
 //
 //        //使用通讯录电话进行全库识别,找到加入医脉但是不是好友关系的列表,获得"医脉资源中好友列表":
@@ -442,33 +455,22 @@ class DoctorRelationController extends BaseController
 //        foreach ($notAddFriends as $notAddFriend) {
 //            array_push($notAddFriendPhoneList, $notAddFriend['phone']);
 //        }
-//
-//        //排除已加过和已加入医脉的好友,获得"可能是医生的列表":
-//        $others = array();
-//        foreach ($content as $item) {
-//            if (in_array($item['phone'], $notAddPhoneList) && !in_array($item['phone'], $notAddFriendPhoneList)) {
-//                $tmpItem = [
-//                    'name' => $item['name'],
-//                    'phone' => $item['phone'],
-//                ];
-//                array_push($others, $tmpItem);
-//            }
-//        }
 
-        //临时,2016年10月11日 20点
+        //排除已加过和已加入医脉的好友,获得"其他":
         $others = array();
         foreach ($content as $item) {
-            $tmpItem = [
-                'name' => $item['name'],
-                'phone' => $item['phone']
-            ];
-            array_push($others, $tmpItem);
+            if (!in_array($item['phone'], $inYM_phoneList)) {
+                $tmpItem = [
+                    'name' => $item['name'],
+                    'phone' => $item['phone'],
+                ];
+                array_push($others, $tmpItem);
+            }
         }
 
         //返回数据:
         $data = [
-//            'friends' => Transformer::usersTransform($notAddFriends),
-            'friends' => null,
+            'friends' => Transformer::usersTransform($inYM),
             'others' => $others
         ];
 
