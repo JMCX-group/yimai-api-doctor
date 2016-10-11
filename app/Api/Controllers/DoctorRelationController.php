@@ -409,9 +409,6 @@ class DoctorRelationController extends BaseController
         $friendsIdList = DoctorRelation::getFriendIdList($userId);
         $friends = User::whereIn('id', $friendsIdList)->get();
 
-        //获取已上传通讯录的好友通讯录:
-//        $haveUploadedfriends = DoctorAddressBook::whereIn('id', $friendsIdList)->get();
-
         //获取电话列表:
         $phoneArr = array();
         foreach ($content as $item) {
@@ -440,21 +437,6 @@ class DoctorRelationController extends BaseController
             array_push($inYM_phoneList, $allFriend['phone']);
         }
         $inYM = array_merge($inYM_addFriends, $inYM_notAddFriends);
-//
-//        //排除已加过的好友,找到没有加过好友的电话列表:
-//        $notAddPhoneList = array();
-//        foreach ($content as $item) {
-//            if (!in_array($item['phone'], $inYM_addFriendPhoneList)) {
-//                array_push($notAddPhoneList, $item['phone']);
-//            }
-//        }
-//
-//        //使用通讯录电话进行全库识别,找到加入医脉但是不是好友关系的列表,获得"医脉资源中好友列表":
-//        $notAddFriends = User::whereIn('phone', $notAddPhoneList)->get();
-//        $notAddFriendPhoneList = array();
-//        foreach ($notAddFriends as $notAddFriend) {
-//            array_push($notAddFriendPhoneList, $notAddFriend['phone']);
-//        }
 
         //排除已加过和已加入医脉的好友,获得"其他":
         $others = array();
