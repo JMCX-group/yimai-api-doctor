@@ -169,6 +169,11 @@ $api->version('v1', function ($api) {
             $api->group(['prefix' => 'card'], function ($api) {
                 $api->get('submit', 'CardController@submit');
             });
+
+            //Wallet
+            $api->group(['prefix' => 'wallet'], function ($api) {
+                $api->get('info', 'WalletController@info');
+            });
         });
     });
 });
