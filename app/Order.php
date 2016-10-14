@@ -20,6 +20,7 @@ class Order extends Model
      */
     protected $fillable = [
         'doctor_id',
+        'patient_id',
         'out_trade_no',
         'total_fee',
         'body',
