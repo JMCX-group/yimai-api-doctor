@@ -218,9 +218,9 @@ class ApiController extends BaseController
                                 'is_auth' => '是否认证,1为认证,0为未认证'
                             ],
                             'sys_info' => [
-                                'radio_unread_count' => '未读的广播数量',
-                                'admissions_unread_count' => '未读的接诊信息数量',
-                                'appointment_unread_count' => '未读的约诊信息数量'
+                                'radio_unread_count' => '未读的广播数量，已读接口名称：广播已读',
+                                'admissions_unread_count' => '未读的接诊信息数量，已读接口名称：发送已读状态更新',
+                                'appointment_unread_count' => '未读的约诊信息数量，已读接口名称：发送已读状态更新'
                             ],
                             'message' => '',
                             'error' => ''
