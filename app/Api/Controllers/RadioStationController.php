@@ -55,7 +55,23 @@ class RadioStationController extends BaseController
             ->where('radio_station_id', $request->id)
             ->delete();
 
-//        return $this->response->noContent();
-        return response()->json(['success' => ''], 204); //给肠媳适配。。
+        return response()->json(['success' => ''], 204);
+    }
+
+    /**
+     * 全部消息已读
+     *
+     * @return \Dingo\Api\Http\Response|mixed
+     */
+    public function allRead()
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        RadioRead::where('user_id', $user->id)->delete();
+
+        return response()->json(['success' => ''], 204);
     }
 }

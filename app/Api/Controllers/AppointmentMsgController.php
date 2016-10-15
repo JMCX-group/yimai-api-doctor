@@ -77,6 +77,23 @@ class AppointmentMsgController extends BaseController
         $msg->read_status = 1;
         $msg->save();
 
-        return response()->json(['success' => ''], 204); //给肠媳适配。。
+        return response()->json(['success' => ''], 204);
+    }
+
+    /**
+     * All read.
+     *
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
+    public function allRead()
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        AppointmentMsg::where('doctor_id', $user->id)->update(['read_status' => 1]);
+
+        return response()->json(['success' => ''], 204);
     }
 }

@@ -117,6 +117,7 @@ $api->version('v1', function ($api) {
             $api->group(['prefix' => 'radio'], function ($api) {
                 $api->get('/', 'RadioStationController@index');
                 $api->post('read', 'RadioStationController@readStatus');
+                $api->get('all-read', 'RadioStationController@allRead');
             });
 
             //Appointment
@@ -155,9 +156,11 @@ $api->version('v1', function ($api) {
                 $api->get('appointment/all', 'AppointmentMsgController@index');
                 $api->get('appointment/new', 'AppointmentMsgController@newMessage');
                 $api->post('appointment/read', 'AppointmentMsgController@readMessage');
+                $api->get('appointment/all-read', 'AppointmentMsgController@allRead');
                 $api->get('admissions/all', 'AdmissionsMsgController@index');
                 $api->get('admissions/new', 'AdmissionsMsgController@newMessage');
                 $api->post('admissions/read', 'AdmissionsMsgController@readMessage');
+                $api->get('admissions/all-read', 'AdmissionsMsgController@allRead');
             });
 
             //Contacts

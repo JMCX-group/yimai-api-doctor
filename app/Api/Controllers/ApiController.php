@@ -1514,7 +1514,22 @@ class ApiController extends BaseController
                         'form-data' => [
                             'id' => '广播ID'
                         ],
+                        '说明' => 'HTTP状态204',
                         'response' => [
+                            'success' => '',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '全部已读' => [
+                        'url' => $http . '/api/radio/all-read',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        '说明' => 'HTTP状态204',
+                        'response' => [
+                            'success' => '',
                             'message' => '',
                             'error' => ''
                         ]
@@ -2225,6 +2240,19 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '全部已读' => [
+                        'url' => $http . '/api/msg/admissions/all-read',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        '说明' => 'HTTP状态204',
+                        'response' => [
+                            'success' => '',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
                 ],
 
                 '预约记录信息(我向别的医生发起的)' => [
@@ -2284,6 +2312,19 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '全部已读' => [
+                        'url' => $http . '/api/msg/appointment/all-read',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        '说明' => 'HTTP状态204',
+                        'response' => [
+                            'success' => '',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
                 ],
 
                 '申请名片' => [

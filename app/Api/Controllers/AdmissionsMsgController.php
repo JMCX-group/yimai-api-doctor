@@ -79,4 +79,21 @@ class AdmissionsMsgController extends BaseController
 
         return response()->json(['success' => ''], 204); //给肠媳适配。。
     }
+
+    /**
+     * All read.
+     *
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
+    public function allRead()
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        AdmissionsMsg::where('doctor_id', $user->id)->update(['read_status' => 1]);
+
+        return response()->json(['success' => ''], 204);
+    }
 }
