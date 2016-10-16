@@ -35,17 +35,23 @@ class AppointmentMsgTransformer
         switch ($data->status) {
             /**
              * wait:
+             * wait-0: 待医生确认
              * wait-1: 待患者付款
              * wait-2: 患者已付款，待医生确认
              * wait-3: 医生确认接诊，待面诊
              * wait-4: 医生改期，待患者确认
              * wait-5: 患者确认改期，待面诊
              */
+            case 'wait-0':
+                $retText = '患者' . $data['patient_name'] . '请求您代约';
+                break;
+
             case 'wait-1':
-                $retText = '您替'.$data['patient_name'].'约诊'.$data['doctor_name'].'医生的信息已发送至'.$data['patient_name'].'，等待确认及支付。若12小时内未完成支付则约诊失效。';
+                $retText = '您替' . $data['patient_name'] . '约诊' . $data['doctor_name'] . '医生的信息已发送至' . $data['patient_name'] . '，等待确认及支付。若12小时内未完成支付则约诊失效。';
                 break;
 
             case 'wait-2':
+                $retText = '患者' . $data['patient_name'] . '已付款。';
                 break;
 
             case 'wait-3':
