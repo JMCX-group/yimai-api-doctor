@@ -19,6 +19,7 @@ use App\DoctorRelation;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Api\Helper\GetDoctor;
 
 class DoctorRelationController extends BaseController
 {
@@ -457,9 +458,11 @@ class DoctorRelationController extends BaseController
                 array_push($otherPhoneList, $item['phone']);
             }
         }
+        $otherPhoneStr = implode(',', $otherPhoneList);
+        $in_DoctorDB =  GetDoctor::getDoctor($otherPhoneStr);
 
         $addressBook = DoctorAddressBook::find($userId);
-        $addressBook->not_in_ym = implode(',', $otherPhoneList);
+        $addressBook->not_in_ym = $otherPhoneStr;
         $addressBook->save();
 
         //返回数据:
@@ -467,7 +470,8 @@ class DoctorRelationController extends BaseController
             'friend_count' => count($inYM),
             'other_count' => count($others),
             'friends' => Transformer::addressBookUsersTransform($inYM),
-            'others' => $others
+            'others' => $others,
+            'in_db' => $in_DoctorDB
         ];
 
         return $data;
