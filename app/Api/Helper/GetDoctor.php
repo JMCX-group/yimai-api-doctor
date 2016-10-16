@@ -52,10 +52,11 @@ class GetDoctor
      * 获取医生信息
      * 返回信息有可能被msg pack打包过,需要解包,代码在最后一行注释里。
      *
-     * @param $phoneList //多个用','分隔。不能有空格，如 '13738409853,13824912175'
-     * @return string
+     * @param $phoneList
+     * @param string $retType
+     * @return array|bool
      */
-    public static function getDoctor($phoneList)
+    public static function getDoctor($phoneList, $retType = 'normal')
     {
         $data = array(
             'auth_id' => self::$auth_id,
@@ -63,7 +64,13 @@ class GetDoctor
             'mobile' => $phoneList
         );
 
-        return self::format(msgpack_unpack(trim(self::curlPostContents($data))));
+        $retData = msgpack_unpack(trim(self::curlPostContents($data)));
+
+        if($retType == 'normal'){
+            return self::format($retData);
+        }else{
+            return self::formatToOnlyPhone($retData);
+        }
     }
 
     /**
@@ -86,6 +93,34 @@ class GetDoctor
                 $newData = false;
             } else {
                 self::push($tmpData);
+                $newData = $tmpData;
+            }
+        } else {
+            $newData = false;
+        }
+
+        return $newData;
+    }
+
+    /**
+     * 格式化成字符串。
+     *
+     * @param $data
+     * @return array|bool
+     */
+    public static function formatToOnlyPhone($data)
+    {
+        if (isset($data['auth']['status']) && $data['auth']['status'] == 'true') {
+            $allData = $data['list'];
+            $tmpData = array();
+            foreach ($allData as $item) {
+                if ($item != '') {
+                    array_push($tmpData, $item['Mobile']);
+                }
+            }
+            if (count($tmpData) == 0) {
+                $newData = false;
+            } else {
                 $newData = $tmpData;
             }
         } else {

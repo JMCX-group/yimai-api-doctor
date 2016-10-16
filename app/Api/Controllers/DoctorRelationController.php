@@ -458,8 +458,22 @@ class DoctorRelationController extends BaseController
                 array_push($otherPhoneList, $item['phone']);
             }
         }
+
+        //请求240万数据库数据：
         $otherPhoneStr = implode(',', $otherPhoneList);
-        $in_DoctorDB =  GetDoctor::getDoctor($otherPhoneStr);
+        $in_DoctorDBList =  GetDoctor::getDoctor($otherPhoneStr, 'phone');
+        if($in_DoctorDBList != false) {
+            $otherPart1 = array();
+            $otherPart2 = array();
+            foreach ($others as $other) {
+                if (in_array($other['phone'], $in_DoctorDBList)) {
+                    array_push($otherPart1, $other);
+                }else{
+                    array_push($otherPart2, $other);
+                }
+            }
+            $others = array_merge($otherPart1, $otherPart2);
+        }
 
         $addressBook = DoctorAddressBook::find($userId);
         $addressBook->not_in_ym = $otherPhoneStr;
@@ -470,8 +484,7 @@ class DoctorRelationController extends BaseController
             'friend_count' => count($inYM),
             'other_count' => count($others),
             'friends' => Transformer::addressBookUsersTransform($inYM),
-            'others' => $others,
-            'in_db' => $in_DoctorDB
+            'others' => $others
         ];
 
         return $data;
