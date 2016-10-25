@@ -8,8 +8,12 @@
 
 namespace App\Api\Transformers;
 
+use App\City;
+use App\College;
 use App\DeptStandard;
 use App\Hospital;
+use App\Province;
+use App\User;
 
 class Transformer
 {
@@ -169,20 +173,25 @@ class Transformer
      */
     public static function searchDoctorTransform($user, $relation = null)
     {
+        // ID convert id:name
+        self::allIdToName($user);
+
         return [
             'id' => $user->id,
             'name' => $user->name,
             'head_url' => ($user->avatar == '') ? null : $user->avatar,
             'job_title' => $user->title,
-            'city' => $user->city,
-            'hospital' => [
-                'id' => $user->hospital_id,
-                'name' => $user->hospital,
-            ],
-            'department' => [
-                'id' => $user->dept_id,
-                'name' => $user->dept,
-            ],
+            'city' => $user->city_id->name,
+            'hospital' => $user->hospital_id,
+//            'hospital' => [
+//                'id' => $user->hospital_id,
+//                'name' => $user->hospital,
+//            ],
+            'department' => $user->dept_id,
+//            'department' => [
+//                'id' => $user->dept_id,
+//                'name' => $user->dept,
+//            ],
             'relation' => $relation
         ];
     }
@@ -352,5 +361,44 @@ class Transformer
                 'time_line' => $appointments->time_line
             ]
         ];
+    }
+
+
+    /**
+     * ID to id:name.
+     *
+     * @param $user
+     * @return mixed
+     */
+    public static function allIdToName($user)
+    {
+//        if (!empty($user['province_id'])) {
+//            $user['province_id'] = Province::find($user['province_id']);
+//        }
+
+        if (!empty($user['city_id'])) {
+            $user['city_id'] = City::select('id', 'name')->find($user['city_id']);
+        }
+
+        if (!empty($user['hospital_id'])) {
+            $user['hospital_id'] = Hospital::select('id', 'name')->find($user['hospital_id']);
+        }
+
+        if (!empty($user['dept_id'])) {
+            $user['dept_id'] = DeptStandard::select('id', 'name')->find($user['dept_id']);
+        }
+
+//        if (!empty($user['college_id'])) {
+//            $user['college_id'] = College::select('id', 'name')->find($user['college_id']);
+//        } else {
+//            $user['college_id'] = null;
+//        }
+
+        // Spell dp code.
+//        if (!empty($user['dp_code'])) {
+//            $user['dp_code'] = User::getDpCode($user['id']);
+//        }
+
+        return $user;
     }
 }
