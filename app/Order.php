@@ -26,6 +26,8 @@ class Order extends Model
         'body',
         'detail',
         'time_start',
-        'time_expire'
+        'time_expire',
+        'ret_data',
+        'status'
     ];
 }
