@@ -64,6 +64,7 @@ class UserController extends BaseController
         $user->auth_img .= ($imgUrl_5 != '') ? $imgUrl_5 . ',' : '';
         $user->auth_img = substr($user->auth_img, 0, strlen($user->auth_img) - 1);
 
+        $user->auth = 'processing'; //未认证： ；认证成功：completed；认证中：processing；认证失败：fail；
         $user->save();
 
         return ['url' => $user->auth_img];
