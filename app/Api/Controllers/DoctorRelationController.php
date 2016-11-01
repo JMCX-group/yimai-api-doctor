@@ -16,6 +16,7 @@ use App\Api\Transformers\Transformer;
 use App\DoctorAddressBook;
 use App\DoctorContactRecord;
 use App\DoctorRelation;
+use App\DoctorVIcon;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -459,20 +460,28 @@ class DoctorRelationController extends BaseController
             }
         }
 
-        //请求240万数据库数据：
+        //转成字符串：
         $otherPhoneStr = implode(',', $otherPhoneList);
-        $in_DoctorDBList =  GetDoctor::getDoctor($otherPhoneStr, 'phone');
-        if($in_DoctorDBList != false) {
+
+        //获取v_icon医生数据库：
+        $in_DoctorVIconDBArr = DoctorVIcon::all()->lists('phone')->toArray();
+
+        //请求240万数据库数据：
+        $in_DoctorDBList = GetDoctor::getDoctor($otherPhoneStr, 'phone');
+        if ($in_DoctorDBList != false) {
             $otherPart1 = array();
             $otherPart2 = array();
+            $otherPart3 = array();
             foreach ($others as $other) {
-                if (in_array($other['phone'], $in_DoctorDBList)) {
+                if (in_array($other['phone'], $in_DoctorVIconDBArr)) {
                     array_push($otherPart1, $other);
-                }else{
+                } elseif (in_array($other['phone'], $in_DoctorDBList)) {
                     array_push($otherPart2, $other);
+                } else {
+                    array_push($otherPart3, $other);
                 }
             }
-            $others = array_merge($otherPart1, $otherPart2);
+            $others = array_merge($otherPart1, $otherPart2, $otherPart3);
         }
 
         $addressBook = DoctorAddressBook::find($userId);
