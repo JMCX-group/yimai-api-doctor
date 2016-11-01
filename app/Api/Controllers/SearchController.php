@@ -27,7 +27,7 @@ class SearchController extends BaseController
 
         $data = array();
         foreach ($doctors as $doctor){
-            array_push($data, Transformer::searchDoctorTransform($doctor));
+            array_push($data, Transformer::searchDoctorTransform_2($doctor));
         }
 
         return response()->json(compact('data'));

@@ -173,25 +173,20 @@ class Transformer
      */
     public static function searchDoctorTransform($user, $relation = null)
     {
-        // ID convert id:name
-        self::allIdToName($user);
-
         return [
             'id' => $user->id,
             'name' => $user->name,
             'head_url' => ($user->avatar == '') ? null : $user->avatar,
             'job_title' => $user->title,
-            'city' => $user->city_id->name,
-            'hospital' => $user->hospital_id,
-//            'hospital' => [
-//                'id' => $user->hospital_id,
-//                'name' => $user->hospital,
-//            ],
-            'department' => $user->dept_id,
-//            'department' => [
-//                'id' => $user->dept_id,
-//                'name' => $user->dept,
-//            ],
+            'city' => $user->city,
+            'hospital' => [
+                'id' => $user->hospital_id,
+                'name' => $user->hospital,
+            ],
+            'department' => [
+                'id' => $user->dept_id,
+                'name' => $user->dept,
+            ],
             'relation' => $relation
         ];
     }
@@ -363,6 +358,36 @@ class Transformer
         ];
     }
 
+
+    /**
+     * @param $user
+     * @param $relation
+     * @return array
+     */
+    public static function searchDoctorTransform_2($user, $relation = null)
+    {
+        // ID convert id:name
+        self::allIdToName($user);
+
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'head_url' => ($user->avatar == '') ? null : $user->avatar,
+            'job_title' => $user->title,
+            'city' => $user->city_id->name,
+            'hospital' => $user->hospital_id,
+//            'hospital' => [
+//                'id' => $user->hospital_id,
+//                'name' => $user->hospital,
+//            ],
+            'department' => $user->dept_id,
+//            'department' => [
+//                'id' => $user->dept_id,
+//                'name' => $user->dept,
+//            ],
+            'relation' => $relation
+        ];
+    }
 
     /**
      * ID to id:name.
