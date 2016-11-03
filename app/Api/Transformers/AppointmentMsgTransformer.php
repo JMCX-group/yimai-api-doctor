@@ -76,6 +76,7 @@ class AppointmentMsgTransformer
                 break;
 
             case 'close-3':
+                $retText = '医生' . $data['doctor_name'] . '拒绝了接诊。';
                 break;
 
             /**
@@ -88,25 +89,17 @@ class AppointmentMsgTransformer
              * cancel-6: 医生改期之后,患者确认之后,患者取消约诊;
              * cancel-7: 医生改期之后,患者确认之后,医生取消约诊;
              */
-            case 'cancel-1':
-                break;
-
             case 'cancel-2':
-                break;
-
-            case 'cancel-3':
-                break;
-
             case 'cancel-4':
-                break;
-
-            case 'cancel-5':
-                break;
-
-            case 'cancel-6':
-                break;
-
             case 'cancel-7':
+                $retText = '医生' . $data['doctor_name'] . '取消了约诊请求。';
+                break;
+
+            case 'cancel-1':
+            case 'cancel-3':
+            case 'cancel-5':
+            case 'cancel-6':
+                $retText = '患者' . $data['patient_name'] . '取消了约诊请求。';
                 break;
 
             /**
