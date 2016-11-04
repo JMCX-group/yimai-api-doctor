@@ -1631,7 +1631,8 @@ class ApiController extends BaseController
                                         'doctor_is_auth' => '医生是否认证',
                                         'patient_name' => '患者姓名',
                                         'time' => '时间',
-                                        'status' => '状态'
+                                        'status' => '状态',
+                                        'status_code' => '状态code',
                                     ]
                                 ]
                             ],
