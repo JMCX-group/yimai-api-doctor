@@ -32,6 +32,7 @@ class AdmissionsRecordTransformer extends TransformerAbstract
             'patient_age' => $appointment['patient_age'],
             'time' => PublicTransformer::generateTreatmentTime($appointment),
             'status' => self::generateStatus($appointment['status']),
+            'status_code' => $appointment['status'],
             'who' => ($appointment['doctor_or_patient'] == 'd') ? '医生代约' : '患者约诊'
         ];
     }

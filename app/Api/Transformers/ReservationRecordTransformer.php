@@ -27,7 +27,8 @@ class ReservationRecordTransformer extends TransformerAbstract
             'doctor_is_auth' => $appointment['auth'],
             'patient_name' => $appointment['patient_name'],
             'time' => PublicTransformer::generateTreatmentTime($appointment),
-            'status' => self::generateStatus($appointment['status'])
+            'status' => self::generateStatus($appointment['status']),
+            'status_code' => $appointment['status']
         ];
     }
 
