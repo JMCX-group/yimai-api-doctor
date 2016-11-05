@@ -941,7 +941,26 @@ class ApiController extends BaseController
                             'message' => '',
                             'error' => ''
                         ]
-                    ],
+                    ]
+                ],
+
+                '钱包' => [
+                    '我的钱包' => [
+                        'url' => $http . '/api/wallet/info',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                'total' => '总额',
+                                'pending' => '待提现',
+                                'refunded' => '已提现'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
                 ],
 
                 '省市信息' => [
