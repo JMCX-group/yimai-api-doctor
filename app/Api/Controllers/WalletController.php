@@ -8,12 +8,19 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Transformers\TransactionRecordTransformer;
 use App\Api\Transformers\WalletTransformer;
 use App\DoctorWallet;
+use App\TransactionRecord;
 use App\User;
 
 class WalletController extends BaseController
 {
+    /**
+     * 钱包基础信息
+     *
+     * @return \Dingo\Api\Http\Response|mixed
+     */
     public function info()
     {
         $user = User::getAuthenticatedUser();
@@ -27,5 +34,27 @@ class WalletController extends BaseController
         }
 
         return $this->response->item($walletInfo, new WalletTransformer());
+    }
+
+    /**
+     * 收支明细
+     *
+     * @return \Dingo\Api\Http\Response|mixed
+     */
+    public function record()
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $record = TransactionRecord::where('doctor_id', $user->id)->get();
+        $data = array();
+        foreach ($record as $item) {
+            $recordData = TransactionRecordTransformer::transformData($item);
+            array_push($data, $recordData);
+        }
+
+        return response()->json(compact('data'));
     }
 }
