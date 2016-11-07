@@ -17,6 +17,7 @@ class WalletTransformer extends TransformerAbstract
     {
         return [
             'total' => $wallet['total'],
+            'billable' => $wallet['billable'],
             'pending' => $wallet['pending'],
             'refunded' => $wallet['refunded']
         ];

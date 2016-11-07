@@ -22,6 +22,7 @@ class DoctorWallet extends Model
         'doctor_id',
         'order_count',
         'total',
+        'billable',
         'pending',
         'refunded'
     ];

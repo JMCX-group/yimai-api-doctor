@@ -954,6 +954,7 @@ class ApiController extends BaseController
                         'response' => [
                             'data' => [
                                 'total' => '总额',
+                                'billable' => '可提现',
                                 'pending' => '待提现',
                                 'refunded' => '已提现'
                             ],
