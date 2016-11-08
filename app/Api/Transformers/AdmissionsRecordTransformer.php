@@ -53,12 +53,10 @@ class AdmissionsRecordTransformer extends TransformerAbstract
              * wait-4: 医生改期，待患者确认
              * wait-5: 患者确认改期，待面诊
              */
+            case 'wait-0':
             case 'wait-1':
-            case 'wait-4':
-                $retData = '待确认';
-                break;
-
             case 'wait-2':
+            case 'wait-4':
                 $retData = '待确认';
                 break;
 
