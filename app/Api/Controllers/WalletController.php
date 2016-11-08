@@ -11,7 +11,7 @@ namespace App\Api\Controllers;
 use App\Api\Transformers\TransactionRecordTransformer;
 use App\Api\Transformers\WalletTransformer;
 use App\DoctorWallet;
-use App\TransactionRecord;
+use App\Order;
 use App\User;
 
 class WalletController extends BaseController
@@ -48,7 +48,7 @@ class WalletController extends BaseController
             return $user;
         }
 
-        $record = TransactionRecord::where('doctor_id', $user->id)->get();
+        $record = Order::where('doctor_id', $user->id)->orderBy('created_at', 'DESC')->get();
         $data = array();
         foreach ($record as $item) {
             $recordData = TransactionRecordTransformer::transformData($item);

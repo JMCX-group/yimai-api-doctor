@@ -8,19 +8,19 @@
 
 namespace App\Api\Transformers;
 
-use App\TransactionRecord;
+use App\Order;
 use League\Fractal\TransformerAbstract;
 
 class TransactionRecordTransformer extends TransformerAbstract
 {
-    public function transform(TransactionRecord $record)
+    public function transform(Order $order)
     {
         return [
-            'name' => $record['name'],
-            'price' => $record['price'],
-            'type' => $record['type'],
-            'status' => $record['status'],
-            'time' => $record['created_at']
+            'name' => $order['name'],
+            'price' => $order['price'],
+            'type' => $order['type'],
+            'status' => $order['status'],
+            'time' => $order['created_at']
         ];
     }
 
@@ -33,10 +33,10 @@ class TransactionRecordTransformer extends TransformerAbstract
     public static function transformData($record)
     {
         return [
-            'name' => $record['name'],
-            'price' => $record['price'],
+            'name' => $record['body'],
+            'price' => $record['total_fee'] / 100, //单位：分
             'type' => $record['type'],
-            'status' => $record['status'],
+            'status' => $record['settlement_status'],
             'time' => $record['created_at']->format('Y-m-d H:i:s')
         ];
     }

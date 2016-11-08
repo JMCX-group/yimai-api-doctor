@@ -9,7 +9,7 @@
 namespace App\Api\Transformers;
 
 use App\Hospital;
-use App\PayRecord;
+use App\Order;
 
 class TimeLineTransformer
 {
@@ -259,7 +259,7 @@ class TimeLineTransformer
      */
     private static function otherInfoContent_alreadyPaid($appointments, $retData)
     {
-        $payRecord = PayRecord::where('transaction_id', $appointments->transaction_id)->get()->first();
+        $payRecord = Order::where('out_trade_no', $appointments->transaction_id)->get()->first();
         $time = $payRecord->created_at->format('Y-m-d H:i:s');
         $infoText = \Config::get('constants.ALREADY_PAID');
         return self::copyTransformer($retData, $time, $infoText, null, 'pass');

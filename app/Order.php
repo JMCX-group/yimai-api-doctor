@@ -25,9 +25,11 @@ class Order extends Model
         'total_fee',
         'body',
         'detail',
+        'type',
         'time_start',
         'time_expire',
         'ret_data',
-        'status'
+        'status',
+        'settlement_status'
     ];
 }
