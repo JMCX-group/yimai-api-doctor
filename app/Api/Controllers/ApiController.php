@@ -955,7 +955,7 @@ class ApiController extends BaseController
                             'data' => [
                                 'total' => '总额',
                                 'billable' => '可提现',
-                                'pending' => '待提现',
+                                'pending' => '待结算',
                                 'refunded' => '已提现'
                             ],
                             'message' => '',
@@ -967,6 +967,29 @@ class ApiController extends BaseController
                         'method' => 'GET',
                         'params' => [
                             'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                'id' => 'ID',
+                                'name' => '名目名称',
+                                'transaction_id' => '交易单号/预约号',
+                                'price' => '价格',
+                                'type' => '类型：收入/支出',
+                                'status' => '状态：还没想好怎么用，先传前台去',
+                                'time' => '交易发生时间'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '收支明细列表 - 带分类' => [
+                        'url' => $http . '/api/wallet/record',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'type' => 'billable：可提现; pending：待结算'
                         ],
                         'response' => [
                             'data' => [

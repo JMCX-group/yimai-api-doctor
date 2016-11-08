@@ -13,6 +13,7 @@ use App\Api\Transformers\WalletTransformer;
 use App\DoctorWallet;
 use App\Order;
 use App\User;
+use Illuminate\Http\Request;
 
 class WalletController extends BaseController
 {
@@ -37,11 +38,51 @@ class WalletController extends BaseController
     }
 
     /**
-     * 收支明细列表
+     * 收支明细列表 - 带分类
      *
      * @return \Dingo\Api\Http\Response|mixed
      */
-    public function record()
+    public function record(Request $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        if (isset($request['type'])) {
+            $type = $request['type'];
+            if ($type == 'billable') { //可提现
+                $record = Order::where('doctor_id', $user->id)
+                    ->where('settlement_status', '可提现')
+                    ->orderBy('created_at', 'DESC')
+                    ->get();
+            } else { //待结算， ($type == 'pending')
+                $record = Order::where('doctor_id', $user->id)
+                    ->where('settlement_status', '待结算')
+                    ->orderBy('created_at', 'DESC')
+                    ->get();
+            }
+        } else {
+            $record = Order::where('doctor_id', $user->id)
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        }
+
+        $data = array();
+        foreach ($record as $item) {
+            $recordData = TransactionRecordTransformer::transformData($item);
+            array_push($data, $recordData);
+        }
+
+        return response()->json(compact('data'));
+    }
+
+    /**
+     * 收支明细列表
+     *
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
+    public function recordGet()
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
