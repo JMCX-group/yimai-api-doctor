@@ -260,7 +260,11 @@ class TimeLineTransformer
     private static function otherInfoContent_alreadyPaid($appointments, $retData)
     {
         $payRecord = Order::where('out_trade_no', $appointments->transaction_id)->get()->first();
-        $time = $payRecord->created_at->format('Y-m-d H:i:s');
+        if (isset($payRecord->created_at)) {
+            $time = $payRecord->created_at->format('Y-m-d H:i:s');
+        } else {
+            $time = '';
+        }
         $infoText = \Config::get('constants.ALREADY_PAID');
         return self::copyTransformer($retData, $time, $infoText, null, 'pass');
     }
