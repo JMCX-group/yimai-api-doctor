@@ -989,7 +989,7 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'form-data' => [
-                            'type' => 'billable：可提现; pending：待结算'
+                            'type' => '可选项，不填则获取全部； all：全部; billable：可提现; pending：待结算'
                         ],
                         'response' => [
                             'data' => [

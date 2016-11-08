@@ -56,9 +56,13 @@ class WalletController extends BaseController
                     ->where('settlement_status', '可提现')
                     ->orderBy('created_at', 'DESC')
                     ->get();
-            } else { //待结算， ($type == 'pending')
+            } elseif ($type == 'pending') { //待结算，
                 $record = Order::where('doctor_id', $user->id)
                     ->where('settlement_status', '待结算')
+                    ->orderBy('created_at', 'DESC')
+                    ->get();
+            } else {
+                $record = Order::where('doctor_id', $user->id)
                     ->orderBy('created_at', 'DESC')
                     ->get();
             }
