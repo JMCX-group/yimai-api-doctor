@@ -210,7 +210,10 @@ class AdmissionsController extends BaseController
 
         foreach ($appointments as $appointment) {
             $appointment['hospital'] = $hospital;
+
             switch ($appointment['status']) {
+                case 'wait-1':
+                    break;
                 //wait-1需要患者付款:
                 case 'wait-2':
                     array_push($waitingForReply, AdmissionsRecordTransformer::admissionsTransform($appointment));
