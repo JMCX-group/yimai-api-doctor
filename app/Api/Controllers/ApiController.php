@@ -1741,6 +1741,7 @@ class ApiController extends BaseController
                         '测试数据8' => '2个完成状态2的可测试约诊号:011605190001,011605190002',
                         'response' => [
                             'basic_info' => [
+                                'appointment_id' => '约诊ID',
                                 'history' => '现病史',
                                 'img_url' => '辅助检查',
                                 'date' => '就诊时间',
@@ -2201,6 +2202,7 @@ class ApiController extends BaseController
                         '测试数据8' => '2个完成状态2的可测试约诊号:011605190001,011605190002',
                         'response' => [
                             'basic_info' => [
+                                'appointment_id' => '约诊ID',
                                 'history' => '现病史',
                                 'img_url' => '辅助检查',
                                 'date' => '就诊时间',
