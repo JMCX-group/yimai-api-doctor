@@ -493,7 +493,8 @@ class DoctorRelationController extends BaseController
             'friend_count' => count($inYM),
             'other_count' => count($others),
             'friends' => Transformer::addressBookUsersTransform($inYM),
-            'others' => $others
+            'others' => $others,
+            'error' => $in_DoctorDBList ? '' : $in_DoctorDBList
         ];
 
         return $data;

@@ -8,6 +8,7 @@
 namespace App\Api\Helper;
 
 use App\DoctorDb;
+use League\Flysystem\Exception;
 
 /**
  * 和第三方医生数据库交叉对比医生数据。
@@ -66,9 +67,9 @@ class GetDoctor
 
         $retData = msgpack_unpack(trim(self::curlPostContents($data)));
 
-        if($retType == 'normal'){
+        if ($retType == 'normal') {
             return self::format($retData);
-        }else{
+        } else {
             return self::formatToOnlyPhone($retData);
         }
     }
