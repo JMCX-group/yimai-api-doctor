@@ -2147,6 +2147,14 @@ class ApiController extends BaseController
                         '测试数据7' => '2个完成状态1的可测试约诊号:011605180001,011605180002',
                         '测试数据8' => '2个完成状态2的可测试约诊号:011605190001,011605190002',
                         'response' => [
+                            'basic_info' => [
+                                'history' => '现病史',
+                                'img_url' => '辅助检查',
+                                'date' => '就诊时间',
+                                'hospital' => '就诊医院',
+                                'remark' => '补充说明',
+                                'supplement' => '就诊须知',
+                            ],
                             'doctor_info' => [
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
                                 'name' => '用户姓名',

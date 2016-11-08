@@ -334,6 +334,14 @@ class Transformer
     public static function appointmentsTransform($appointments, $doctor)
     {
         return [
+            'basic_info' => [
+                'history' => $appointments->patient_history,
+                'img_url' => $appointments->patient_imgs,
+                'date' => $appointments->visit_time,
+                'hospital' => $doctor->hospital,
+                'remark' => $appointments->remark,
+                'supplement' => $appointments->supplement,
+            ],
             'doctor_info' => [
                 'id' => $doctor->id,
                 'name' => $doctor->name,
