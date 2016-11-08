@@ -34,6 +34,15 @@ class WalletController extends BaseController
             $walletInfo = DoctorWallet::insert(['doctor_id' => $user->id]);
         }
 
+        $total = Order::totalFeeSum($user->id);
+        $billable = Order::billableSum($user->id);
+        $pending = Order::pendingSum($user->id);
+        $walletInfo->total = ($total[0]->sum_value) / 100;
+        $walletInfo->billable = ($billable[0]->sum_value) / 100; //可提现
+        $walletInfo->pending = ($pending[0]->sum_value) / 100; //待结算
+        //$walletInfo->refunded = 0; //已提现
+        $walletInfo->save();
+
         return $this->response->item($walletInfo, new WalletTransformer());
     }
 
