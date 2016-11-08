@@ -38,6 +38,9 @@ $api->version('v1', function ($api) {
             $api->post('reset-pwd', 'AuthController@resetPassword');
         });
 
+
+        $api->post('get-doctor', 'UserController@verifyDoctor');
+
         /**
          * Token Auth
          */
