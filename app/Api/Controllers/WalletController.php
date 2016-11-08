@@ -37,7 +37,7 @@ class WalletController extends BaseController
     }
 
     /**
-     * 收支明细
+     * 收支明细列表
      *
      * @return \Dingo\Api\Http\Response|mixed
      */
@@ -54,6 +54,25 @@ class WalletController extends BaseController
             $recordData = TransactionRecordTransformer::transformData($item);
             array_push($data, $recordData);
         }
+
+        return response()->json(compact('data'));
+    }
+
+    /**
+     * 收支细节
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
+    public function detail($id)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $order = Order::find($id);
+        $data = TransactionRecordTransformer::transformData($order);
 
         return response()->json(compact('data'));
     }

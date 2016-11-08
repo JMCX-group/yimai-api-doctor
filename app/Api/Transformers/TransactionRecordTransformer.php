@@ -33,7 +33,9 @@ class TransactionRecordTransformer extends TransformerAbstract
     public static function transformData($record)
     {
         return [
+            'id' => $record['id'],
             'name' => $record['body'],
+            'transaction_id' => $record['out_trade_no'],
             'price' => $record['total_fee'] / 100, //单位：分
             'type' => $record['type'],
             'status' => $record['settlement_status'],

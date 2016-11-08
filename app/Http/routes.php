@@ -177,6 +177,7 @@ $api->version('v1', function ($api) {
             $api->group(['prefix' => 'wallet'], function ($api) {
                 $api->get('info', 'WalletController@info');
                 $api->get('record', 'WalletController@record');
+                $api->get('detail/{id}', 'WalletController@detail');
             });
         });
     });
