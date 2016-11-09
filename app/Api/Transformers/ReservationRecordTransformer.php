@@ -44,7 +44,7 @@ class ReservationRecordTransformer extends TransformerAbstract
                 $retData = '待患者确认';
                 break;
 
-            case 'wait-0':
+            case 'wait-0': //待代约医生确认
             case 'wait-2':
                 $retData = '待医生确认';
                 break;

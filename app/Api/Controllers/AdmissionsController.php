@@ -212,6 +212,7 @@ class AdmissionsController extends BaseController
             $appointment['hospital'] = $hospital;
 
             switch ($appointment['status']) {
+                case 'wait-0':
                 case 'wait-1':
                     break;
                 //wait-1需要患者付款:

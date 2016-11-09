@@ -43,12 +43,15 @@ class TimeLineTransformer
         switch ($appointments->status) {
             /**
              * wait:
+             * wait-0: 待代约医生确认
              * wait-1: 待患者付款
              * wait-2: 患者已付款，待医生确认
              * wait-3: 医生确认接诊，待面诊
              * wait-4: 医生改期，待患者确认
              * wait-5: 患者确认改期，待面诊
              */
+            case 'wait-0':
+                break;
             case 'wait-1':
                 $infoText = \Config::get('constants.WAIT_PAYMENT');
                 $retData = self::copyTransformer($retData, null, $infoText, null, 'wait');
@@ -359,6 +362,9 @@ class TimeLineTransformer
             /**
              * wait:
              */
+            case 'wait-0':
+                $retData = ['milestone' => '发起约诊', 'status' => '待确认'];
+                break;
             case 'wait-1':
                 $retData = ['milestone' => '发起约诊', 'status' => '待付款'];
                 break;

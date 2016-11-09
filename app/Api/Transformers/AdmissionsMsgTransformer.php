@@ -35,12 +35,17 @@ class AdmissionsMsgTransformer
         switch ($data->status) {
             /**
              * wait:
+             * wait-0: 待代约医生确认
              * wait-1: 待患者付款
              * wait-2: 患者已付款，待医生确认
              * wait-3: 医生确认接诊，待面诊
              * wait-4: 医生改期，待患者确认
              * wait-5: 患者确认改期，待面诊
              */
+            case 'wait-0':
+                $retText = '患者' . $data['patient_name'] . '请求您代约。';
+                break;
+
             case 'wait-1':
                 break;
 
