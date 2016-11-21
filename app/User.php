@@ -160,6 +160,25 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @param $dpCode
+     * @return bool
+     */
+    public static function getDoctorForDpCode($dpCode)
+    {
+        $data = User::select('*')
+            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
+            ->where('dept_id', substr($dpCode, 3, 3))
+            ->where('dp_code', substr($dpCode, 6))
+            ->get();
+
+        if (isset($data->first()->name)) {
+            return $data->first()->name;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Get same type contact count.
      *
      * @param $hospitalId

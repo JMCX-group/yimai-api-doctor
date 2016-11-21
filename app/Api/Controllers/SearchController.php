@@ -8,6 +8,7 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Requests\DpCodeRequest;
 use App\Api\Transformers\Transformer;
 use App\User;
 use Illuminate\Http\Request;
@@ -31,5 +32,21 @@ class SearchController extends BaseController
         }
 
         return response()->json(compact('data'));
+    }
+
+    /**
+     * @param DpCodeRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDoctorInfoForDpCode(DpCodeRequest $request)
+    {
+        $data = User::getDoctorForDpCode($request->get('dp_code'));
+        $data = Transformer::searchDoctorTransform_2($data);
+
+        if ($data) {
+            return response()->json(compact('data'));
+        } else {
+            return response()->json(['success' => ''], 204);
+        }
     }
 }

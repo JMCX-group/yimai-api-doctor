@@ -66,6 +66,7 @@ $api->version('v1', function ($api) {
 
             // Search
             $api->group(['prefix' => 'search'], function ($api) {
+                $api->post('doctor_info', 'SearchController@getDoctorInfoForDpCode');
                 $api->post('doctors', 'SearchController@doctors');
             });
 
