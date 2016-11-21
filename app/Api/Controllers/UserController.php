@@ -392,20 +392,20 @@ class UserController extends BaseController
 
         switch ($searchType) {
             case 'admissions':
-                $users = User::searchDoctor_admissions($data['field'], $user->city_id);
+                $users = User::searchDoctor_admissions($user->id, $data['field'], $user->city_id);
                 break;
             case 'same_hospital':
-                $users = User::searchDoctor_sameHospital($data['field'], $user->hospital_id, $data['city_id'], $data['dept_id']);
+                $users = User::searchDoctor_sameHospital($user->id, $data['field'], $user->hospital_id, $data['city_id'], $data['dept_id']);
                 break;
             case 'same_department':
                 $deptIdList = DeptStandard::getSameFirstLevelDeptIdList($user->dept_id);
-                $users = User::searchDoctor_sameDept($data['field'], $deptIdList, $data['city_id'], $data['hospital_id']);
+                $users = User::searchDoctor_sameDept($user->id, $data['field'], $deptIdList, $data['city_id'], $data['hospital_id']);
                 break;
             case 'same_college':
-                $users = User::searchDoctor_sameCollege($data['field'], $user->college_id, $data['city_id'], $data['hospital_id'], $data['dept_id']);
+                $users = User::searchDoctor_sameCollege($user->id, $data['field'], $user->college_id, $data['city_id'], $data['hospital_id'], $data['dept_id']);
                 break;
             default:
-                $users = User::searchDoctor($data['field'], $data['city_id'], $data['hospital_id'], $data['dept_id']);
+                $users = User::searchDoctor($user->id, $data['field'], $data['city_id'], $data['hospital_id'], $data['dept_id']);
                 break;
         }
 

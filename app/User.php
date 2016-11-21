@@ -185,13 +185,14 @@ class User extends Model implements AuthenticatableContract,
      * id转name.
      * 按是否三甲医院排序.
      *
+     * @param $myId
      * @param $field
      * @param $cityId
      * @param $hospitalId
      * @param $deptId
      * @return mixed
      */
-    public static function searchDoctor($field, $cityId, $hospitalId, $deptId)
+    public static function searchDoctor($myId, $field, $cityId, $hospitalId, $deptId)
     {
         $condition = "where ";
         $condition .= $cityId ? "doctors.city_id = '$cityId' " : "";
@@ -206,6 +207,7 @@ class User extends Model implements AuthenticatableContract,
         $condition .= $deptId ? "" : "or dept_standards.name like '%$field%' ";
         $condition .= "or doctors.tag_list like '%$field%' ";
         $condition .= ") ";
+        $condition .= "and id!=$myId ";
 
         return self::defaultSearchSql($condition, "ORDER BY hospitals.three_a desc");
     }
@@ -214,14 +216,16 @@ class User extends Model implements AuthenticatableContract,
      * 搜索同城市的医生信息.
      * id转name.
      *
+     * @param $myId
      * @param $field
      * @param $cityId
      * @return mixed
      */
-    public static function searchDoctor_admissions($field, $cityId)
+    public static function searchDoctor_admissions($myId, $field, $cityId)
     {
         $condition = "where `doctors`.`city_id` = '$cityId' ";
         $condition .= $field ? "and (doctors.name like '%$field%' ) " : "";
+        $condition .= "and id!=$myId ";
 
         return self::defaultSearchSql($condition);
     }
@@ -229,13 +233,14 @@ class User extends Model implements AuthenticatableContract,
     /**
      * 搜索同医院的医生信息.
      *
+     * @param $myId
      * @param $field
      * @param $hospitalId
      * @param $cityId
      * @param $deptId
      * @return mixed
      */
-    public static function searchDoctor_sameHospital($field, $hospitalId, $cityId, $deptId)
+    public static function searchDoctor_sameHospital($myId, $field, $hospitalId, $cityId, $deptId)
     {
         $condition = "where ";
         $condition .= $cityId ? "doctors.city_id = '$cityId' " : "";
@@ -244,6 +249,7 @@ class User extends Model implements AuthenticatableContract,
         $condition .= $deptId ? "and " : "";
         $condition .= "doctors.hospital_id = '$hospitalId' ";
         $condition .= $field ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' ) " : "";
+        $condition .= "and id!=$myId ";
 
         return self::defaultSearchSql($condition);
     }
@@ -257,7 +263,7 @@ class User extends Model implements AuthenticatableContract,
      * @param $hospitalId
      * @return mixed
      */
-    public static function searchDoctor_sameDept($field, $deptList, $cityId, $hospitalId)
+    public static function searchDoctor_sameDept($myId, $field, $deptList, $cityId, $hospitalId)
     {
         $deptList = implode(',', $deptList);
 
@@ -268,6 +274,7 @@ class User extends Model implements AuthenticatableContract,
         $condition .= $hospitalId ? "and " : "";
         $condition .= "doctors.dept_id IN ($deptList) ";
         $condition .= $field ? "and (doctors.name like '%$field%' or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') " : "";
+        $condition .= "and id!=$myId ";
 
         return self::defaultSearchSql($condition);
     }
@@ -275,6 +282,7 @@ class User extends Model implements AuthenticatableContract,
     /**
      * 搜索同院校下的医生信息。
      *
+     * @param $myId
      * @param $field
      * @param $collegeId
      * @param $cityId
@@ -282,7 +290,7 @@ class User extends Model implements AuthenticatableContract,
      * @param $deptId
      * @return mixed
      */
-    public static function searchDoctor_sameCollege($field, $collegeId, $cityId, $hospitalId, $deptId)
+    public static function searchDoctor_sameCollege($myId, $field, $collegeId, $cityId, $hospitalId, $deptId)
     {
         $condition = "where ";
         $condition .= $cityId ? "doctors.city_id = '$cityId' " : "";
@@ -296,6 +304,7 @@ class User extends Model implements AuthenticatableContract,
             ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' " .
             "or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') "
             : "";
+        $condition .= "and id!=$myId ";
 
         return self::defaultSearchSql($condition);
     }
