@@ -166,6 +166,8 @@ class DoctorRelation extends Model
         $data = DoctorRelation::select('doctor_id', 'doctor_friend_id', 'doctor_read', 'doctor_friend_read', 'created_at')
             ->where('doctor_id', $id)
             ->orWhere('doctor_friend_id', $id)
+            ->where('doctor_read', 0)
+            ->where('doctor_friend_read', 0)
             ->orderBy('created_at', 'DESC')
             ->get();
 
