@@ -34,7 +34,8 @@ class DpCodeRequest extends Request
     public function rules()
     {
         return [
-            'dp_code' => 'required|digits_between:8,9'
+            'dp_code' => 'required'
+//            'dp_code' => 'required|digits_between:8,9'
         ];
     }
 

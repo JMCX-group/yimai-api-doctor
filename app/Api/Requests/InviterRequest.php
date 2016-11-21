@@ -34,7 +34,8 @@ class InviterRequest extends Request
     public function rules()
     {
         return [
-            'inviter' => 'required|digits_between:8,9'
+            'inviter' => 'required'
+//            'inviter' => 'required|digits_between:8,9'
         ];
     }
 
