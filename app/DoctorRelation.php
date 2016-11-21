@@ -77,7 +77,10 @@ class DoctorRelation extends Model
      */
     public static function getFriendIdList($id)
     {
-        return DoctorRelation::where('doctor_id', $id)->lists('doctor_friend_id')->toArray();
+        return DoctorRelation::where('doctor_id', $id)
+            ->where('doctor_friend_id', '!=', $id)
+            ->lists('doctor_friend_id')
+            ->toArray();
     }
 
     /**
