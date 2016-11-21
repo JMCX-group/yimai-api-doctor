@@ -148,8 +148,8 @@ class User extends Model implements AuthenticatableContract,
     {
         $data = User::select('name')
 //            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
-            ->where('dept_id', substr($dpCode, 3, 3))
-            ->where('dp_code', substr($dpCode, 6))
+            ->where('dept_id', substr($dpCode, 0, 3))
+            ->where('dp_code', substr($dpCode, 3))
             ->get();
 
         if (isset($data->first()->name)) {
@@ -167,8 +167,8 @@ class User extends Model implements AuthenticatableContract,
     {
         $data = User::select('*')
 //            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
-            ->where('dept_id', substr($dpCode, 3, 3))
-            ->where('dp_code', substr($dpCode, 6))
+            ->where('dept_id', substr($dpCode, 0, 3))
+            ->where('dp_code', substr($dpCode, 3))
             ->get();
 
         if (isset($data->first()->name)) {
