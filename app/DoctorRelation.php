@@ -164,10 +164,10 @@ class DoctorRelation extends Model
     public static function getNewFriendsIdList($id)
     {
         $data = DB::select(
-            "SELECT doctor_id, doctor_friend_id, doctor_read, doctor_friend_read, created_at" .
+            "SELECT doctor_id, doctor_friend_id, doctor_read, doctor_friend_read, created_at " .
             "FROM doctor_relations " .
-            "WHERE (doctor_id=$id AND doctor_read=0) OR (doctor_friend_id=$id AND doctor_friend_read=0)" .
-            "ORDER BY created_at DESC"
+            "WHERE (doctor_id=$id AND doctor_read=0) OR (doctor_friend_id=$id AND doctor_friend_read=0) " .
+            "ORDER BY `created_at` DESC"
         );
 
         return self::groupByNewFriends($data, $id);
