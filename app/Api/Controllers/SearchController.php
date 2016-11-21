@@ -10,6 +10,7 @@ namespace App\Api\Controllers;
 
 use App\Api\Requests\DpCodeRequest;
 use App\Api\Transformers\Transformer;
+use App\DoctorRelation;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,7 @@ class SearchController extends BaseController
         $doctors = User::find($idList);
 
         $data = array();
-        foreach ($doctors as $doctor){
+        foreach ($doctors as $doctor) {
             array_push($data, Transformer::searchDoctorTransform_2($doctor));
         }
 
@@ -40,8 +41,17 @@ class SearchController extends BaseController
      */
     public function getDoctorInfoForDpCode(DpCodeRequest $request)
     {
-        $data = User::getDoctorForDpCode($request->get('dp_code'));
-        $data = Transformer::searchDoctorTransform_2($data);
+        $my = User::getAuthenticatedUser();
+        if (!isset($my->id)) {
+            return $my;
+        }
+
+        $user = User::getDoctorForDpCode($request->get('dp_code'));
+        if (isset($user['id']) && $user['id'] != '' && $user['id'] != null) {
+            $user['dp_code'] = User::getDpCode($user['id']);
+            $user['is_friend'] = (DoctorRelation::getIsFriend($my->id, $user['id'])[0]->count) == 2 ? true : false;
+        }
+        $data = Transformer::searchDoctorTransform_dpCode($user);
 
         if ($data) {
             return response()->json(compact('data'));

@@ -368,7 +368,6 @@ class Transformer
         ];
     }
 
-
     /**
      * @param $user
      * @param $relation
@@ -396,6 +395,32 @@ class Transformer
 //                'name' => $user->dept,
 //            ],
             'relation' => $relation
+        ];
+    }
+
+    /**
+     * @param $user
+     * @return array
+     */
+    public static function searchDoctorTransform_dpCode($user)
+    {
+        return [
+            'is_friend' => $user->is_friend,
+
+            'id' => $user->id,
+            'code' => $user->dp_code,
+            'name' => $user->name,
+            'head_url' => ($user->avatar == '') ? null : $user->avatar,
+            'job_title' => $user->title,
+            'province' => $user->province,
+            'city' => $user->city,
+            'hospital' => $user->hospital,
+            'department' => $user->dept,
+            'college' => $user->college,
+            'tags' => $user->tag_list,
+            'personal_introduction' => $user->profile,
+            'is_auth' => $user->auth,
+            'common_friend_list' => $user->common_friend_list,
         ];
     }
 

@@ -165,17 +165,22 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function getDoctorForDpCode($dpCode)
     {
-        $data = User::select('*')
-//            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
+        return User::select(
+            'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.title', 'doctors.auth',
+            'doctors.province_id', 'doctors.city_id', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.college_id',
+            'doctors.tag_list', 'doctors.profile',
+            'provinces.name AS province', 'citys.name AS city',
+            'hospitals.name AS hospital', 'dept_standards.name AS dept',
+            'colleges.name AS college')
+            ->leftJoin('provinces', 'provinces.id', '=', 'doctors.province_id')
+            ->leftJoin('citys', 'citys.id', '=', 'doctors.city_id')
+            ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
+            ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
+            ->leftJoin('colleges', 'colleges.id', '=', 'doctors.college_id')
             ->where('dept_id', substr($dpCode, 0, 3))
             ->where('dp_code', substr($dpCode, 3))
-            ->get();
-
-        if (isset($data->first()->name)) {
-            return $data->first()->name;
-        } else {
-            return false;
-        }
+            ->get()
+            ->first();
     }
 
     /**

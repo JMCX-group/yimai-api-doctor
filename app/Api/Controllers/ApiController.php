@@ -2532,20 +2532,25 @@ class ApiController extends BaseController
                         ],
                         'response' => [
                             'data' => [
-                                'id' => '用户ID',
+                                'is_friend' => 'true | false',
+                                'id' => '用户id',
+                                'code' => '医脉码',
                                 'name' => '用户姓名',
                                 'head_url' => '头像URL',
                                 'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
-                                'city' => '所属城市',
-                                'hospital' => [
-                                    'id' => '用户所在医院ID',
-                                    'name' => '用户所在医院名称'
-                                ],
-                                'department' => [
-                                    'id' => '用户所在科室ID',
-                                    'name' => '用户所在科室名称'
-                                ],
-                                'relation' => '1:一度人脉; 2:二度人脉; null:没关系'
+                                'province' => '用户所在省份名称',
+                                'city' => '用户所在城市名称',
+                                'hospital' => '用户所在医院名称',
+                                'department' => '用户所在科室名称',
+                                'college' => '用户所在院校名称',
+                                'tags' => '特长/标签',
+                                'personal_introduction' => '个人简介',
+                                'is_auth' => '是否认证；未认证： ；认证成功：completed；认证中：processing；认证失败：fail；',
+                                'common_friend_list' => [
+                                    'id' => '用户id',
+                                    'head_url' => '头像URL',
+                                    'is_auth' => '是否认证,1为认证,0为未认证'
+                                ]
                             ],
                             'message' => '',
                             'error' => ''
