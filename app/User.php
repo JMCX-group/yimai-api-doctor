@@ -147,7 +147,7 @@ class User extends Model implements AuthenticatableContract,
     public static function getInviter($dpCode)
     {
         $data = User::select('name')
-            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
+//            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
             ->where('dept_id', substr($dpCode, 3, 3))
             ->where('dp_code', substr($dpCode, 6))
             ->get();
@@ -166,7 +166,7 @@ class User extends Model implements AuthenticatableContract,
     public static function getDoctorForDpCode($dpCode)
     {
         $data = User::select('*')
-            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
+//            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
             ->where('dept_id', substr($dpCode, 3, 3))
             ->where('dp_code', substr($dpCode, 6))
             ->get();
