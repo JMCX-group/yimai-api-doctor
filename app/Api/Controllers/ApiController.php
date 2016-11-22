@@ -1531,7 +1531,8 @@ class ApiController extends BaseController
                                 ],
                                 'others' => [
                                     'name' => '姓名',
-                                    'phone' => '手机号码'
+                                    'phone' => '手机号码',
+                                    'sms_status' => '已发送：true；未发送：false; 已发送的不显示发送按钮'
                                 ]
                             ],
                             'message' => '',
