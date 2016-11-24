@@ -192,6 +192,7 @@ class ApiController extends BaseController
                                 'address' => '邮寄地址',
                                 'addressee' => '收件人',
                                 'receive_phone' => '收件电话',
+                                'role' => '权限，功能还未完成，请先接收到前台',
                                 'inviter' => '邀请者'
                             ],
                             'relations' => [
@@ -301,6 +302,7 @@ class ApiController extends BaseController
                                 'address' => '邮寄地址',
                                 'addressee' => '收件人',
                                 'receive_phone' => '收件电话',
+                                'role' => '权限，功能还未完成，请先接收到前台',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',
@@ -923,6 +925,7 @@ class ApiController extends BaseController
                                 'address' => '邮寄地址',
                                 'addressee' => '收件人',
                                 'receive_phone' => '收件电话',
+                                'role' => '权限，功能还未完成，请先接收到前台',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',

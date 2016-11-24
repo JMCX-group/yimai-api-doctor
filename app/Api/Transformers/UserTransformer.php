@@ -63,6 +63,7 @@ class UserTransformer extends TransformerAbstract
             'address' => $user['address'],
             'addressee' => $user['addressee'],
             'receive_phone' => $user['receive_phone'],
+            'role' => $user['role'],
             'inviter' => $user['inviter_dp_code']
         ];
     }
@@ -169,6 +170,7 @@ class UserTransformer extends TransformerAbstract
             'address' => $user['address'],
             'addressee' => $user['addressee'],
             'receive_phone' => $user['receive_phone'],
+            'role' => $user['role'],
             'inviter' => $user['inviter_dp_code']
         ];
     }
