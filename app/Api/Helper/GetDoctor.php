@@ -68,7 +68,9 @@ class GetDoctor
         $retData = msgpack_unpack(trim(self::curlPostContents($data)));
 
         if ($retType == 'normal') {
-            return self::format($retData);
+            $ret['data'] = self::format($retData);
+            $ret['debug'] = $retData;
+            return $ret;
         } else {
             return self::formatToOnlyPhone($retData);
         }

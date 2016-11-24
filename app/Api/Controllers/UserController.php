@@ -673,14 +673,14 @@ class UserController extends BaseController
      */
     public function verifyDoctor(Request $request)
     {
-        $doctors = GetDoctor::getDoctor($request['phone']);
+        $retData = GetDoctor::getDoctor($request['phone']);
+        $doctors = $retData['data'];
         $data = [
             'in_count' => count(explode(',', $request['phone'])),
             'out_count' => count($doctors),
-            'doctor' => $doctors
+            'doctor' => $doctors,
+            'debug' => $retData['debug']
         ];
-
-
 
         //TODO 还未完成
         return response()->json(compact('data'));
