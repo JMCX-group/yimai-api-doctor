@@ -223,8 +223,8 @@ class DoctorRelation extends Model
                     if ($value->doctor_friend_read == 0) {
                         $unreadCount++;
                     }
-                    $value['status'] = 'waitForSure';
-                    $value['word'] = '请求添加您';
+                    $value->status = 'waitForSure';
+                    $value->word = '请求添加您';
                     array_push($retData, $value);
                 }
             }
