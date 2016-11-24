@@ -398,8 +398,8 @@ class UserController extends BaseController
                 $users = User::searchDoctor_sameHospital($user->id, $data['field'], $user->hospital_id, $data['city_id'], $data['dept_id']);
                 break;
             case 'same_department':
-                $deptIdList = DeptStandard::getSameFirstLevelDeptIdList($user->dept_id);
-                $users = User::searchDoctor_sameDept($user->id, $data['field'], $deptIdList, $data['city_id'], $data['hospital_id']);
+//                $deptIdList = DeptStandard::getSameFirstLevelDeptIdList($user->dept_id);
+                $users = User::searchDoctor_sameDept($user->id, $data['field'], $user->dept_id, $data['city_id'], $data['hospital_id']);
                 break;
             case 'same_college':
                 $users = User::searchDoctor_sameCollege($user->id, $data['field'], $user->college_id, $data['city_id'], $data['hospital_id'], $data['dept_id']);

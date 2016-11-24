@@ -279,24 +279,23 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
-     * 搜索相同一级科室的所有一二级科室的医生信息。
+     * 搜索相同科室的所有医生信息。
      *
+     * @param $myId
      * @param $field
-     * @param $deptList
+     * @param $deptId
      * @param $cityId
      * @param $hospitalId
      * @return mixed
      */
-    public static function searchDoctor_sameDept($myId, $field, $deptList, $cityId, $hospitalId)
+    public static function searchDoctor_sameDept($myId, $field, $deptId, $cityId, $hospitalId)
     {
-        $deptList = implode(',', $deptList);
-
         $condition = "where ";
         $condition .= $cityId ? "doctors.city_id = '$cityId' " : "";
         $condition .= $cityId ? "and " : "";
         $condition .= $hospitalId ? "doctors.hospital_id = '$hospitalId' " : "";
         $condition .= $hospitalId ? "and " : "";
-        $condition .= "doctors.dept_id IN ($deptList) ";
+        $condition .= "doctors.dept_id = '$deptId' ";
         $condition .= $field ? "and (doctors.name like '%$field%' or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') " : "";
         $condition .= "and doctors.id!=$myId ";
 
