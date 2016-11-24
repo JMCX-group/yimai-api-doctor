@@ -488,6 +488,25 @@ class DoctorRelationController extends BaseController
         $addressBook->not_in_ym = $otherPhoneStr;
         $addressBook->save();
 
+        //增加已发送状态：
+        $tmpSmsSentArr = explode(',', $addressBook->sms_sent);
+        $othersPartYes = array();
+        $othersPartNo = array();
+        foreach ($others as &$other) {
+            $tmpOtherItem = [
+                'name' => $other['name'],
+                'phone' => $other['phone'],
+                'sms_status' => 'false'
+            ];
+            if (in_array($other['phone'], $tmpSmsSentArr)) {
+                $tmpOtherItem['sms_status'] = 'true';
+                array_push($othersPartYes, $tmpOtherItem);
+            } else {
+                array_push($othersPartNo, $tmpOtherItem);
+            }
+        }
+        $others = array_merge($othersPartNo, $othersPartYes);
+
         //返回数据:
         $data = [
             'friend_count' => count($inYM),
@@ -516,6 +535,25 @@ class DoctorRelationController extends BaseController
         $phoneList = $request['phone'];
         $phoneArr = explode(',', $phoneList);
         $this->sendSMS($user->name, $phoneArr);
+
+        /**
+         * 记录是否发过短信：
+         */
+        $doctorAddressBook = DoctorAddressBook::find($user->id);
+        $tmpSmsSentList = $doctorAddressBook->sms_sent;
+        $tmpSmsSentArr = explode(',', $tmpSmsSentList);
+        if ($tmpSmsSentList == null || $tmpSmsSentList == '') {
+            $tmpSmsSentList = $phoneList;
+        } else {
+            foreach ($phoneArr as $item) {
+                if (!in_array($item, $tmpSmsSentArr)) {
+                    array_push($tmpSmsSentArr, $item);
+                }
+            }
+            $tmpSmsSentList = implode(',', $tmpSmsSentArr);
+        }
+        $doctorAddressBook->sms_sent = $tmpSmsSentList;
+        $doctorAddressBook->sms_sent_time = date('Y-m-d H:i:s', time());
 
         return response()->json(['success' => ''], 204);
     }

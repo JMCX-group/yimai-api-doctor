@@ -231,7 +231,7 @@ class User extends Model implements AuthenticatableContract,
         $condition .= $deptId ? "" : "or dept_standards.name like '%$field%' ";
         $condition .= "or doctors.tag_list like '%$field%' ";
         $condition .= ") ";
-        $condition .= "and id!=$myId ";
+        $condition .= "and doctors.id!=$myId ";
 
         return self::defaultSearchSql($condition, "ORDER BY hospitals.three_a desc");
     }
@@ -249,7 +249,7 @@ class User extends Model implements AuthenticatableContract,
     {
         $condition = "where `doctors`.`city_id` = '$cityId' ";
         $condition .= $field ? "and (doctors.name like '%$field%' ) " : "";
-        $condition .= "and id!=$myId ";
+        $condition .= "and doctors.id!=$myId ";
 
         return self::defaultSearchSql($condition);
     }
@@ -273,7 +273,7 @@ class User extends Model implements AuthenticatableContract,
         $condition .= $deptId ? "and " : "";
         $condition .= "doctors.hospital_id = '$hospitalId' ";
         $condition .= $field ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' ) " : "";
-        $condition .= "and id!=$myId ";
+        $condition .= "and doctors.id!=$myId ";
 
         return self::defaultSearchSql($condition);
     }
@@ -298,7 +298,7 @@ class User extends Model implements AuthenticatableContract,
         $condition .= $hospitalId ? "and " : "";
         $condition .= "doctors.dept_id IN ($deptList) ";
         $condition .= $field ? "and (doctors.name like '%$field%' or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') " : "";
-        $condition .= "and id!=$myId ";
+        $condition .= "and doctors.id!=$myId ";
 
         return self::defaultSearchSql($condition);
     }
@@ -328,7 +328,7 @@ class User extends Model implements AuthenticatableContract,
             ? "and (doctors.name like '%$field%' or dept_standards.name like '%$field%' " .
             "or hospitals.name like '%$field%' or doctors.tag_list like '%$field%') "
             : "";
-        $condition .= "and id!=$myId ";
+        $condition .= "and doctors.id!=$myId ";
 
         return self::defaultSearchSql($condition);
     }
