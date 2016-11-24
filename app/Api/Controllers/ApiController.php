@@ -861,7 +861,9 @@ class ApiController extends BaseController
                             'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
                             'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
                             'application_card' => '是否申请了名片，1为已申请，在申请界面灰化按钮',
-                            'address' => '邮寄地址'
+                            'address' => '邮寄地址',
+                            'addressee' => '收件人',
+                            'receive_phone' => '收件电话',
                         ],
                         'response' => [
                             'user' => [
