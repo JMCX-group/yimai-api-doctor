@@ -61,6 +61,8 @@ class UserTransformer extends TransformerAbstract
             'friends_friends_appointment_switch' => $user['friends_friends_appointment_switch'],
             'application_card' => $user['application_card'],
             'address' => $user['address'],
+            'addressee' => $user['addressee'],
+            'receive_phone' => $user['receive_phone'],
             'inviter' => $user['inviter_dp_code']
         ];
     }
@@ -165,6 +167,8 @@ class UserTransformer extends TransformerAbstract
             'friends_friends_appointment_switch' => $user['friends_friends_appointment_switch'],
             'application_card' => $user['application_card'],
             'address' => $user['address'],
+            'addressee' => $user['addressee'],
+            'receive_phone' => $user['receive_phone'],
             'inviter' => $user['inviter_dp_code']
         ];
     }

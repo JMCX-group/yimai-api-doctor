@@ -214,6 +214,12 @@ class UserController extends BaseController
         if (isset($request['address']) && !empty($request['address'])) {
             $user->address = $request['address'];
         }
+        if (isset($request['addressee']) && !empty($request['addressee'])) {
+            $user->addressee = $request['addressee'];
+        }
+        if (isset($request['receive_phone']) && !empty($request['receive_phone'])) {
+            $user->receive_phone = $request['receive_phone'];
+        }
 
         /**
          * Get rong yun token.

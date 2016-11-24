@@ -67,6 +67,8 @@ class User extends Model implements AuthenticatableContract,
         'friends_friends_appointment_switch',
         'application_card',
         'address',
+        'addressee',
+        'receive_phone',
         'inviter_dp_code',
         'remember_token'
     ];
