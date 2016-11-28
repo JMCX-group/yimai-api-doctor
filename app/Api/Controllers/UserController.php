@@ -156,7 +156,7 @@ class UserController extends BaseController
         if (isset($request['tags']) && !empty($request['tags'])) {
             $user->tag_list = $request['tags'];
         }
-        if (isset($request['personal_introduction']) && !empty($request['personal_introduction'])) {
+        if (isset($request['personal_introduction'])) {
             $user->profile = $request['personal_introduction'];
         }
 
