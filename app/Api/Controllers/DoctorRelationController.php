@@ -584,7 +584,7 @@ class DoctorRelationController extends BaseController
     {
         foreach ($phoneArr as $item) {
             $sms = new Sms();
-            $txt = '【医脉】您的好友' . $name . '邀请您加入医脉。URL:'; //文案
+            $txt = '【医者脉连】您的好友' . $name . '邀请您加入医脉。URL:'; //文案
             $sms->sendSMS($item, $txt);
         }
     }
