@@ -140,6 +140,9 @@ class UserController extends BaseController
                 $hospitalId = $this->createNewHospital($request);
             }
             $user->hospital_id = $hospitalId;
+            $hospitals = Hospital::find($hospitalId);
+            $user->province_id = $hospitals->province_id;
+            $user->city_id = $hospitals->city_id;
         }
         if (isset($request['department']) && !empty($request['department'])) {
             $user->dept_id = $request['department'];
