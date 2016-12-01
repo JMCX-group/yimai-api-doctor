@@ -52,10 +52,10 @@ class UserController extends BaseController
         }
 
         $imgUrl_1 = isset($request['img-1']) ? $this->saveImg($user->id, $request->file('img-1')) : '';
-        $imgUrl_2 = isset($request['img-2']) ? $this->saveImg($user->id, $request->file('img-2')) : '';
-        $imgUrl_3 = isset($request['img-3']) ? $this->saveImg($user->id, $request->file('img-3')) : '';
-        $imgUrl_4 = isset($request['img-4']) ? $this->saveImg($user->id, $request->file('img-4')) : '';
-        $imgUrl_5 = isset($request['img-5']) ? $this->saveImg($user->id, $request->file('img-5')) : '';
+        $imgUrl_2 = isset($request['img-2']) ? $this->saveImg($user->id, $request->file('img-2'), 2) : '';
+        $imgUrl_3 = isset($request['img-3']) ? $this->saveImg($user->id, $request->file('img-3'), 3) : '';
+        $imgUrl_4 = isset($request['img-4']) ? $this->saveImg($user->id, $request->file('img-4'), 4) : '';
+        $imgUrl_5 = isset($request['img-5']) ? $this->saveImg($user->id, $request->file('img-5'), 5) : '';
 
         $user->auth_img = ($imgUrl_1 != '') ? $imgUrl_1 . ',' : '';
         $user->auth_img .= ($imgUrl_2 != '') ? $imgUrl_2 . ',' : '';
@@ -75,14 +75,15 @@ class UserController extends BaseController
      *
      * @param $userId
      * @param $imgFile
+     * @param $count
      * @return string
      */
-    public function saveImg($userId, $imgFile)
+    public function saveImg($userId, $imgFile, $count=0)
     {
         $destinationPath =
             \Config::get('constants.AUTH_PATH') .
             $userId . '/';
-        $filename = time() . '.jpg';
+        $filename = time() + $count . '.jpg';
 
 //        try {
         $imgFile->move($destinationPath, $filename);
