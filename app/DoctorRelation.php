@@ -169,7 +169,7 @@ class DoctorRelation extends Model
         $data = DB::select(
             "SELECT doctor_id, doctor_friend_id, doctor_read, doctor_friend_read, created_at " .
             "FROM doctor_relations " .
-            "WHERE (doctor_id=$id AND doctor_read=0) OR (doctor_friend_id=$id AND doctor_friend_read=0) " .
+            "WHERE doctor_id=$id OR doctor_friend_id=$id " .
             "ORDER BY `created_at` DESC"
         );
 
