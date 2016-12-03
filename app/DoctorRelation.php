@@ -29,7 +29,7 @@ class DoctorRelation extends Model
 
     /**
      * 获取和某个医生的共同好友的id list.
-     * 
+     *
      * @param $myId
      * @param $id
      * @return mixed
@@ -49,13 +49,13 @@ class DoctorRelation extends Model
                 }
             }
         }
-        
+
         return array_unique($commonFriendIdList);
     }
 
     /**
      * 获取和某人是否是好友关系,返回是2则互为好友.
-     * 
+     *
      * @param $myId
      * @param $id
      * @return mixed
@@ -170,6 +170,24 @@ class DoctorRelation extends Model
             "SELECT doctor_id, doctor_friend_id, doctor_read, doctor_friend_read, created_at " .
             "FROM doctor_relations " .
             "WHERE doctor_id=$id OR doctor_friend_id=$id " .
+            "ORDER BY `created_at` DESC"
+        );
+
+        return self::groupByNewFriends($data, $id);
+    }
+
+    /**
+     * Get new friend id list.
+     *
+     * @param $id
+     * @return array
+     */
+    public static function getUnreadNewFriendsIdList($id)
+    {
+        $data = DB::select(
+            "SELECT doctor_id, doctor_friend_id, doctor_read, doctor_friend_read, created_at " .
+            "FROM doctor_relations " .
+            "WHERE (doctor_id=$id AND doctor_read=0) OR (doctor_friend_id=$id AND doctor_friend_read=0) " .
             "ORDER BY `created_at` DESC"
         );
 

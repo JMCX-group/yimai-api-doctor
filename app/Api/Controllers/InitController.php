@@ -42,7 +42,7 @@ class InitController extends BaseController
         $relationData = Transformer::userListTransform(DoctorRelation::getFriends($user->id));
         $relations = [
             'same' => User::getSameTypeContactCount($user->hospital_id, $user->dept_id, $user->college_id),
-            'unread' => DoctorRelation::getNewFriendsIdList($user->id)['unread'],
+            'unread' => DoctorRelation::getUnreadNewFriendsIdList($user->id)['unread'],
             'count' => [
                 'doctor' => count($relationData['friends']),
                 'hospital' => $relationData['hospital_count']
