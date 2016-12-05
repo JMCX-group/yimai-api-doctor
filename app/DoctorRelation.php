@@ -216,8 +216,8 @@ class DoctorRelation extends Model
                     if ($value->doctor_read == 0) {
                         $unreadCount++;
                     }
-                    $value['status'] = 'isFriend';
-                    $value['word'] = '';
+                    $value->status = 'isFriend';
+                    $value->word = '';
                     array_push($retData, $value);
                     $bool = false;
                     break;
@@ -233,8 +233,8 @@ class DoctorRelation extends Model
                     if ($value->doctor_read == 0) {
                         $unreadCount++;
                     }
-                    $value['status'] = 'waitForFriendAgree';
-                    $value['word'] = '请求已发送';
+                    $value->status = 'waitForFriendAgree';
+                    $value->word = '请求已发送';
                     array_push($retData, $value);
                 } elseif ($value->doctor_friend_id == $id) {
                     // 他人请求自己
