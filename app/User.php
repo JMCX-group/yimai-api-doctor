@@ -198,7 +198,7 @@ class User extends Model implements AuthenticatableContract,
     {
         $hospitalCount = User::where('hospital_id', $hospitalId)->count();
         $deptCount = User::where('dept_id', $deptId)->count();
-        $collegeCount = User::where('college_id', $collegeId)->count();
+        $collegeCount = ($collegeId == null || $collegeId == '') ? 0 : User::where('college_id', $collegeId)->count();
 
         return [
             'hospital' => $hospitalCount,
