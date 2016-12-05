@@ -9,6 +9,7 @@
 namespace App\Api\Controllers;
 
 use App\Api\Requests\DpCodeRequest;
+use App\Api\Requests\SearchDoctorForIdRequest;
 use App\Api\Transformers\Transformer;
 use App\DoctorRelation;
 use App\User;
@@ -17,14 +18,14 @@ use Illuminate\Http\Request;
 class SearchController extends BaseController
 {
     /**
-     * Doctors.
+     * Doctors
      *
-     * @param Request $request
+     * @param SearchDoctorForIdRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function doctors(Request $request)
+    public function doctors(SearchDoctorForIdRequest $request)
     {
-        $idList = explode(',', $request['id_list']);
+        $idList = explode(',', $request->get('id_list'));
         $doctors = User::find($idList);
 
         $data = array();

@@ -453,6 +453,22 @@ class ApiController extends BaseController
                                         'id' => '用户所在科室ID',
                                         'name' => '用户所在科室名称'
                                     ],
+                                    'admission_set_fixed' => [
+                                        '说明' => '接诊时间设置,固定排班; 接收json,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                        '格式案例' => [
+                                            'week' => 'sun',
+                                            'am' => 'true',
+                                            'pm' => 'false',
+                                        ]
+                                    ],
+                                    'admission_set_flexible' => [
+                                        '说明' => '接诊时间设置,灵活排班; 接收json,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                        '格式案例' => [
+                                            'date' => '2016-06-23',
+                                            'am' => 'true',
+                                            'pm' => 'false',
+                                        ]
+                                    ],
                                     'relation' => '1:一度人脉; 2:二度人脉; null:没关系'
                                 ],
                                 'message' => '',
@@ -533,6 +549,22 @@ class ApiController extends BaseController
                                         'department' => [
                                             'id' => '用户所在科室ID',
                                             'name' => '用户所在科室名称'
+                                        ],
+                                        'admission_set_fixed' => [
+                                            '说明' => '接诊时间设置,固定排班; 接收json encode字符串,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                            '格式案例' => [
+                                                'week' => 'sun',
+                                                'am' => 'true',
+                                                'pm' => 'false',
+                                            ]
+                                        ],
+                                        'admission_set_flexible' => [
+                                            '说明' => '接诊时间设置,灵活排班; 接收json encode字符串,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                            '格式案例' => [
+                                                'date' => '2016-06-23',
+                                                'am' => 'true',
+                                                'pm' => 'false',
+                                            ]
                                         ],
                                         'relation' => '1:一度人脉; 2:二度人脉; null:没关系'
                                     ],
@@ -624,6 +656,22 @@ class ApiController extends BaseController
                                             'id' => '用户所在科室ID',
                                             'name' => '用户所在科室名称'
                                         ],
+                                        'admission_set_fixed' => [
+                                            '说明' => '接诊时间设置,固定排班; 接收json encode字符串,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                            '格式案例' => [
+                                                'week' => 'sun',
+                                                'am' => 'true',
+                                                'pm' => 'false',
+                                            ]
+                                        ],
+                                        'admission_set_flexible' => [
+                                            '说明' => '接诊时间设置,灵活排班; 接收json encode字符串,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                            '格式案例' => [
+                                                'date' => '2016-06-23',
+                                                'am' => 'true',
+                                                'pm' => 'false',
+                                            ]
+                                        ],
                                         'relation' => '1:一度人脉; 2:二度人脉; null:没关系'
                                     ],
                                     'friends-friends' => [
@@ -713,6 +761,22 @@ class ApiController extends BaseController
                                         'department' => [
                                             'id' => '用户所在科室ID',
                                             'name' => '用户所在科室名称'
+                                        ],
+                                        'admission_set_fixed' => [
+                                            '说明' => '接诊时间设置,固定排班; 接收json encode字符串,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                            '格式案例' => [
+                                                'week' => 'sun',
+                                                'am' => 'true',
+                                                'pm' => 'false',
+                                            ]
+                                        ],
+                                        'admission_set_flexible' => [
+                                            '说明' => '接诊时间设置,灵活排班; 接收json encode字符串,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                            '格式案例' => [
+                                                'date' => '2016-06-23',
+                                                'am' => 'true',
+                                                'pm' => 'false',
+                                            ]
                                         ],
                                         'relation' => '1:一度人脉; 2:二度人脉; null:没关系'
                                     ],
@@ -804,6 +868,22 @@ class ApiController extends BaseController
                                         'department' => [
                                             'id' => '用户所在科室ID',
                                             'name' => '用户所在科室名称'
+                                        ],
+                                        'admission_set_fixed' => [
+                                            '说明' => '接诊时间设置,固定排班; 接收json encode字符串,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                            '格式案例' => [
+                                                'week' => 'sun',
+                                                'am' => 'true',
+                                                'pm' => 'false',
+                                            ]
+                                        ],
+                                        'admission_set_flexible' => [
+                                            '说明' => '接诊时间设置,灵活排班; 接收json encode字符串,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                            '格式案例' => [
+                                                'date' => '2016-06-23',
+                                                'am' => 'true',
+                                                'pm' => 'false',
+                                            ]
                                         ],
                                         'relation' => '1:一度人脉; 2:二度人脉; null:没关系'
                                     ],
@@ -2530,6 +2610,22 @@ class ApiController extends BaseController
                                     'id' => '用户所在科室ID',
                                     'name' => '用户所在科室名称'
                                 ],
+                                'admission_set_fixed' => [
+                                    '说明' => '接诊时间设置,固定排班; 接收json,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                    '格式案例' => [
+                                        'week' => 'sun',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
+                                'admission_set_flexible' => [
+                                    '说明' => '接诊时间设置,灵活排班; 接收json,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                    '格式案例' => [
+                                        'date' => '2016-06-23',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
                                 'relation' => '1:一度人脉; 2:二度人脉; null:没关系'
                             ],
                             'message' => '',
@@ -2540,7 +2636,7 @@ class ApiController extends BaseController
                         'url' => $http . '/api/search/doctor_info',
                         'method' => 'POST',
                         'form-data' => [
-                            'dp_code' => '8位长的纯数字号码'
+                            'dp_code' => '纯数字号码'
                         ],
                         'response' => [
                             'data' => [
@@ -2558,6 +2654,22 @@ class ApiController extends BaseController
                                 'tags' => '特长/标签',
                                 'personal_introduction' => '个人简介',
                                 'is_auth' => '是否认证；未认证： ；认证成功：completed；认证中：processing；认证失败：fail；',
+                                'admission_set_fixed' => [
+                                    '说明' => '接诊时间设置,固定排班; 接收json,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
+                                    '格式案例' => [
+                                        'week' => 'sun',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
+                                'admission_set_flexible' => [
+                                    '说明' => '接诊时间设置,灵活排班; 接收json,读取时会自动过滤过期时间; 会有多组数据,格式一致',
+                                    '格式案例' => [
+                                        'date' => '2016-06-23',
+                                        'am' => 'true',
+                                        'pm' => 'false',
+                                    ]
+                                ],
                                 'common_friend_list' => [
                                     'id' => '用户id',
                                     'head_url' => '头像URL',
