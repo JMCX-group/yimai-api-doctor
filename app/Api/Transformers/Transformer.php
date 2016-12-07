@@ -187,8 +187,8 @@ class Transformer
                 'id' => $user->dept_id,
                 'name' => $user->dept,
             ],
-            'admission_set_fixed' => $user['admission_set_fixed'],
-            'admission_set_flexible' => UserTransformer::delOutdated(json_decode($user['admission_set_flexible'], true)),
+            'admission_set_fixed' => $user->admission_set_fixed,
+            'admission_set_flexible' => UserTransformer::delOutdated(json_decode($user->admission_set_flexible, true)),
             'relation' => $relation
         ];
     }
@@ -396,8 +396,8 @@ class Transformer
 //                'id' => $user->dept_id,
 //                'name' => $user->dept,
 //            ],
-            'admission_set_fixed' => $user['admission_set_fixed'],
-            'admission_set_flexible' => UserTransformer::delOutdated(json_decode($user['admission_set_flexible'], true)),
+            'admission_set_fixed' => $user->admission_set_fixed,
+            'admission_set_flexible' => UserTransformer::delOutdated(json_decode($user->admission_set_flexible, true)),
             'relation' => $relation
         ];
     }
@@ -424,8 +424,8 @@ class Transformer
             'tags' => $user->tag_list,
             'personal_introduction' => $user->profile,
             'is_auth' => $user->auth,
-            'admission_set_fixed' => $user['admission_set_fixed'],
-            'admission_set_flexible' => UserTransformer::delOutdated(json_decode($user['admission_set_flexible'], true)),
+            'admission_set_fixed' => $user->admission_set_fixed,
+            'admission_set_flexible' => UserTransformer::delOutdated(json_decode($user->admission_set_flexible, true)),
             'common_friend_list' => $user->common_friend_list,
         ];
     }
