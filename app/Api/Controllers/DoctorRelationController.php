@@ -534,7 +534,7 @@ class DoctorRelationController extends BaseController
 
         $phoneList = $request['phone'];
         $phoneArr = explode(',', $phoneList);
-        $this->sendSMS($user->name, $phoneArr);
+        $this->sendSMS(User::getDpCode($user->id), $user->name, $phoneArr);
 
         /**
          * 记录是否发过短信：
