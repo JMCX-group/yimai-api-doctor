@@ -64,6 +64,7 @@ class UserTransformer extends TransformerAbstract
             'addressee' => $user['addressee'],
             'receive_phone' => $user['receive_phone'],
             'role' => $user['role'],
+            'blacklist' => $user['blacklist'],
             'inviter' => $user['inviter_dp_code']
         ];
     }
@@ -171,6 +172,7 @@ class UserTransformer extends TransformerAbstract
             'addressee' => $user['addressee'],
             'receive_phone' => $user['receive_phone'],
             'role' => $user['role'],
+            'blacklist' => $user['blacklist'],
             'inviter' => $user['inviter_dp_code']
         ];
     }

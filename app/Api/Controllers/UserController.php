@@ -226,6 +226,13 @@ class UserController extends BaseController
         }
 
         /**
+         * Blacklist
+         */
+        if (isset($request['blacklist']) && !empty($request['blacklist'])) {
+            $user->blacklist = $request['blacklist'];
+        }
+
+        /**
          * Get rong yun token.
          */
         if (($user->rong_yun_token == '' || $user->rong_yun_token == null) && ($user->name != '' && $user->name != null)) {

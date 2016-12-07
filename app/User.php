@@ -69,6 +69,7 @@ class User extends Model implements AuthenticatableContract,
         'address',
         'addressee',
         'receive_phone',
+        'blacklist',
         'inviter_dp_code',
         'role',
         'remember_token'
