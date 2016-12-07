@@ -569,7 +569,7 @@ class DoctorRelationController extends BaseController
     {
         $allFriends = DoctorAddressBook::find($userId);
         $phoneArr = explode(',', $allFriends->not_in_ym);
-        $this->sendSMS($userName, $phoneArr);
+        $this->sendSMS(User::getDpCode($userId), $userName, $phoneArr);
 
         return response()->json(['success' => ''], 204);
     }
@@ -577,14 +577,15 @@ class DoctorRelationController extends BaseController
     /**
      * 发送短信。
      *
+     * @param $dpCode
      * @param $name
      * @param $phoneArr
      */
-    public function sendSMS($name, $phoneArr)
+    public function sendSMS($dpCode, $name, $phoneArr)
     {
         foreach ($phoneArr as $item) {
             $sms = new Sms();
-            $txt = '【医者脉连】您的好友' . $name . '邀请您加入医脉。URL:'; //文案
+            $txt = '【医者脉连】您的医生朋友' . $name . '邀请您共同使用"医者脉连"，互相约诊更方便。医者仁心，脉脉相连。下载地址：http://pre.im/H5P2下载后输入医脉码' . $dpCode . '可直接添加' . $name . '为好友。'; //文案
             $sms->sendSMS($item, $txt);
         }
     }
