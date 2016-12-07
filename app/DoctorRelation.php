@@ -99,6 +99,21 @@ class DoctorRelation extends Model
     }
 
     /**
+     * Get my friends id list.
+     * 包含申请了好友，对方未确认的
+     *
+     * @param $id
+     * @return array
+     */
+    public static function getAllFriendsIdList($id)
+    {
+        return DoctorRelation::where('doctor_id', $id)
+            ->where('doctor_friend_id', '!=', $id)
+            ->lists('doctor_friend_id')
+            ->toArray();
+    }
+
+    /**
      * Get my friends list.
      *
      * @param $id

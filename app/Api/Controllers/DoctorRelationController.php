@@ -412,7 +412,7 @@ class DoctorRelationController extends BaseController
     public function contactsAnalysis($userId, $content)
     {
         //获取好友列表:
-        $friendsIdList = DoctorRelation::getFriendIdList($userId);
+        $friendsIdList = DoctorRelation::getAllFriendsIdList($userId);
         $friends = User::whereIn('id', $friendsIdList)->get();
 
         //获取电话列表:
@@ -422,7 +422,7 @@ class DoctorRelationController extends BaseController
         }
         $allFriends = User::whereIn('phone', $phoneArr)->get();
 
-        //找到通讯录中已在医脉加过的好友:
+        //找到通讯录中已在医脉加过的（包含对方未确认的）好友:
         $inYM_addFriendPhoneList = array();
         foreach ($friends as $friend) {
             if (in_array($friend['phone'], $phoneArr)) {
