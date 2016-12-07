@@ -411,7 +411,7 @@ class DoctorRelationController extends BaseController
      */
     public function contactsAnalysis($userId, $content)
     {
-        //获取好友列表:
+        //获取好友（包含对方未确认的）列表:
         $friendsIdList = DoctorRelation::getAllFriendsIdList($userId);
         $friends = User::whereIn('id', $friendsIdList)->get();
 
@@ -554,6 +554,7 @@ class DoctorRelationController extends BaseController
         }
         $doctorAddressBook->sms_sent = $tmpSmsSentList;
         $doctorAddressBook->sms_sent_time = date('Y-m-d H:i:s', time());
+        $doctorAddressBook->save();
 
         return response()->json(['success' => ''], 204);
     }
