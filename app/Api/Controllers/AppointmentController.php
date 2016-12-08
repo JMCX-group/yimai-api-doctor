@@ -222,6 +222,17 @@ class AppointmentController extends BaseController
             ->where('updated_at', '>', date("Y-m-d H:i:s", time() - 12 * 3600))
             ->update(['status' => 'close-1']); //close-1: 待患者付款，关闭
 
+        /**
+         * 更新已付款，48小时未确认的：
+         */
+        Appointment::where('locums_id', $user->id)
+            ->where('status', 'wait-2')
+            ->where('updated_at', '>', date("Y-m-d H:i:s", time() - 48 * 3600))
+            ->update(['status' => 'close-2']); //close-2: 医生过期未接诊,约诊关闭
+
+        /**
+         * 获取返回信息：
+         */
         $appointments = Appointment::where('appointments.locums_id', $user->id)
             ->leftJoin('doctors', 'doctors.id', '=', 'appointments.doctor_id')
             ->select('appointments.*', 'doctors.name', 'doctors.avatar', 'doctors.title', 'doctors.auth')

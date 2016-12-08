@@ -189,6 +189,17 @@ class AdmissionsController extends BaseController
             return $user;
         }
 
+        /**
+         * 更新已付款，48小时未确认的：
+         */
+        Appointment::where('doctor_id', $user->id)
+            ->where('status', 'wait-2')
+            ->where('updated_at', '>', date("Y-m-d H:i:s", time() - 48 * 3600))
+            ->update(['status' => 'close-2']); //close-2: 医生过期未接诊,约诊关闭
+
+        /**
+         * 获取返回信息：
+         */
         $appointments = Appointment::where('appointments.doctor_id', $user->id)
             ->select('appointments.*',
                 'doctors.name', 'doctors.avatar', 'doctors.title', 'doctors.auth',
