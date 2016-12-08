@@ -8,6 +8,7 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Helper\Sms;
 use App\Api\Requests\AppointmentIdRequest;
 use App\Api\Requests\AppointmentRequest;
 use App\Api\Transformers\ReservationRecordTransformer;
@@ -15,6 +16,7 @@ use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
 use App\AppointmentMsg;
+use App\Patient;
 use App\User;
 use Intervention\Image\Facades\Image;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -70,6 +72,15 @@ class AppointmentController extends BaseController
         ];
 
         /**
+         * 是否为已注册患者，不是注册患者需要发送短信
+         */
+        $doctor = User::getDoctorAllInfo($request['doctor']);
+        $patient = Patient::where('phone', $request['phone'])->get();
+        if ($patient->isEmpty()) {
+            $this->sendSMS($user, $doctor, $request['phone']);
+        }
+
+        /**
          * 推送消息记录
          */
         $msgData = [
@@ -78,7 +89,7 @@ class AppointmentController extends BaseController
             'locums_name' => $user->name, //代理医生姓名
             'patient_name' => $request['name'],
             'doctor_id' => $request['doctor'],
-            'doctor_name' => User::find($request['doctor'])->first()->name,
+            'doctor_name' => $doctor->name,
             'status' => 'wait-1' //新建约诊之后,进入待患者付款阶段
         ];
 
@@ -228,5 +239,25 @@ class AppointmentController extends BaseController
         ];
 
         return response()->json(compact('data'));
+    }
+
+    /**
+     * 发送短信
+     *
+     * @param $user
+     * @param $doctor
+     * @param $phone
+     */
+    public function sendSMS($user, $doctor, $phone)
+    {
+        $sms = new Sms();
+        //文案：
+        $txt = '【医者脉连】' .
+            $user->name . '医生刚刚通过“医者脉连”平台为您预约' .
+            $doctor->hospital .
+            $doctor->dept .
+            $doctor->name . '医师的面诊，约诊费约为' .
+            $doctor->fee . '元，请在12小时内安装“医者脉连-看专家”客户端进行确认。下载地址：http://pre.im/PHMF 。请确保使用本手机号码进行注册和登陆以便查看该笔预约。';
+        $sms->sendSMS($phone, $txt);
     }
 }

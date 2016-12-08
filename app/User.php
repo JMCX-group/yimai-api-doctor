@@ -346,10 +346,10 @@ class User extends Model implements AuthenticatableContract,
     public static function defaultSearchSql($condition, $order = '')
     {
         return DB::select(
-            "SELECT doctors.id, doctors.name, doctors.avatar, ".
-                "doctors.province_id, doctors.city_id, doctors.hospital_id, doctors.dept_id, doctors.title, " .
-                "doctors.admission_set_fixed, doctors.admission_set_flexible, " .
-                "provinces.name AS province, citys.name AS city, hospitals.name AS hospital, dept_standards.name AS dept " .
+            "SELECT doctors.id, doctors.name, doctors.avatar, " .
+            "doctors.province_id, doctors.city_id, doctors.hospital_id, doctors.dept_id, doctors.title, " .
+            "doctors.admission_set_fixed, doctors.admission_set_flexible, " .
+            "provinces.name AS province, citys.name AS city, hospitals.name AS hospital, dept_standards.name AS dept " .
             "FROM doctors " .
             "LEFT JOIN provinces ON provinces.id=doctors.province_id " .
             "LEFT JOIN dept_standards ON dept_standards.id=doctors.dept_id " .
@@ -372,6 +372,32 @@ class User extends Model implements AuthenticatableContract,
             'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.title', 'doctors.auth',
             'doctors.province_id', 'doctors.city_id', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.college_id',
             'doctors.tag_list', 'doctors.profile',
+            'provinces.name AS province', 'citys.name AS city',
+            'hospitals.name AS hospital', 'dept_standards.name AS dept',
+            'colleges.name AS college')
+            ->leftJoin('provinces', 'provinces.id', '=', 'doctors.province_id')
+            ->leftJoin('citys', 'citys.id', '=', 'doctors.city_id')
+            ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
+            ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
+            ->leftJoin('colleges', 'colleges.id', '=', 'doctors.college_id')
+            ->where('doctors.id', $id)
+            ->get()
+            ->first();
+    }
+
+    /**
+     * 获得某个医生全部可视化信息
+     *
+     * @param $id
+     * @return mixed
+     */
+    public static function getDoctorAllInfo($id)
+    {
+        return User::select(
+            'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.title', 'doctors.auth',
+            'doctors.province_id', 'doctors.city_id', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.college_id',
+            'doctors.tag_list', 'doctors.profile',
+            'doctors.fee',
             'provinces.name AS province', 'citys.name AS city',
             'hospitals.name AS hospital', 'dept_standards.name AS dept',
             'colleges.name AS college')
