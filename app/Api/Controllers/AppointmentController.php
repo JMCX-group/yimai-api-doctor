@@ -57,6 +57,7 @@ class AppointmentController extends BaseController
         /**
          * 发起约诊信息记录
          */
+        $doctor = User::getDoctorAllInfo($request['doctor']);
         $data = [
             'id' => $frontId . $nowId,
             'locums_id' => $user->id, //代理医生ID
@@ -68,13 +69,13 @@ class AppointmentController extends BaseController
             'doctor_id' => $request['doctor'],
             'expect_visit_date' => $request['date'],
             'expect_am_pm' => $request['am_or_pm'],
+            'price' => $doctor->fee,
             'status' => 'wait-1' //新建约诊之后,进入待患者付款阶段
         ];
 
         /**
          * 是否为已注册患者，不是注册患者需要发送短信
          */
-        $doctor = User::getDoctorAllInfo($request['doctor']);
         $patient = Patient::where('phone', $request['phone'])->get();
         if ($patient->isEmpty()) {
             $this->sendSMS($user, $doctor, $request['phone']);
