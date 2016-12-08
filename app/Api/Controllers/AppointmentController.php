@@ -213,6 +213,15 @@ class AppointmentController extends BaseController
             return $user;
         }
 
+        /**
+         * 更新过期未支付的：
+         */
+        Appointment::where('locums_id', $user->id)
+            ->where('is_pay', '0')
+            ->where('status', 'wait-1')
+            ->where('updated_at', '>', date("Y-m-d H:i:s", time() - 12 * 3600))
+            ->update(['status' => 'close-1']); //close-1: 待患者付款，关闭
+
         $appointments = Appointment::where('appointments.locums_id', $user->id)
             ->leftJoin('doctors', 'doctors.id', '=', 'appointments.doctor_id')
             ->select('appointments.*', 'doctors.name', 'doctors.avatar', 'doctors.title', 'doctors.auth')
