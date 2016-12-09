@@ -150,7 +150,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
+//        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
     ],
 
     /*
