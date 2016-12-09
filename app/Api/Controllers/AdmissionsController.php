@@ -117,7 +117,7 @@ class AdmissionsController extends BaseController
     {
         $appointment = Appointment::find($request['id']);
 
-        if ($appointment->status == 'wait-5') {
+        if ($appointment->status == 'wait-3' || $appointment->status == 'wait-5') {
             if ($appointment->new_am_pm == null || $appointment->new_am_pm == '') {
                 $appointment->status = 'completed-1'; //正常完成面诊
             } else {
