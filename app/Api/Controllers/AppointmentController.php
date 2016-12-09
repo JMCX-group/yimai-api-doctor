@@ -219,7 +219,7 @@ class AppointmentController extends BaseController
         Appointment::where('locums_id', $user->id)
             ->where('is_pay', '0')
             ->where('status', 'wait-1')
-            ->where('updated_at', '>', date('Y-m-d H:i:s', time() - 12 * 3600))
+            ->where('updated_at', '<', date('Y-m-d H:i:s', time() - 12 * 3600))
             ->update(['status' => 'close-1']); //close-1: 待患者付款，关闭
 
         /**
