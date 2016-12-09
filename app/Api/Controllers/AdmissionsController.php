@@ -194,7 +194,7 @@ class AdmissionsController extends BaseController
          */
         Appointment::where('doctor_id', $user->id)
             ->where('status', 'wait-2')
-            ->where('updated_at', '>', date("Y-m-d H:i:s", time() - 48 * 3600))
+            ->where('updated_at', '<', date('Y-m-d H:i:s', time() - 48 * 3600))
             ->update(['status' => 'close-2']); //close-2: 医生过期未接诊,约诊关闭
 
         /**
