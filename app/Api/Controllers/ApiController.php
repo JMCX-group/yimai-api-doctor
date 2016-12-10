@@ -946,7 +946,7 @@ class ApiController extends BaseController
                             'address' => '邮寄地址',
                             'addressee' => '收件人',
                             'receive_phone' => '收件电话',
-                            'blacklist' => '黑名单； 用户ID list，用逗号分隔',
+                            'blacklist' => '黑名单； 用户ID list，用逗号分隔'
                         ],
                         'response' => [
                             'user' => [

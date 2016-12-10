@@ -23,11 +23,13 @@ class Patient extends Model
         'password',
         'name',
         'nickname',
+        'avatar',
         'gender',
         'birthday',
         'province_id',
         'city_id',
         'tag_list',
+        'blacklist',
         'my_doctors',
     ];
 }
