@@ -312,12 +312,12 @@ class ApiController extends BaseController
                         ]
                     ],
                     '通过用户ID查询其他医生的信息' => [
+                        '说明' => '请前台判断是否在查询自己,自己的信息在登陆时已经有全部的了,而且看自己的没有中间的两个按钮',
                         'url' => $http . '/api/user/{doctor_id}',
                         'method' => 'GET',
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => '请前台判断是否在查询自己,自己的信息在登陆时已经有全部的了,而且看自己的没有中间的两个按钮',
                         'response' => [
                             'user' => [
                                 'is_friend' => '决定按钮的布局; true | false',
@@ -377,6 +377,10 @@ class ApiController extends BaseController
                         ]
                     ],
                     '搜索医生信息' => [
+                        '说明' => [
+                            '1' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
+                            '2' => '当type符合同医院:same_hospital; 同领域:same_department; 同院校:same_college时,返回的users部分没有分组'
+                        ],
                         'url' => $http . '/api/user/search',
                         'method' => 'POST',
                         'params' => [
@@ -391,8 +395,6 @@ class ApiController extends BaseController
                             'type' => '普通搜索,可以不填该项或内容置空; 同医院:same_hospital; 同领域:same_department; 同院校:same_college; 可选项; 也可以使用下面3个专用接口',
                             'page' => '页码,每页每组100条用户数据; 可选项; 默认为第一页'
                         ],
-                        '说明1' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
-                        '说明2' => '当type符合同医院:same_hospital; 同领域:same_department; 同院校:same_college时,返回的users部分没有分组',
                         'response' =>
                             [
                                 'provinces' => [
@@ -478,6 +480,7 @@ class ApiController extends BaseController
                             ]
                     ],
                     '搜索医生信息，预约医生' => [
+                        '说明' => '默认是同城搜索; 会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'url' => $http . '/api/user/search/admissions',
                         'method' => 'POST',
                         'params' => [
@@ -488,7 +491,6 @@ class ApiController extends BaseController
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式',
                             'page' => '页码,每页每组100条用户数据; 可选项; 默认为第一页'
                         ],
-                        '说明' => '默认是同城搜索; 会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'response' =>
                             [
                                 'provinces' => [
@@ -582,6 +584,7 @@ class ApiController extends BaseController
                             ]
                     ],
                     '搜索医生信息，同医院' => [
+                        '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'url' => $http . '/api/user/search/same-hospital',
                         'method' => 'POST',
                         'params' => [
@@ -594,7 +597,6 @@ class ApiController extends BaseController
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式',
                             'page' => '页码,每页每组100条用户数据; 可选项; 默认为第一页'
                         ],
-                        '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'response' =>
                             [
                                 'provinces' => [
@@ -688,6 +690,7 @@ class ApiController extends BaseController
                             ]
                     ],
                     '搜索医生信息，同领域' => [
+                        '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'url' => $http . '/api/user/search/same-department',
                         'method' => 'POST',
                         'params' => [
@@ -700,7 +703,6 @@ class ApiController extends BaseController
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式',
                             'page' => '页码,每页每组100条用户数据; 可选项; 默认为第一页'
                         ],
-                        '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'response' =>
                             [
                                 'provinces' => [
@@ -794,6 +796,7 @@ class ApiController extends BaseController
                             ]
                     ],
                     '搜索医生信息，同院校' => [
+                        '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'url' => $http . '/api/user/search/same-college',
                         'method' => 'POST',
                         'params' => [
@@ -807,7 +810,6 @@ class ApiController extends BaseController
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式',
                             'page' => '页码,每页每组100条用户数据; 可选项; 默认为第一页'
                         ],
-                        '说明' => '会一次传递所有排好序的数据,按3个分组,每个显示2个即可; 如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'response' =>
                             [
                                 'provinces' => [
@@ -901,12 +903,12 @@ class ApiController extends BaseController
                             ]
                     ],
                     '修改个人信息/修改密码/修改接诊收费信息/修改隐私设置' => [
+                        '说明' => 'form-data项均为可选项,修改任意一个或几个都可以,有什么数据加什么字段',
                         'url' => $http . '/api/user',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => '以下form-data项均为可选项,修改任意一个或几个都可以,有什么数据加什么字段',
                         'form-data' => [
                             'password' => '用户密码',
                             'name' => '用户姓名',
@@ -1221,12 +1223,12 @@ class ApiController extends BaseController
                         ]
                     ],
                     '属于某个城市下的医院' => [
+                        '说明' => '已按三甲医院顺序排序',
                         'url' => $http . '/api/hospital/city/{city_id}',
                         'method' => 'GET',
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => '已按三甲医院顺序排序',
                         'response' => [
                             'data' => [
                                 'id' => '医院ID',
@@ -1253,6 +1255,7 @@ class ApiController extends BaseController
                         ]
                     ],
                     '医院搜索,约诊确定后专用' => [
+                        '说明' => '如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'url' => $http . '/api/hospital/search/admissions',
                         'method' => 'POST',
                         'params' => [
@@ -1264,7 +1267,6 @@ class ApiController extends BaseController
                             'city_id' => '下拉框选择的城市ID; 可选项',
                             'format' => '或者什么样的格式; 可选项; 提交该项,且值为android时,hospitals会返回安卓格式',
                         ],
-                        '说明' => '如果下拉框为后置条件,建议前端执行过滤; 城市按省份ID分组; 医院按省份ID和城市ID级联分组',
                         'response' =>
                             [
                                 'provinces' => [
@@ -1472,12 +1474,12 @@ class ApiController extends BaseController
                         ]
                     ],
                     '二度医脉(两部分数据)' => [
+                        '说明' => 'friends中的数据块已按common_friend_count的倒序排序',
                         'url' => $http . '/api/relation/friends-friends',
                         'method' => 'GET',
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => 'friends中的数据块已按common_friend_count的倒序排序',
                         'response' => [
                             'count' => [
                                 'doctor' => '我的朋友中共有多少名医生',
@@ -1522,12 +1524,12 @@ class ApiController extends BaseController
                         ]
                     ],
                     '新朋友' => [
+                        '说明' => 'friends中的数据块已按添加好友的时间倒序排序; 获取之后,该次所有数据的未读状态将自动置为已读',
                         'url' => $http . '/api/relation/new-friends',
                         'method' => 'GET',
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => 'friends中的数据块已按添加好友的时间倒序排序; 获取之后,该次所有数据的未读状态将自动置为已读',
                         'response' => [
                             'friends' => [
                                 'id' => '用户ID',
@@ -1591,6 +1593,12 @@ class ApiController extends BaseController
                     ],
 
                     '上传通讯录信息' => [
+                        '说明' => [
+                            'data' => '[{"phone":"18712345678","name":"187"},{"phone":"18611175661","name":"187"},{"phone":"18611111111","name":"没有加入"}]',
+                            '1' => '用186用户登录的话,上面的数据刚好是一个在通讯里且加好友了,一个在通讯里但没在医脉加好友,一个在通讯录里且没加入医脉',
+                            '2' => 'friends是在通讯里加入了医脉,但没在医脉中互加好友的部分; others是未加入医脉的通讯里好友名单,需要调用短信接口',
+                            '3' => '现在只有2个组:【您在医脉有xx位好友】,【您还有xx位好友未加入医脉】'
+                        ],
                         'url' => $http . '/api/relation/upload-address-book',
                         'method' => 'POST',
                         'params' => [
@@ -1599,12 +1607,6 @@ class ApiController extends BaseController
                         'form-data' => [
                             'content' => 'json格式的全部通讯录信息; 格式:[{"name":"","phone":""},{"name":"","phone":""}]'
                         ],
-                        '测试数据' => [
-                            'data' => '[{"phone":"18712345678","name":"187"},{"phone":"18611175661","name":"187"},{"phone":"18611111111","name":"没有加入"}]',
-                            '说明' => '用186用户登录的话,上面的数据刚好是一个在通讯里且加好友了,一个在通讯里但没在医脉加好友,一个在通讯录里且没加入医脉'
-                        ],
-                        '说明1' => 'friends是在通讯里加入了医脉,但没在医脉中互加好友的部分; others是未加入医脉的通讯里好友名单,需要调用短信接口',
-                        '说明2' => '现在只有2个组:【您在医脉有xx位好友】,【您还有xx位好友未加入医脉】',
                         'response' => [
                             'data' => [
                                 'friend_count' => '好友数量',
@@ -1762,7 +1764,6 @@ class ApiController extends BaseController
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => '用phone:18712345678,password:123456登陆可以获得所有测试数据',
                         '状态code说明' => 'wait-0: 待医生确认
                                              wait-1: 待患者付款
                                              wait-2: 患者已付款，待医生确认
@@ -1900,7 +1901,6 @@ class ApiController extends BaseController
                             'supplement' => '附加信息; 可选项',
                             'remark' => '补充说明; 可选项'
                         ],
-                        '说明' => '用phone:18612345678,password:123456登陆可以操作所有测试数据; 返回数据格式和【获取我的约诊详细信息】一模一样',
                         'response' => [
                             'doctor_info' => [
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
@@ -1960,7 +1960,6 @@ class ApiController extends BaseController
                             'id' => '约诊ID',
                             'reason' => '拒绝原因'
                         ],
-                        '说明' => '用phone:18612345678,password:123456登陆可以操作所有测试数据; 返回数据格式和【获取我的约诊详细信息】一模一样',
                         'response' => [
                             'doctor_info' => [
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
@@ -2036,7 +2035,6 @@ class ApiController extends BaseController
                         'form-data' => [
                             'id' => '约诊ID'
                         ],
-                        '说明' => '用phone:18612345678,password:123456登陆可以操作所有测试数据; 返回数据格式和【获取我的约诊详细信息】一模一样',
                         'response' => [
                             'doctor_info' => [
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
@@ -2096,7 +2094,6 @@ class ApiController extends BaseController
                             'id' => '约诊ID',
                             'visit_time' => '改期接诊时间'
                         ],
-                        '说明' => '用phone:18612345678,password:123456登陆可以操作所有测试数据; 返回数据格式和【获取我的约诊详细信息】一模一样',
                         'response' => [
                             'doctor_info' => [
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
@@ -2156,7 +2153,6 @@ class ApiController extends BaseController
                             'id' => '约诊ID',
                             'reason' => '取消原因'
                         ],
-                        '说明' => '用phone:18612345678,password:123456登陆可以操作所有测试数据; 返回数据格式和【获取我的约诊详细信息】一模一样',
                         'response' => [
                             'doctor_info' => [
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
@@ -2212,7 +2208,6 @@ class ApiController extends BaseController
                         'params' => [
                             'token' => ''
                         ],
-                        '说明' => '用phone:18612345678,password:123456登陆可以获得所有测试数据',
                         '状态code说明' => 'wait-0: 待医生确认
                                              wait-1: 待患者付款
                                              wait-2: 患者已付款，待医生确认
