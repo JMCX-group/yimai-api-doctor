@@ -85,14 +85,25 @@ class AdmissionsController extends BaseController
         if ($appointment->status == 'wait-2') {
             $appointment->doctor_id = $request['doctor_id']; //修改医生信息
             $appointment->save();
-            
+
+            /**
+             * 代理医生信息,1为平台代约,0为没有代约医生
+             */
+            if($appointment->locums_id == 0){
+                $locumsName = '';
+            }elseif($appointment->locums_id == 1){
+                $locumsName = '医脉平台';
+            }else{
+                $locumsName = User::find($appointment->locums_id)->first()->name; //代理医生姓名
+            }
+
             /**
              * 推送消息记录
              */
             $msgData = [
                 'appointment_id' => $request['id'],
                 'locums_id' => $appointment->locums_id, //代理医生ID
-                'locums_name' => User::find($appointment->locums_id)->first()->name, //代理医生姓名
+                'locums_name' => $locumsName,
                 'patient_name' => $appointment->patient_name,
                 'doctor_id' => $request['doctor_id'],
                 'doctor_name' => User::find($request['doctor_id'])->first()->name,
@@ -269,9 +280,21 @@ class AdmissionsController extends BaseController
             ->first();
 
         /**
-         * 查询代约医生的信息:
+         * 查询医生的信息:
          */
         $doctors = User::select(
+            'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.title',
+            'hospitals.name AS hospital', 'dept_standards.name AS dept')
+            ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
+            ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
+            ->where('doctors.id', $appointments->doctor_id)
+            ->get()
+            ->first();
+
+        /**
+         * 查询代约医生的信息:
+         */
+        $locumsDoctors = User::select(
             'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.title',
             'hospitals.name AS hospital', 'dept_standards.name AS dept')
             ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
@@ -280,7 +303,7 @@ class AdmissionsController extends BaseController
             ->get()
             ->first();
 
-        $appointments['time_line'] = TimeLineTransformer::generateTimeLine($appointments, $doctors, $user->id, $doctors);
+        $appointments['time_line'] = TimeLineTransformer::generateTimeLine($appointments, $doctors, $user->id, $locumsDoctors);
 
         $appointments['progress'] = TimeLineTransformer::generateProgressStatus($appointments->status);
 
