@@ -23,6 +23,8 @@ class ApiController extends BaseController
 
         $api = [
             '统一说明' => [
+                '医生端域名' => 'http://d.medi-link.cn/',
+                '患者端域名' => 'http://p.medi-link.cn/',
                 '数据格式' => 'JSON',
                 'url字段' => 'HTTP请求地址; {}表示在链接后直接跟该数据的ID值即可,例:http://api/hospital/77?token=xx,能获取id为77的医院信息',
                 'method字段' => 'GET / POST',
@@ -112,7 +114,6 @@ class ApiController extends BaseController
                     ]
                 ],
                 '静态资源' => [
-                    '说明' => '和图片一样是相对链接，前面拼域名或IP即可访问； 例如：http://101.201.40.220/about/contact-us ，可以访问关于我们',
                     '关于我们' => $http . '/about/contact-us',
                     '医脉简介' => $http . '/about/introduction',
                     '律师信息' => $http . '/about/lawyer',
