@@ -80,6 +80,7 @@ class UserController extends BaseController
      */
     public function saveImg($userId, $imgFile, $count=0)
     {
+        $domain = \Config::get('constants.DOMAIN');
         $destinationPath =
             \Config::get('constants.AUTH_PATH') .
             $userId . '/';
@@ -96,7 +97,7 @@ class UserController extends BaseController
 
         Image::make($fullPath)->encode('jpg', 50)->save($newPath); //按50的品质压缩图片
 
-        return '/' . $newPath;
+        return $domain. '/' . $newPath;
     }
 
     /**
@@ -283,13 +284,14 @@ class UserController extends BaseController
      */
     public function avatar($userId, $avatarFile)
     {
+        $domain = \Config::get('constants.DOMAIN');
         $destinationPath = \Config::get('constants.AVATAR_SAVE_PATH');
         $filename = $userId . '.jpg';
         $avatarFile->move($destinationPath, $filename);
 
         Image::make($destinationPath . $filename)->fit(150)->save();
 
-        return '/' . $destinationPath . $filename;
+        return $domain . '/' . $destinationPath . $filename;
     }
 
     /**

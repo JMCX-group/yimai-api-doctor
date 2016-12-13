@@ -135,6 +135,7 @@ class AppointmentController extends BaseController
      */
     public function saveImg($appointmentId, $imgFile)
     {
+        $domain = \Config::get('constants.DOMAIN');
         $destinationPath =
             \Config::get('constants.CASE_HISTORY_SAVE_PATH') .
             date('Y') . '/' . date('m') . '/' .
@@ -148,7 +149,7 @@ class AppointmentController extends BaseController
 
         Image::make($fullPath)->encode('jpg', 30)->save($newPath); //按30的品质压缩图片
 
-        return '/' . $newPath;
+        return $domain . '/' . $newPath;
     }
 
     /**
