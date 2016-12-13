@@ -77,6 +77,21 @@ class DoctorRelation extends Model
      */
     public static function getFriendIdList($id)
     {
+        /**
+         * 黑名单获取
+         */
+        $blacklist = User::where('id', $id)
+            ->lists('blacklist')
+            ->first();
+        $blacklistArr = array();
+        if ($blacklist != null && $blacklist != '') {
+            if (strstr($blacklist, ',')) {
+                $blacklistArr = explode(',', $blacklist);
+            } else {
+                array_push($blacklistArr, $blacklist);
+            }
+        }
+
         $myFriends = DoctorRelation::where('doctor_id', $id)
             ->where('doctor_friend_id', '!=', $id)
             ->lists('doctor_friend_id')
@@ -90,6 +105,11 @@ class DoctorRelation extends Model
         $retArr = array();
         foreach ($myFriends as $friend)
         {
+            //黑名单过滤
+            if(in_array($friend, $blacklistArr) || in_array($friend, $blacklistArr)){
+                continue;
+            }
+
             if(in_array($friend, $myRelations)){
                 array_push($retArr, $friend);
             }
@@ -294,11 +314,31 @@ class DoctorRelation extends Model
     {
         $list = self::getNewFriendsIdList($id)['id_list'];
 
+        /**
+         * 黑名单获取
+         */
+        $blacklist = User::where('id', $id)
+            ->lists('blacklist')
+            ->first();
+        $blacklistArr = array();
+        if ($blacklist != null && $blacklist != '') {
+            if (strstr($blacklist, ',')) {
+                $blacklistArr = explode(',', $blacklist);
+            } else {
+                array_push($blacklistArr, $blacklist);
+            }
+        }
+
         if (empty($list)) {
             return [];
         } else {
             $idList = array();
             foreach ($list as $item) {
+                //黑名单过滤
+                if(in_array($item->doctor_id, $blacklistArr) || in_array($item->doctor_friend_id, $blacklistArr)){
+                    continue;
+                }
+
                 if ($item->doctor_id != $id) {
                     array_push($idList, $item->doctor_id);
                 } elseif ($item->doctor_friend_id != $id) {
@@ -306,15 +346,19 @@ class DoctorRelation extends Model
                 }
             }
 
-            $idListStr = implode(',', $idList);
-            $users = DB::select(
-                "select * from doctors where id in (" . $idListStr . ") order by find_in_set(id, '" . $idListStr . "')"
-            );
+            if (empty($idList)) {
+                return [];
+            } else {
+                $idListStr = implode(',', $idList);
+                $users = DB::select(
+                    "select * from doctors where id in (" . $idListStr . ") order by find_in_set(id, '" . $idListStr . "')"
+                );
 
-            return [
-                'users' => $users,
-                'list' => $list
-            ];
+                return [
+                    'users' => $users,
+                    'list' => $list
+                ];
+            }
         }
     }
 
