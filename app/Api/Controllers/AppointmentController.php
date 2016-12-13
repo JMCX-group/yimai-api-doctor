@@ -95,6 +95,7 @@ class AppointmentController extends BaseController
         ];
 
         try {
+            dd(Appointment::create($data));
             Appointment::create($data);
             AppointmentMsg::create($msgData);
         } catch (JWTException $e) {
