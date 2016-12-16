@@ -1409,7 +1409,7 @@ class ApiController extends BaseController
                         ]
                     ],
                     '同意/确定申请' => [
-                        'url' => $http . '/api/user/relation/confirm',
+                        'url' => $http . '/api/relation/confirm',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
