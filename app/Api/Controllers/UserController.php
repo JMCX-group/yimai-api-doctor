@@ -121,9 +121,11 @@ class UserController extends BaseController
         }
         if (isset($request['name']) && !empty($request['name'])) {
             $user->name = $request['name'];
+            $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
         }
         if (isset($request['head_img']) && !empty($request['head_img'])) {
             $user->avatar = $this->avatar($user->id, $request->file('head_img'));
+            $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
         }
         // 传0会判断成false,需要判断:
         if (isset($request['sex']) && (!empty($request['sex']) || $request['sex'] == 0)) {
