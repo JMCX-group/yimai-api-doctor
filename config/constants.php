@@ -7,7 +7,7 @@
  */
 
 return [
-    'DOMAIN' => 'http://d.medi-link.cn/',
+    'DOMAIN' => 'http://d.medi-link.cn',
     'CASE_HISTORY_SAVE_PATH' => 'uploads/case-history/',
     'AVATAR_SAVE_PATH' => 'uploads/avatar/',
     'AUTH_PATH' => 'uploads/auth/',
