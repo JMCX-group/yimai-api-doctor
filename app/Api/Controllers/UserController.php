@@ -245,6 +245,8 @@ class UserController extends BaseController
             if ($rongCloudRet['code'] == 200 && $rongCloudRet['userId'] == $user->id) {
                 $user->rong_yun_token = $rongCloudRet['token'];
             }
+
+            $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
         }
 
         try {
