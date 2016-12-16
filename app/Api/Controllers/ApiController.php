@@ -1370,6 +1370,27 @@ class ApiController extends BaseController
                             'message' => '',
                             'error' => ''
                         ]
+                    ],
+                    '分组标签' => [
+                        '说明' => '能获取请求者对应的科室下的标签分组，一级科室会有多个二级科室组数据，二级科室只有一组数据',
+                        'url' => $http . '/api/tag/group',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                [
+                                    'dept' => '二级科室名称',
+                                    'tags' => [
+                                        'id' => '标签ID',
+                                        'name' => '标签名称'
+                                    ]
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
                     ]
                 ],
 

@@ -98,6 +98,7 @@ $api->version('v1', function ($api) {
             // Tag
             $api->group(['prefix' => 'tag'], function ($api) {
                 $api->get('/all', 'TagController@index');
+                $api->get('/group', 'TagController@group');
             });
             
             // Relation

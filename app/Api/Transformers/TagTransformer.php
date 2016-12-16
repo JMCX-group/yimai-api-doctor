@@ -20,4 +20,20 @@ class TagTransformer extends TransformerAbstract
             'name' => $tag['name']
         ];
     }
+
+    /**
+     * Dept lv2.
+     *
+     * @param $tagData
+     * @return array
+     */
+    public static function deptLv2Data($tagData)
+    {
+        return [
+            'id' => $tagData->id,
+            'name' => $tagData->name,
+            'dept' => $tagData->dept_name,
+            'hot' => $tagData->hot
+        ];
+    }
 }
