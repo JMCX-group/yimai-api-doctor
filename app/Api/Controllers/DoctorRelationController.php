@@ -145,10 +145,10 @@ class DoctorRelationController extends BaseController
 
         $relation = DoctorRelation::where('doctor_id', $request['id'])->where('doctor_friend_id', $user->id)->first();
         if (!Empty($relation)) {
-            if ($relation->where('doctor_id', $request['id'])
+            $myRead = $relation->where('doctor_id', $request['id'])
                 ->where('doctor_friend_id', $user->id)
-                ->update(['doctor_friend_read' => 1])
-            ) {
+                ->update(['doctor_friend_read' => 1]);
+            if ($myRead) {
                 $data = [
                     'doctor_id' => $user->id,
                     'doctor_friend_id' => $request['id'],
@@ -158,8 +158,7 @@ class DoctorRelationController extends BaseController
 
                 try {
                     if (DoctorRelation::create($data)) {
-//                        return $this->response->noContent();
-                        return response()->json(['success' => ''], 204); //给肠媳适配。。
+                        return response()->json(['success' => ''], 204);
                     } else {
                         return response()->json(['message' => '添加失败'], 500);
                     }
