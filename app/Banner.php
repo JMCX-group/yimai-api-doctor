@@ -22,6 +22,7 @@ class Banner extends Model
         'focus_img_url',
         'content',
         'location',
+        'd_or_p',
         'status'
     ];
 }

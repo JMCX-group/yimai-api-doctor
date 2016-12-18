@@ -16,7 +16,7 @@ class BannerController extends BaseController
     {
         $domain = \Config::get('constants.DOMAIN');
         $data = array();
-//        $banners = Banner::where('status', '1')->orderBy('location')->get();
+//        $banners = Banner::where('status', '1')->where('d_or_p', 'd')->orderBy('location')->get();
 //        foreach ($banners as $banner) {
 //            $tmp = [
 //                'focus_img_url' => $domain . $banner->focus_img_url,
