@@ -18,6 +18,10 @@ Route::get('about/lawyer', 'AboutController@lawyer');
 Route::get('agreement/doctor', 'AgreementController@doctor');
 Route::get('share/index', 'ShareController@index');
 
+Route::get('banner/first', 'BannerController@first');
+Route::get('banner/second', 'BannerController@second');
+Route::get('banner/third', 'BannerController@third');
+
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
@@ -38,6 +42,10 @@ $api->version('v1', function ($api) {
             $api->post('reset-pwd', 'AuthController@resetPassword');
         });
 
+        /**
+         * Banner
+         */
+        $api->get('get-banner-url', 'BannerController@index');
 
         $api->post('get-doctor', 'UserController@verifyDoctor');
 
@@ -47,7 +55,7 @@ $api->version('v1', function ($api) {
         $api->group(['middleware' => 'jwt.auth'], function ($api) {
             // Init
             $api->group(['prefix' => 'init'], function ($api) {
-                $api->get('/', 'InitController@index');
+
             });
 
             // Doctor

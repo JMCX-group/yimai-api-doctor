@@ -51,6 +51,23 @@ class ApiController extends BaseController
                     'method' => 'GET'
                 ],
 
+                'Banner' => [
+                    '全部链接' => [
+                        'url' => $http . '/api/get-banner-url',
+                        'method' => 'GET',
+                        'response' => [
+                            'data' => [
+                                [
+                                    'focus_img_url' => '轮播图URL',
+                                    'content_url' => '跳转文章URL'
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
+                ],
+
                 '用户' => [
                     '注册' => [
                         'url' => $http . '/api/user/register',
