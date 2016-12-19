@@ -55,6 +55,14 @@ class AppointmentController extends BaseController
         }
 
         /**
+         * 时间过滤：
+         */
+        $expectVisitDate = $request['date'];
+        if (substr($expectVisitDate, strlen($expectVisitDate) - 1) == ',') {
+            $expectVisitDate = substr($expectVisitDate, 0, strlen($expectVisitDate) - 1);
+        }
+
+        /**
          * 发起约诊信息记录
          */
         $doctor = User::getDoctorAllInfo($request['doctor']);
@@ -67,7 +75,7 @@ class AppointmentController extends BaseController
             'patient_age' => $request['age'],
             'patient_history' => $request['history'],
             'doctor_id' => $request['doctor'],
-            'expect_visit_date' => date('Y-m-d', $request['date']),
+            'expect_visit_date' => $expectVisitDate,
             'expect_am_pm' => $request['am_or_pm'],
             'price' => $doctor->fee,
             'status' => 'wait-1' //新建约诊之后,进入待患者付款阶段
@@ -241,8 +249,7 @@ class AppointmentController extends BaseController
             ->get();
 
         if ($appointments->isEmpty()) {
-//            return $this->response->noContent();
-            return response()->json(['success' => ''], 204); //给肠媳适配。。
+            return response()->json(['success' => ''], 204);
         }
 
         $waitingForReply = array();
