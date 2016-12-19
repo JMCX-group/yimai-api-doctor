@@ -28,14 +28,18 @@ class PublicTransformer
             }
 
             //开始截取
-            $expectVisitDateArr = explode(',', $dates);
-            $expectVisitAmPmArr = explode(',', $am_pm);
-            $expectVisitDate = '';
-            for ($i = 0; $i < count($expectVisitDateArr); $i++) {
-                $expectVisitDate .= $expectVisitDateArr[$i] . ' ' . (($expectVisitAmPmArr[$i] == 'am') ? '上午' : '下午');
-                $expectVisitDate .= ',';
+            if (strpos($dates, ',')) {
+                $expectVisitDateArr = explode(',', $dates);
+                $expectVisitAmPmArr = explode(',', $am_pm);
+                $expectVisitDate = '';
+                for ($i = 0; $i < count($expectVisitDateArr); $i++) {
+                    $expectVisitDate .= $expectVisitDateArr[$i] . ' ' . (($expectVisitAmPmArr[$i] == 'am') ? '上午' : '下午');
+                    $expectVisitDate .= ',';
+                }
+                $expectVisitDate = substr($expectVisitDate, 0, strlen($expectVisitDate) - 1);
+            } else {
+                $expectVisitDate = $dates . ' ' . (($am_pm == 'am') ? '上午' : '下午');
             }
-            $expectVisitDate = substr($expectVisitDate, 0, strlen($expectVisitDate) - 1);
         }
 
         return $expectVisitDate;

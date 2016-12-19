@@ -61,6 +61,10 @@ class AppointmentController extends BaseController
         if (substr($expectVisitDate, strlen($expectVisitDate) - 1) == ',') {
             $expectVisitDate = substr($expectVisitDate, 0, strlen($expectVisitDate) - 1);
         }
+        $expectAmPm = $request['am_or_pm'];
+        if (substr($expectAmPm, strlen($expectAmPm) - 1) == ',') {
+            $expectAmPm = substr($expectAmPm, 0, strlen($expectAmPm) - 1);
+        }
 
         /**
          * 发起约诊信息记录
@@ -76,7 +80,7 @@ class AppointmentController extends BaseController
             'patient_history' => $request['history'],
             'doctor_id' => $request['doctor'],
             'expect_visit_date' => $expectVisitDate,
-            'expect_am_pm' => $request['am_or_pm'],
+            'expect_am_pm' => $expectAmPm,
             'price' => $doctor->fee,
             'status' => 'wait-1' //新建约诊之后,进入待患者付款阶段
         ];
