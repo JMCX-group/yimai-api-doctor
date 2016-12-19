@@ -67,7 +67,7 @@ class AppointmentController extends BaseController
             'patient_age' => $request['age'],
             'patient_history' => $request['history'],
             'doctor_id' => $request['doctor'],
-            'expect_visit_date' => $request['date'],
+            'expect_visit_date' => date('Y-m-d', $request['date']),
             'expect_am_pm' => $request['am_or_pm'],
             'price' => $doctor->fee,
             'status' => 'wait-1' //新建约诊之后,进入待患者付款阶段
