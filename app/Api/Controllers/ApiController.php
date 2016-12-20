@@ -1056,6 +1056,22 @@ class ApiController extends BaseController
                             'message' => '',
                             'error' => ''
                         ]
+                    ],
+                    '修改绑定手机号' => [
+                        '说明' => '先获取验证码后，把token、新手机号、新验证码一同传来',
+                        'url' => $http . '/api/user/reset-pwd',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'phone' => '11位长的纯数字手机号码',
+                            'verify_code' => '4位数字验证码'
+                        ],
+                        'response' => [
+                            'token' => '成功后会返回登录之后的token值',
+                            'message' => ''
+                        ]
                     ]
                 ],
 

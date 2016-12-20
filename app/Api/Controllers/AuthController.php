@@ -10,6 +10,7 @@ namespace App\Api\Controllers;
 
 use App\Api\Requests\AuthRequest;
 use App\Api\Requests\InviterRequest;
+use App\Api\Requests\ResetPhoneRequest;
 use App\Api\Requests\ResetPwdRequest;
 use App\Api\Transformers\UserTransformer;
 use App\User;
@@ -69,6 +70,45 @@ class AuthController extends BaseController
             'admission_set_fixed' => '[{"week":"sun","am":"false","pm":"false"},{"week":"mon","am":"false","pm":"false"},{"week":"tue","am":"false","pm":"false"},{"week":"wed","am":"false","pm":"false"},{"week":"thu","am":"false","pm":"false"},{"week":"fri","am":"false","pm":"false"},{"week":"sat","am":"false","pm":"false"}]'
         ];
         $user = User::create($newUser);
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(compact('token'));
+    }
+
+    /**
+     * User reset phone.
+     *
+     * @param ResetPhoneRequest $request
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
+    public function resetPhone(ResetPhoneRequest $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+        $newPhone = $request->get('phone');
+
+        /**
+         * 判断是否未修改
+         */
+        if ($user->phone == $newPhone) {
+            return response()->json(['message' => '该手机号未有变化'], 404);
+        }
+
+        /**
+         * 判断是否已经注册
+         */
+        $getData = User::where('phone', $newPhone)->get();
+        if (!$getData->isEmpty()) {
+            return response()->json(['message' => '该手机号已注册'], 404);
+        }
+
+        /**
+         * 修改信息
+         */
+        $user->phone = $newPhone;
+        $user->save();
         $token = JWTAuth::fromUser($user);
 
         return response()->json(compact('token'));
