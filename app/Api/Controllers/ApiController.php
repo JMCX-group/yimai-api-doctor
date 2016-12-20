@@ -1059,7 +1059,7 @@ class ApiController extends BaseController
                     ],
                     '修改绑定手机号' => [
                         '说明' => '先获取验证码后，把token、新手机号、新验证码一同传来',
-                        'url' => $http . '/api/user/reset-pwd',
+                        'url' => $http . '/api/user/reset-phone',
                         'method' => 'POST',
                         'params' => [
                             'token' => ''
