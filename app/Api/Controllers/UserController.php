@@ -170,7 +170,7 @@ class UserController extends BaseController
         /**
          * 接诊收费设置。
          */
-        if (isset($request['fee_switch']) && !empty($request['fee_switch'])) {
+        if (isset($request['fee_switch']) && (!empty($request['fee_switch']) || $request['fee_switch'] == 0)) {
             $user->fee_switch = $request['fee_switch'];
         }
         if (isset($request['fee']) && !empty($request['fee'])) {
