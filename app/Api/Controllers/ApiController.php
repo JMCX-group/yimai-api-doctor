@@ -1032,7 +1032,7 @@ class ApiController extends BaseController
                                 ],
                                 'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
                                 'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
-                                'application_card' => '是否申请了名片，1为已申请待审核，2未已寄出，3为已拒绝。在申请界面灰化按钮',
+                                'application_card' => '是否申请了名片，1为已申请待审核，2未已寄出，3为已拒绝（可以再次提交）。在申请界面灰化按钮',
                                 'address' => '邮寄地址',
                                 'addressee' => '收件人',
                                 'receive_phone' => '收件电话',
@@ -2612,7 +2612,7 @@ class ApiController extends BaseController
                 ],
 
                 '申请名片' => [
-                    '新建当面咨询' => [
+                    '提交申请' => [
                         'url' => $http . '/api/card/submit',
                         'method' => 'GET',
                         'params' => [
@@ -2625,6 +2625,19 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '再次提交' => [
+                        'url' => $http . '/api/card/resubmit',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        '说明' => 'HTTP状态204',
+                        'response' => [
+                            'success' => '',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ]
                 ],
 
                 '查询' => [

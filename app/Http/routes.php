@@ -185,6 +185,7 @@ $api->version('v1', function ($api) {
             //Card
             $api->group(['prefix' => 'card'], function ($api) {
                 $api->get('submit', 'CardController@submit');
+                $api->get('resubmit', 'CardController@submit');
             });
 
             //Wallet
