@@ -16,6 +16,7 @@ use App\Api\Transformers\Transformer;
 use App\Api\Transformers\UserTransformer;
 use App\DeptStandard;
 use App\DoctorContactRecord;
+use App\DoctorDb;
 use App\DoctorRelation;
 use App\Hospital;
 use App\User;
@@ -701,9 +702,11 @@ class UserController extends BaseController
         $data = [
             'in_count' => count(explode(',', $request['phone'])),
             'out_count' => count($doctors),
-            'doctor' => $doctors,
-            'debug' => $retData['debug']
+//            'doctor' => $doctors,
+//            'debug' => $retData['debug']
         ];
+
+        DoctorDb::insert($doctors);
 
         //TODO 还未完成
         return response()->json(compact('data'));
