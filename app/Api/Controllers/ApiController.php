@@ -1805,6 +1805,23 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '约诊医生 - 更新约诊信息' => [
+                        '说明' => '代约医生选择医生后，更新约诊状态，需要传约诊ID和医生ID',
+                        'url' => $http . '/api/appointment/update',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '约诊ID',
+                            'doctor' => '预约的医生的ID'
+                        ],
+                        'response' => [
+                            'success' => '',
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                     '上传图片' => [
                         'url' => $http . '/api/appointment/upload-img',
                         'method' => 'POST',

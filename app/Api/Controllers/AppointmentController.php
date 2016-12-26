@@ -29,6 +29,41 @@ class AppointmentController extends BaseController
     }
 
     /**
+     * 代约医生信息确认
+     *
+     * @param AppointmentIdRequest $request
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
+    public function update(AppointmentIdRequest $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        $appointment = Appointment::find($request['id']);
+
+        $doctor = User::getDoctorAllInfo($request['doctor']);
+
+        /**
+         * 更新的约诊信息：
+         */
+        $appointment->price = $doctor->fee;
+        $appointment->doctor_id = $request['doctor'];
+        $appointment->status = 'wait-1';//预约医生之后,进入待患者付款阶段
+
+        try {
+            if ($appointment->save()) {
+                return response()->json(['success' => ''], 204);
+            } else {
+                return response()->json(['message' => '保存失败'], 500);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+        }
+    }
+
+    /**
      * @param AppointmentRequest $request
      * @return array|mixed
      */
