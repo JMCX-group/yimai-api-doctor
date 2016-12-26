@@ -307,6 +307,6 @@ class AdmissionsController extends BaseController
 
         $appointments['progress'] = TimeLineTransformer::generateProgressStatus($appointments->status);
 
-        return Transformer::appointmentsTransform($appointments, $doctors);
+        return Transformer::appointmentsTransform($appointments, $locumsDoctors);
     }
 }
