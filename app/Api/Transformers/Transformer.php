@@ -341,17 +341,17 @@ class Transformer
                 'history' => $appointments->patient_history,
                 'img_url' => $appointments->patient_imgs,
                 'date' => $appointments->visit_time,
-                'hospital' => $doctor->hospital,
+                'hospital' => ($doctor == null) ? null : $doctor->hospital,
                 'remark' => $appointments->remark,
                 'supplement' => $appointments->supplement,
             ],
             'doctor_info' => [
-                'id' => $doctor->id,
-                'name' => $doctor->name,
-                'head_url' => ($doctor->avatar == '') ? null : $doctor->avatar,
-                'job_title' => $doctor->title,
-                'hospital' => $doctor->hospital,
-                'department' => $doctor->dept
+                'id' => ($doctor == null) ? null : $doctor->id,
+                'name' => ($doctor == null) ? null : $doctor->name,
+                'head_url' => ($doctor == null) ? null : (($doctor->avatar == '') ? null : $doctor->avatar),
+                'job_title' => ($doctor == null) ? null : $doctor->title,
+                'hospital' => ($doctor == null) ? null : $doctor->hospital,
+                'department' => ($doctor == null) ? null : $doctor->dept
             ],
             'patient_info' => [
                 'name' => $appointments->patient_name,
