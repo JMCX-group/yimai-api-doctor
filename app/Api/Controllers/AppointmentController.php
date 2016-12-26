@@ -11,6 +11,7 @@ namespace App\Api\Controllers;
 use App\Api\Helper\Sms;
 use App\Api\Requests\AppointmentIdRequest;
 use App\Api\Requests\AppointmentRequest;
+use App\Api\Requests\AppointmentUpdateRequest;
 use App\Api\Transformers\ReservationRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
@@ -31,10 +32,10 @@ class AppointmentController extends BaseController
     /**
      * 代约医生信息确认
      *
-     * @param AppointmentIdRequest $request
+     * @param AppointmentUpdateRequest $request
      * @return \Illuminate\Http\JsonResponse|mixed
      */
-    public function update(AppointmentIdRequest $request)
+    public function update(AppointmentUpdateRequest $request)
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
