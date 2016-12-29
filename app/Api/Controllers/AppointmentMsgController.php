@@ -92,7 +92,7 @@ class AppointmentMsgController extends BaseController
             return $user;
         }
 
-        AppointmentMsg::where('doctor_id', $user->id)->update(['read_status' => 1]);
+        AppointmentMsg::where('locums_id', $user->id)->update(['read_status' => 1]);
 
         return response()->json(['success' => ''], 204);
     }
