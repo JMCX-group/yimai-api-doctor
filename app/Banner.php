@@ -19,6 +19,7 @@ class Banner extends Model
      * @var array
      */
     protected $fillable = [
+        'title',
         'focus_img_url',
         'content',
         'location',
