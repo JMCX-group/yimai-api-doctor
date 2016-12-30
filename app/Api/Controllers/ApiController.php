@@ -1909,6 +1909,12 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'response' => [
+                            'patient_demand' => [
+                                'doctor_name' => '患者所需的医生姓名',
+                                'hospital' => '患者所需的医院',
+                                'department' => '患者所需的科室',
+                                'job_title' => '患者所需的医生头衔'
+                            ],
                             'basic_info' => [
                                 'appointment_id' => '约诊ID',
                                 'history' => '现病史',
@@ -1916,7 +1922,7 @@ class ApiController extends BaseController
                                 'date' => '就诊时间',
                                 'hospital' => '就诊医院',
                                 'remark' => '补充说明',
-                                'supplement' => '就诊须知',
+                                'supplement' => '就诊须知'
                             ],
                             'doctor_info' => [
                                 'id' => '用户ID',
@@ -2353,6 +2359,12 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'response' => [
+                            'patient_demand' => [
+                                'doctor_name' => '患者所需的医生姓名',
+                                'hospital' => '患者所需的医院',
+                                'department' => '患者所需的科室',
+                                'job_title' => '患者所需的医生头衔'
+                            ],
                             'basic_info' => [
                                 'appointment_id' => '约诊ID',
                                 'history' => '现病史',
@@ -2360,7 +2372,7 @@ class ApiController extends BaseController
                                 'date' => '就诊时间',
                                 'hospital' => '就诊医院',
                                 'remark' => '补充说明',
-                                'supplement' => '就诊须知',
+                                'supplement' => '就诊须知'
                             ],
                             'doctor_info' => [
                                 'id' => '用户ID; 这个是代约医生或平台的信息',
