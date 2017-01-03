@@ -18,9 +18,7 @@ Route::get('about/lawyer', 'AboutController@lawyer');
 Route::get('agreement/doctor', 'AgreementController@doctor');
 Route::get('share/index', 'ShareController@index');
 
-Route::get('banner/first', 'BannerController@first');
-Route::get('banner/second', 'BannerController@second');
-Route::get('banner/third', 'BannerController@third');
+Route::get('banner/{banner_id}', 'BannerController@getBannerContent');
 
 $api = app('Dingo\Api\Routing\Router');
 

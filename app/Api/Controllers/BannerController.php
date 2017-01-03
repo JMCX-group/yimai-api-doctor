@@ -12,35 +12,24 @@ use App\Banner;
 
 class BannerController extends BaseController
 {
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         $domain = \Config::get('constants.DOMAIN');
         $data = array();
-//        $banners = Banner::where('status', '1')->where('d_or_p', 'd')->orderBy('location')->get();
-//        foreach ($banners as $banner) {
-//            $tmp = [
-//                'focus_img_url' => $domain . $banner->focus_img_url,
-//                'content_url' => $domain . '/banner/first'
-//            ];
-//
-//            array_push($data, $tmp);
-//        }
-        $tmp1 = [
-            'focus_img_url' => $domain . '/banner/20161218205430.png',
-            'content_url' => $domain . '/banner/first'
-        ];
-        $tmp2 = [
-            'focus_img_url' => $domain . '/banner/20161218205430.png',
-            'content_url' => $domain . '/banner/second'
-        ];
-        $tmp3 = [
-            'focus_img_url' => $domain . '/banner/20161218205430.png',
-            'content_url' => $domain . '/banner/third'
-        ];
+        $banners = Banner::where('d_or_p', 'd')
+            ->where('location', '!=', '')
+            ->orderBy('location')->get();
+        foreach ($banners as $banner) {
+            $tmp = [
+                'focus_img_url' => $banner->focus_img_url,
+                'content_url' => $domain . '/banner/' . $banner->id
+            ];
 
-        array_push($data, $tmp1);
-        array_push($data, $tmp2);
-        array_push($data, $tmp3);
+            array_push($data, $tmp);
+        }
 
         return response()->json(compact('data'));
     }

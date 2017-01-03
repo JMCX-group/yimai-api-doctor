@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Banner;
+
 class BannerController extends Controller
 {
-    public function first()
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getBannerContent($id)
     {
-        return view('banner.first');
-    }
+        $data = Banner::find($id);
 
-    public function second()
-    {
-        return view('banner.second');
-    }
-
-    public function third()
-    {
-        return view('banner.third');
+        return view('banner.index', compact('data'));
     }
 }
