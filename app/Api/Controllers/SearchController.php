@@ -26,7 +26,18 @@ class SearchController extends BaseController
     public function doctors(SearchDoctorForIdRequest $request)
     {
         $idList = explode(',', $request->get('id_list'));
-        $doctors = User::find($idList);
+        $newIdList = array();
+
+        /**
+         * 自动过滤1-5内置用户：
+         */
+        foreach ($idList as $item){
+            if($item > 5){
+                array_push($newIdList, $item);
+            }
+        }
+
+        $doctors = User::find($newIdList);
 
         $data = array();
         foreach ($doctors as $doctor) {
