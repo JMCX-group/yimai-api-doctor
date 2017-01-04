@@ -520,7 +520,7 @@ class UserController extends BaseController
          * 只有普通搜索有分组:
          */
         if ($request['type'] == 'same_hospital' || $request['type'] == 'same_department' || $request['type'] == 'same_college' || ($type != null && $type != 'admissions')) {
-            $retData = array_merge($recentContactsArr, $friendArr, $sameCityArr, $b_s_g_threeA, $otherArr);
+            $retData = array_merge($recentContactsArr, $friendArr, $friendsFriendsArr, $sameCityArr, $b_s_g_threeA, $otherArr);
 
             return [
                 'provinces' => $provinces,
