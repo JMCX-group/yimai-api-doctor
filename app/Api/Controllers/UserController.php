@@ -232,7 +232,7 @@ class UserController extends BaseController
         /**
          * Blacklist
          */
-        if (isset($request['blacklist']) && !empty($request['blacklist'])) {
+        if (isset($request['blacklist'])) {
             $user->blacklist = $request['blacklist'];
         }
 
