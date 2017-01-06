@@ -2767,6 +2767,91 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                ],
+
+                '银行卡信息' => [
+                    '银行卡信息列表' => [
+                        '说明' => '返回该用户所有银行卡信息，有可能是空或多条数据',
+                        'url' => $http . '/api/bank/info',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                [
+                                    'id' => '数据ID',
+                                    'name' => '银行名称',
+                                    'info' => '银行开户行信息',
+                                    'no' => '银行卡号',
+                                    'verify' => '是否实名认证',
+                                    'status' => '状态',
+                                    'desc' => '描述/备注'
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '新增银行卡信息' => [
+                        '说明' => '成功增加后返回该用户所有银行卡信息，有可能是空或多条数据',
+                        'url' => $http . '/api/bank/new',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'name' => '银行名称； 必填',
+                            'info' => '银行开户行信息',
+                            'no' => '银行卡号； 必填',
+                            'desc' => '描述/备注'
+                        ],
+                        'response' => [
+                            'data' => [
+                                [
+                                    'id' => '数据ID',
+                                    'name' => '银行名称',
+                                    'info' => '银行开户行信息',
+                                    'no' => '银行卡号',
+                                    'verify' => '是否实名认证',
+                                    'status' => '状态',
+                                    'desc' => '描述/备注'
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                    '更新银行卡信息' => [
+                        '说明' => '成功更新后返回该用户所有银行卡信息，有可能是空或多条数据',
+                        'url' => $http . '/api/bank/update',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '数据ID； 必填',
+                            'name' => '银行名称； 必填',
+                            'info' => '银行开户行信息',
+                            'no' => '银行卡号； 必填',
+                            'desc' => '描述/备注'
+                        ],
+                        'response' => [
+                            'data' => [
+                                [
+                                    'id' => '数据ID',
+                                    'name' => '银行名称',
+                                    'info' => '银行开户行信息',
+                                    'no' => '银行卡号',
+                                    'verify' => '是否实名认证',
+                                    'status' => '状态',
+                                    'desc' => '描述/备注',
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                 ]
             ]
         ];
