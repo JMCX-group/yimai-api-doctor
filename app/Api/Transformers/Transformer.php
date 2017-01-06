@@ -160,6 +160,7 @@ class Transformer
                 'college' => $user->college,
                 'tags' => $user->tag_list,
                 'personal_introduction' => $user->profile,
+                'qr_code_url' => $user->qr_code_url,
                 'is_auth' => $user->auth,
                 'common_friend_list' => $user->common_friend_list,
             ]
