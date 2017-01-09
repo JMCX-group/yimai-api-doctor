@@ -1166,6 +1166,19 @@ class ApiController extends BaseController
                             'message' => '',
                             'error' => ''
                         ]
+                    ],
+                    '申请提现' => [
+                        '说明' => '成功后返回HTTP状态204',
+                        'url' => $http . '/api/wallet/withdraw',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'success' => '',
+                            'message' => '',
+                            'error' => ''
+                        ]
                     ]
                 ],
 

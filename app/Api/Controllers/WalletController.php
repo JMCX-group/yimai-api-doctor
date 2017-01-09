@@ -12,6 +12,7 @@ use App\Api\Transformers\TransactionRecordTransformer;
 use App\Api\Transformers\WalletTransformer;
 use App\DoctorWallet;
 use App\Order;
+use App\SettlementRecord;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -50,7 +51,8 @@ class WalletController extends BaseController
     /**
      * 收支明细列表 - 带分类
      *
-     * @return \Dingo\Api\Http\Response|mixed
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|mixed
      */
     public function record(Request $request)
     {
@@ -130,5 +132,31 @@ class WalletController extends BaseController
         $data = TransactionRecordTransformer::transformData($order);
 
         return response()->json(compact('data'));
+    }
+
+    /**
+     * 提现
+     * 每个月20日为结算日，21日0点之后，访问钱包可激活结算，然后需要医脉后台进行报税
+     * 报税之后可以提现，提现申请后，将所有可提现金额全部可以提现。
+     *
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
+    public function withdraw()
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        try {
+            SettlementRecord::where('doctor_id', $user->id)
+                ->where('status', 1)//结算状态； 0：未缴税；1：已完成结算，可提现
+                ->where('withdraw_status', 0)//提现状态；0为未提现，1为申请提现，9为成功
+                ->update(['withdraw_status' => 1, 'withdraw_request_date' => date('Y-m-d H:i:s', time())]);
+
+            return response()->json(['success' => ''], 204);
+        } catch (\Exception $e) {
+            return response()->json(['message' => '入库失败'], 500);
+        }
     }
 }
