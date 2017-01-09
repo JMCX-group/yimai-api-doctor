@@ -255,6 +255,25 @@ class ApiController extends BaseController
                     ]
                 ],
 
+                '数据信息' => [
+                    '查询医院/医生/约诊数量' => [
+                        'url' => $http . '/api/data/auth-column',
+                        'method' => 'GET',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'response' => [
+                            'data' => [
+                                'hospital_count' => '医院数量',
+                                'doctor_count' => '医生数量',
+                                'appointment_count' => '约诊数量'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
+                ],
+
                 '用户信息' => [
                     '查询登陆用户自己的信息' => [
                         'url' => $http . '/api/user/me',

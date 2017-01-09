@@ -56,6 +56,11 @@ $api->version('v1', function ($api) {
                 $api->get('/', 'InitController@index');
             });
 
+            // Data
+            $api->group(['prefix' => 'data'], function ($api) {
+                $api->get('auth-column', 'DataController@authColumn');
+            });
+
             // Doctor
             $api->group(['prefix' => 'user'], function ($api) {
                 $api->get('me', 'AuthController@getAuthenticatedUser');
