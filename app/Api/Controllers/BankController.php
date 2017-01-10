@@ -12,6 +12,7 @@ use App\Api\Requests\BankRequest;
 use App\Api\Requests\BankUpdateRequest;
 use App\Api\Transformers\BankTransformer;
 use App\DoctorBank;
+use App\Http\Requests\Request;
 use App\User;
 
 class BankController extends BaseController
@@ -82,6 +83,30 @@ class BankController extends BaseController
             return $this->response->item($bankInfo, new BankTransformer());
         } catch (\Exception $e) {
             return response()->json(['message' => '入库失败'], 500);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response|\Illuminate\Http\JsonResponse|mixed
+     */
+    public function destroy(Request $request)
+    {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
+        try {
+            $bank = DoctorBank::find($request['id']);
+            if($bank != null) {
+                DoctorBank::where('id', $request['id'])->delete();
+            }
+
+            $bankInfo = DoctorBank::where('doctor_id', $user->id)->get();
+            return $this->response->item($bankInfo, new BankTransformer());
+        } catch (\Exception $e) {
+            return response()->json(['message' => '查询/删除失败'], 500);
         }
     }
 }

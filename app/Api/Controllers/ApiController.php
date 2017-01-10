@@ -2884,6 +2884,32 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '删除银行卡信息' => [
+                        '说明' => '成功更新后返回该用户所有银行卡信息，有可能是空或多条数据',
+                        'url' => $http . '/api/bank/delete',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '数据ID； 必填'
+                        ],
+                        'response' => [
+                            'data' => [
+                                [
+                                    'id' => '数据ID',
+                                    'name' => '银行名称',
+                                    'info' => '银行开户行信息',
+                                    'no' => '银行卡号',
+                                    'verify' => '是否实名认证',
+                                    'status' => '状态',
+                                    'desc' => '描述/备注',
+                                ]
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                 ]
             ]
         ];
