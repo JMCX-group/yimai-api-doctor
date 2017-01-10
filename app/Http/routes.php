@@ -204,7 +204,7 @@ $api->version('v1', function ($api) {
             //Bank
             $api->group(['prefix' => 'bank'], function ($api) {
                 $api->get('info', 'BankController@index');
-                $api->get('new', 'BankController@store');
+                $api->post('new', 'BankController@store');
                 $api->post('update', 'BankController@update');
                 $api->post('delete', 'BankController@destroy');
             });
