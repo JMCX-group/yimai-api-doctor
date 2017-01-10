@@ -43,6 +43,7 @@ class BankController extends BaseController
         }
 
         $data = [
+            'doctor_id' => $user->id,
             'bank_name' => $request['name'],
             'bank_info' => $request['info'],
             'bank_no' => $request['no'],
