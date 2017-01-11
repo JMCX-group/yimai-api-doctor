@@ -403,6 +403,7 @@ class Transformer
 //                'id' => $user->dept_id,
 //                'name' => $user->dept,
 //            ],
+            'is_auth' => $user->auth,
             'admission_set_fixed' => $user->admission_set_fixed,
             'admission_set_flexible' => UserTransformer::delOutdated(json_decode($user->admission_set_flexible, true)),
             'relation' => $relation

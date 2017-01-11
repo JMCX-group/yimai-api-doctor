@@ -2729,6 +2729,7 @@ class ApiController extends BaseController
                                     'id' => '用户所在科室ID',
                                     'name' => '用户所在科室名称'
                                 ],
+                                'is_auth' => '是否认证；',
                                 'admission_set_fixed' => [
                                     '说明' => '接诊时间设置,固定排班; 接收json,直接存库; 需要存7组数据,week分别是:sun,mon,tue,wed,thu,fri,sat',
                                     '格式案例' => [
