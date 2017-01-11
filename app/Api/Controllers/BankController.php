@@ -12,7 +12,7 @@ use App\Api\Requests\BankRequest;
 use App\Api\Requests\BankUpdateRequest;
 use App\Api\Transformers\BankTransformer;
 use App\DoctorBank;
-use App\Http\Requests\Request;
+use Illuminate\Http\Request;
 use App\User;
 
 class BankController extends BaseController
@@ -28,7 +28,11 @@ class BankController extends BaseController
         }
 
         $bankInfo = DoctorBank::where('doctor_id', $user->id)->get();
-        return $this->response->item($bankInfo, new BankTransformer());
+        $data = array();
+        foreach ($bankInfo as $item) {
+            array_push($data, BankTransformer::transform($item));
+        }
+        return response()->json(compact('data'));
     }
 
     /**
@@ -54,7 +58,11 @@ class BankController extends BaseController
             DoctorBank::create($data);
 
             $bankInfo = DoctorBank::where('doctor_id', $user->id)->get();
-            return $this->response->item($bankInfo, new BankTransformer());
+            $data = array();
+            foreach ($bankInfo as $item) {
+                array_push($data, BankTransformer::transform($item));
+            }
+            return response()->json(compact('data'));
         } catch (\Exception $e) {
             return response()->json(['message' => '入库失败'], 500);
         }
@@ -81,7 +89,11 @@ class BankController extends BaseController
             $bank->save();
 
             $bankInfo = DoctorBank::where('doctor_id', $user->id)->get();
-            return $this->response->item($bankInfo, new BankTransformer());
+            $data = array();
+            foreach ($bankInfo as $item) {
+                array_push($data, BankTransformer::transform($item));
+            }
+            return response()->json(compact('data'));
         } catch (\Exception $e) {
             return response()->json(['message' => '入库失败'], 500);
         }
@@ -100,12 +112,16 @@ class BankController extends BaseController
 
         try {
             $bank = DoctorBank::find($request['id']);
-            if($bank != null) {
+            if ($bank != null) {
                 DoctorBank::where('id', $request['id'])->delete();
             }
 
             $bankInfo = DoctorBank::where('doctor_id', $user->id)->get();
-            return $this->response->item($bankInfo, new BankTransformer());
+            $data = array();
+            foreach ($bankInfo as $item) {
+                array_push($data, BankTransformer::transform($item));
+            }
+            return response()->json(compact('data'));
         } catch (\Exception $e) {
             return response()->json(['message' => '查询/删除失败'], 500);
         }

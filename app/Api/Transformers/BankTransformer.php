@@ -14,10 +14,10 @@ use League\Fractal\TransformerAbstract;
 class BankTransformer extends TransformerAbstract
 {
     /**
-     * @param DoctorBank $bank
+     * @param $bank
      * @return array
      */
-    public function transform(DoctorBank $bank)
+    public static function transform($bank)
     {
         return [
             'id' => $bank['id'],
