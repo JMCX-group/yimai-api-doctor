@@ -143,31 +143,30 @@ class DoctorRelationController extends BaseController
             return $user;
         }
 
-        $relation = DoctorRelation::where('doctor_id', $request['id'])->where('doctor_friend_id', $user->id)->first();
-        if (!Empty($relation)) {
-            $myRead = $relation->where('doctor_id', $request['id'])
-                ->where('doctor_friend_id', $user->id)
-                ->update(['doctor_friend_read' => 1]);
-            if ($myRead) {
-                $data = [
-                    'doctor_id' => $user->id,
-                    'doctor_friend_id' => $request['id'],
-                    'doctor_read' => 1,
-                    'doctor_friend_read' => 0
-                ];
+        /**
+         * 查询是否有这条数据以及更新已读情况：
+         */
+        $myRead = DoctorRelation::where('doctor_id', $request['id'])
+            ->where('doctor_friend_id', $user->id)
+            ->update(['doctor_friend_read' => 1]);
 
-                try {
-                    if (DoctorRelation::create($data)) {
-                        return response()->json(['success' => ''], 204);
-                    } else {
-                        return response()->json(['message' => '添加失败'], 500);
-                    }
-                } catch (\Exception $e) {
-                    Log::info('add friend', ['context' => $e->getMessage()]);
-                    return response()->json(['message' => '添加失败'], 400);
+        if ($myRead) {
+            $data = [
+                'doctor_id' => $user->id,
+                'doctor_friend_id' => $request['id'],
+                'doctor_read' => 1,
+                'doctor_friend_read' => 0
+            ];
+
+            try {
+                if (DoctorRelation::create($data)) {
+                    return response()->json(['success' => ''], 204);
+                } else {
+                    return response()->json(['message' => '添加失败'], 500);
                 }
-            } else {
-                return response()->json(['message' => '确认失败'], 500);
+            } catch (\Exception $e) {
+                Log::info('add friend', ['context' => $e->getMessage()]);
+                return response()->json(['message' => '添加失败'], 400);
             }
         } else {
             return response()->json(['message' => '关系不存在'], 400);
