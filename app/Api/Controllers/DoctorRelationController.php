@@ -10,6 +10,7 @@ namespace App\Api\Controllers;
 
 use App\Api\Helper\Sms;
 use App\Api\Requests\AddressRequest;
+use App\Api\Requests\RelationDelRequest;
 use App\Api\Requests\RelationIdRequest;
 use App\Api\Requests\RemarksRequest;
 use App\Api\Transformers\Transformer;
@@ -349,10 +350,10 @@ class DoctorRelationController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @return \Dingo\Api\Http\Response|\Illuminate\Http\JsonResponse|mixed
+     * @param RelationDelRequest $request
+     * @return \Illuminate\Http\JsonResponse|mixed
      */
-    public function destroy(Request $request)
+    public function destroy(RelationDelRequest $request)
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
@@ -360,16 +361,13 @@ class DoctorRelationController extends BaseController
         }
 
         try {
-            if (DoctorRelation::destroyRelation($user->id, $request['friend_id'])
-            ) {
-//                return $this->response->noContent();
-                return response()->json(['success' => ''], 204); //给肠媳适配。。
-            } else {
-                return response()->json(['message' => '删除失败'], 500);
-            }
+            DoctorRelation::where('doctor_id', $user->id)->where('doctor_friend_id', $request['friend_id'])->delete();
+            DoctorRelation::where('doctor_friend_id', $user->id)->where('doctor_id', $request['friend_id'])->delete();
+
+            return response()->json(['success' => ''], 204);
         } catch (\Exception $e) {
             Log::info('del friend', ['context' => $e->getMessage()]);
-            return response()->json(['message' => '删除失败'], 400);
+            return response()->json(['message' => '删除失败'], 500);
         }
     }
 

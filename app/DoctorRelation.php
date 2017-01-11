@@ -370,17 +370,4 @@ class DoctorRelation extends Model
         DoctorRelation::where('doctor_id', $id)->update(['doctor_read' => 1]);
         DoctorRelation::where('doctor_friend_id', $id)->update(['doctor_friend_read' => 1]);
     }
-
-    /**
-     * @param $myId
-     * @param $friendId
-     * @return mixed
-     */
-    public static function destroyRelation($myId, $friendId)
-    {
-        return DB::delete(
-            "DELETE FROM doctor_relations " .
-            "WHERE (doctor_id=$myId AND doctor_friend_id=$friendId) OR (doctor_id=$friendId AND doctor_friend_id=$myId)"
-        );
-    }
 }
