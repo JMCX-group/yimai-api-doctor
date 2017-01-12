@@ -957,6 +957,7 @@ class ApiController extends BaseController
                         ],
                         'form-data' => [
                             'password' => '用户密码',
+                            'device_token' => '友盟设备token； IOS：64位长，安卓：44位长',
                             'name' => '用户姓名',
                             'head_img' => '用户头像; 直接POST文件,支持后缀:jpg/jpeg/png',
                             'sex' => '性别',
