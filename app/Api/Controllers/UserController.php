@@ -120,6 +120,12 @@ class UserController extends BaseController
         if (isset($request['password']) && !empty($request['password'])) {
             $user->password = bcrypt($request->get('password'));
         }
+
+        // device_token : 友盟消息推送服务对设备的唯一标识。Android的device_token是44位字符串, iOS的device-token是64位
+        if (isset($request['device_token']) && !empty($request['device_token'])) {
+            $user->device_token = $request['device_token'];
+        }
+
         if (isset($request['name']) && !empty($request['name'])) {
             $user->name = $request['name'];
             $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
