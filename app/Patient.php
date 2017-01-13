@@ -21,6 +21,7 @@ class Patient extends Model
     protected $fillable = [
         'phone',
         'password',
+        'device_token',
         'name',
         'nickname',
         'avatar',
