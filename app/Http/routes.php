@@ -199,7 +199,7 @@ $api->version('v1', function ($api) {
                 $api->get('record', 'WalletController@recordGet');
                 $api->post('record', 'WalletController@record');
                 $api->get('detail/{id}', 'WalletController@detail');
-                $api->get('withdraw', 'WalletController@withdraw');
+                $api->post('withdraw', 'WalletController@withdraw');
             });
 
             //Bank

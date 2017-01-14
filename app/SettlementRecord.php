@@ -22,10 +22,12 @@ class SettlementRecord extends Model
         'doctor_id',
         'total',
         'tax_payment',
+        'tax_time',
         'year',
         'month',
         'status', //结算状态； 0：未缴税；1：已完成结算，可提现
         'withdraw_status', //提现状态，是否已提现；0为未提现，1为申请提现，9为成功
+        'withdraw_bank_no',
         'withdraw_request_date',
         'withdraw_confirm_date'
     ];

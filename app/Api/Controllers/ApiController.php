@@ -1215,9 +1215,12 @@ class ApiController extends BaseController
                     '申请提现' => [
                         '说明' => '成功后返回HTTP状态204',
                         'url' => $http . '/api/wallet/withdraw',
-                        'method' => 'GET',
+                        'method' => 'POST',
                         'params' => [
                             'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '银行卡列表的ID，注意不是卡号'
                         ],
                         'response' => [
                             'success' => '',

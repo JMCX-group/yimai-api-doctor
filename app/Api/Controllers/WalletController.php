@@ -8,6 +8,7 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Requests\IdRequest;
 use App\Api\Transformers\TransactionRecordTransformer;
 use App\Api\Transformers\WalletTransformer;
 use App\DoctorWallet;
@@ -139,20 +140,27 @@ class WalletController extends BaseController
      * 每个月20日为结算日，21日0点之后，访问钱包可激活结算，然后需要医脉后台进行报税
      * 报税之后可以提现，提现申请后，将所有可提现金额全部可以提现。
      *
+     * @param IdRequest $request
      * @return \Illuminate\Http\JsonResponse|mixed
      */
-    public function withdraw()
+    public function withdraw(IdRequest $request)
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
             return $user;
         }
 
+        $bankId = $request['id'];
+
         try {
             SettlementRecord::where('doctor_id', $user->id)
                 ->where('status', 1)//结算状态； 0：未缴税；1：已完成结算，可提现
                 ->where('withdraw_status', 0)//提现状态；0为未提现，1为申请提现，9为成功
-                ->update(['withdraw_status' => 1, 'withdraw_request_date' => date('Y-m-d H:i:s', time())]);
+                ->update([
+                    'withdraw_status' => 1,
+                    'withdraw_request_date' => date('Y-m-d H:i:s', time()),
+                    'withdraw_bank_no' => $bankId
+                ]);
 
             return response()->json(['success' => ''], 204);
         } catch (\Exception $e) {
