@@ -66,4 +66,23 @@ class Order extends Model
     {
         return DB::select("SELECT SUM(`total_fee`) as sum_value FROM orders WHERE doctor_id=" . $userId . " AND `settlement_status`='待结算'");
     }
+
+    /**
+     * 按月查询某医生当月收入总额
+     *
+     * @param $doctorId
+     * @return mixed
+     */
+    public static function sumTotal($doctorId)
+    {
+        return DB::select("
+            SELECT 
+                date_format(`time_expire`, '%Y') AS 'year',
+                date_format(`time_expire`, '%m') AS 'month',
+                sum(total_fee) AS total 
+            FROM orders 
+            WHERE doctor_id=$doctorId 
+            GROUP BY date_format(`time_expire`, '%Y-%m');
+        ");
+    }
 }

@@ -31,6 +31,14 @@ class WalletController extends BaseController
             return $user;
         }
 
+        /**
+         * 激活计算上个月结余：
+         */
+        $this->checkout($user->id);
+
+        /**
+         * 钱包信息生成：
+         */
         $walletInfo = DoctorWallet::where('doctor_id', $user->id)->first();
         if (!isset($walletInfo->doctor_id)) {
             DoctorWallet::insert(['doctor_id' => $user->id]);
@@ -165,6 +173,62 @@ class WalletController extends BaseController
             return response()->json(['success' => ''], 204);
         } catch (\Exception $e) {
             return response()->json(['message' => '入库失败'], 500);
+        }
+    }
+
+    /**
+     * 结算上月
+     *
+     * @param $id
+     */
+    public function checkout($id)
+    {
+        /**
+         * 年月信息：
+         * 需判断是否为20号以后，20号为上月结算日
+         */
+        $year = date('Y'); //当年
+        if (date('d') > 20) {
+            $month = date('m') - 1; //上个月
+            if ($month == 0) { //如果本月是一月，则重置年月
+                $month = 12;
+                $year = $year - 1;
+            }
+        } else {
+            $month = date('m') - 2; //上上个月
+            if ($month == -1) { //如果本月是一月，则重置年月
+                $month = 11;
+                $year = $year - 1;
+            } elseif ($month == 0) { //如果本月是二月，则重置年月
+                $month = 12;
+                $year = $year - 1;
+            }
+        }
+
+        /**
+         *
+         */
+        $settlement = SettlementRecord::where('doctor_id', $id)
+            ->where('year', $year)
+            ->where('month', $month)
+            ->first();
+        if (!isset($settlement->id)) {
+            $totals = Order::sumTotal($id);
+            foreach ($totals as $total) {
+                if ($total->year == $year && $total->month == $month) {
+                    $data = [
+                        'doctor_id' => $id,
+                        'total' => $total->total / 100, //单位是分
+                        'year' => $year,
+                        'month' => $month,
+                        'status' => 0 //结算状态； 0：未缴税；1：已完成结算，可提现]
+                    ];
+
+                    SettlementRecord::create($data);
+
+                    break;
+                }
+            }
         }
     }
 }
