@@ -59,6 +59,7 @@ $api->version('v1', function ($api) {
             // Data
             $api->group(['prefix' => 'data'], function ($api) {
                 $api->get('auth-column', 'DataController@authColumn');
+                $api->post('scheduling', 'DataController@scheduling');
             });
 
             // Doctor
