@@ -126,6 +126,7 @@ class UserController extends BaseController
         }
 
         if (isset($request['name']) && !empty($request['name'])) {
+            Log::info('upload-head-img-name', ['context' => $request->file('head_img')]);
             $user->name = $request['name'];
             $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
         }
