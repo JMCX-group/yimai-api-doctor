@@ -90,6 +90,7 @@ class AppointmentController extends BaseController
             $lastId = intval(substr($lastId[0], 8));
             $nowId = str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
         }
+        $appointmentId = $frontId . $nowId;
 
         /**
          * 时间过滤：
@@ -108,7 +109,7 @@ class AppointmentController extends BaseController
          */
         $doctor = User::getDoctorAllInfo($request['doctor']);
         $data = [
-            'id' => $frontId . $nowId,
+            'id' => $appointmentId,
             'locums_id' => $user->id, //代理医生ID
             'patient_name' => $request['name'],
             'patient_phone' => $request['phone'],
@@ -126,7 +127,7 @@ class AppointmentController extends BaseController
          * 推送消息记录
          */
         $msgData = [
-            'appointment_id' => $frontId . $nowId,
+            'appointment_id' => $appointmentId,
             'locums_id' => $user->id, //代理医生ID
             'locums_name' => $user->name, //代理医生姓名
             'patient_name' => $request['name'],
@@ -149,7 +150,7 @@ class AppointmentController extends BaseController
                     /**
                      * 向患者端推送消息
                      */
-                    $pushResult = $this->pushMsg($patient->device_token);
+                    $pushResult = $this->pushMsg($patient->device_token, $appointmentId);
                     if ($pushResult['result'] == false) {
                         Log::info('push-appointment-patient', ['context' => $pushResult['message']]);
                     }
@@ -164,7 +165,7 @@ class AppointmentController extends BaseController
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
         }
 
-        return ['id' => $frontId . $nowId];
+        return ['id' => $appointmentId];
     }
 
     /**
@@ -349,9 +350,10 @@ class AppointmentController extends BaseController
      * 给患者推送约诊信息
      *
      * @param $deviceToken
+     * @param $appointmentId
      * @return array
      */
-    public function pushMsg($deviceToken)
+    public function pushMsg($deviceToken, $appointmentId)
     {
         require(dirname(dirname(__FILE__)) . '/Helper/UmengNotification/NotificationPush.php');
 
@@ -364,7 +366,7 @@ class AppointmentController extends BaseController
             $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
             //患者端AppStore
 //            $push = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
-            $pushResult = $push->sendIOSUnicast($deviceToken, '您有新的约诊订单需要支付', 'appointment');
+            $pushResult = $push->sendIOSUnicast($deviceToken, '您有新的约诊订单需要支付', 'appointment', $appointmentId);
         } else {
             $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
             $pushResult = $push->sendAndroidUnicast($deviceToken, '您有新的约诊订单需要支付', 'appointment');

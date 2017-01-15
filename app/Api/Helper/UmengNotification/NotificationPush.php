@@ -245,9 +245,10 @@ class NotificationPush
      * @param $deviceToken
      * @param $alert
      * @param $action
+     * @param $dataId
      * @return array
      */
-    function sendIOSUnicast($deviceToken, $alert, $action)
+    function sendIOSUnicast($deviceToken, $alert, $action, $dataId)
     {
         try {
             $unicast = new IOSUnicast();
@@ -263,7 +264,7 @@ class NotificationPush
             $unicast->setPredefinedKeyValue("production_mode", "false");
             // Set customized fields
             $unicast->setCustomizedField("action", $action);
-            print("Sending unicast notification, please wait...\r\n");
+            $unicast->setCustomizedField("data-id", $dataId);
             $unicast->send();
 
             return ['result' => true, 'message' => ''];
