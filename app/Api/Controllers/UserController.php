@@ -14,9 +14,7 @@ use App\Api\Requests\SearchUserRequest;
 use App\Api\Requests\UserRequest;
 use App\Api\Transformers\Transformer;
 use App\Api\Transformers\UserTransformer;
-use App\DeptStandard;
 use App\DoctorContactRecord;
-use App\DoctorDb;
 use App\DoctorRelation;
 use App\Hospital;
 use App\User;
@@ -24,6 +22,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Log;
 use Validator;
 use JWTAuth;
 
@@ -131,6 +130,7 @@ class UserController extends BaseController
             $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
         }
         if (isset($request['head_img']) && !empty($request['head_img'])) {
+            Log::info('upload-head-img', ['context' => $request->file('head_img')]);
             $user->avatar = $this->avatar($user->id, $request->file('head_img'));
             $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
         }
