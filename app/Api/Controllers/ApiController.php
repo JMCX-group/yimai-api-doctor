@@ -48,14 +48,18 @@ class ApiController extends BaseController
                 '友盟推送说明' => [
                     '广播' => [
                         '场景' => 'CMS发送广播，将会分医生或患者端推送',
-                        'action' => 'radio',
-                        'data-id' => '广播ID',
+                        '传参' => [
+                            'action' => 'radio',
+                            'data-id' => '广播ID',
+                        ],
                         '跳转' => '指定的广播页面',
                     ],
                     '约诊' => [
                         '场景' => '代约医生新建约诊，将会给相应患者推送单播，提示缴费',
-                        'action' => 'appointment',
-                        'data-id' => '约诊ID',
+                        '传参' => [
+                            'action' => 'appointment',
+                            'data-id' => '约诊ID',
+                        ],
                         '跳转' => '指定的约诊页面',
                     ],
                 ]
