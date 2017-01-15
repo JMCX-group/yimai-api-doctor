@@ -62,10 +62,8 @@ class SearchController extends BaseController
         if (isset($user['id']) && $user['id'] != '' && $user['id'] != null) {
             $user['dp_code'] = User::getDpCode($user['id']);
             $user['is_friend'] = (DoctorRelation::getIsFriend($my->id, $user['id'])[0]->count) == 2 ? true : false;
-        }
-        $data = Transformer::searchDoctorTransform_dpCode($user);
+            $data = Transformer::searchDoctorTransform_dpCode($user);
 
-        if ($data) {
             return response()->json(compact('data'));
         } else {
             return response()->json(['success' => ''], 204);

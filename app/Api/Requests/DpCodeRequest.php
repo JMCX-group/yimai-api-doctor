@@ -34,7 +34,7 @@ class DpCodeRequest extends Request
     public function rules()
     {
         return [
-            'dp_code' => 'required'
+            'dp_code' => 'required|numeric'
 //            'dp_code' => 'required|digits_between:8,9'
         ];
     }
@@ -46,6 +46,7 @@ class DpCodeRequest extends Request
     {
         return [
             'required' => ':attribute不能为空',
+            'numeric' => ':attribute需为数字',
             'digits_between' => ':attribute必须为:min到:max位长的数字'
         ];
     }
