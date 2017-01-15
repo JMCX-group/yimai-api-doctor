@@ -147,18 +147,20 @@ class AppointmentController extends BaseController
             if ($patient->isEmpty()) {
                 $this->sendSMS($user, $doctor, $request['phone']);
             } else {
-                /**
-                 * 向患者端推送消息
-                 */
-                require(dirname(dirname(__FILE__)) . '/Helper/UmengNotification/NotificationPush.php');
-                //患者端企业版
-                $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
-                //患者端AppStore
+                if ($patient->device_token != '' && $patient->device_token != null) {
+                    /**
+                     * 向患者端推送消息
+                     */
+                    require(dirname(dirname(__FILE__)) . '/Helper/UmengNotification/NotificationPush.php');
+                    //患者端企业版
+                    $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
+                    //患者端AppStore
 //            $push = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
-                $pushResult = $push->sendIOSUnicast($patient->device_token, '您有新的约诊订单需要支付', 'appointment');
+                    $pushResult = $push->sendIOSUnicast($patient->device_token, '您有新的约诊订单需要支付', 'appointment');
 
-                if ($pushResult['result'] == false) {
-                    Log::info('push-appointment-patient', ['context' => $pushResult['message']]);
+                    if ($pushResult['result'] == false) {
+                        Log::info('push-appointment-patient', ['context' => $pushResult['message']]);
+                    }
                 }
             }
         } catch (JWTException $e) {
