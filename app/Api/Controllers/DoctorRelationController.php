@@ -80,8 +80,18 @@ class DoctorRelationController extends BaseController
 
             try {
                 if (DoctorRelation::create($data)) {
-//                    return $this->response->noContent();
-                    return response()->json(['success' => ''], 204); //给肠媳适配。。
+                    /**
+                     * 判断被加一方是否无需验证：
+                     */
+                    if($friend['verify_switch'] == 0){
+                        $friendData['doctor_id'] = $friend['id'];
+                        $friendData['doctor_friend_id'] = $user->id;
+                        $friendData['doctor_read'] = 0;
+                        $friendData['doctor_friend_read'] = 1;
+                        DoctorRelation::create($friendData);
+                    }
+
+                    return response()->json(['success' => ''], 204);
                 } else {
                     return response()->json(['message' => '已添加过'], 500);
                 }
