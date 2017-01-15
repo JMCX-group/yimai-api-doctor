@@ -144,7 +144,7 @@ class AppointmentController extends BaseController
              * 注册患者发送单播通知；未注册患者需要发送短信
              */
             $patient = Patient::where('phone', $request['phone'])->first();
-            if (isset($patient->id)) {
+            if (!isset($patient->id)) {
                 $this->sendSMS($user, $doctor, $request['phone']);
             } else {
                 if ($patient->device_token != '' && $patient->device_token != null) {
