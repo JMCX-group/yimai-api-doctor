@@ -30,9 +30,10 @@ class NotificationPush
      *
      * @param $title
      * @param $action
+     * @param $dataId
      * @return array
      */
-    function sendAndroidBroadcast($title, $action)
+    function sendAndroidBroadcast($title, $action, $dataId='')
     {
         try {
             $brocast = new AndroidBroadcast();
@@ -48,6 +49,7 @@ class NotificationPush
             $brocast->setPredefinedKeyValue("production_mode", "true");
             // [optional]Set extra fields
             $brocast->setExtraField("action", $action);
+            $unicast->setExtraField("data-id", $dataId);
             $brocast->send();
 
             return ['result' => true, 'message' => ''];
@@ -62,9 +64,10 @@ class NotificationPush
      * @param $deviceToken
      * @param $title
      * @param $action
+     * @param $dataId
      * @return array
      */
-    function sendAndroidUnicast($deviceToken, $title, $action)
+    function sendAndroidUnicast($deviceToken, $title, $action, $dataId='')
     {
         try {
             $unicast = new AndroidUnicast();
@@ -82,6 +85,7 @@ class NotificationPush
             $unicast->setPredefinedKeyValue("production_mode", "true");
             // Set extra fields
             $unicast->setExtraField("action", $action);
+            $unicast->setExtraField("data-id", $dataId);
             $unicast->send();
 
             return ['result' => true, 'message' => ''];
@@ -214,9 +218,10 @@ class NotificationPush
      *
      * @param $alert
      * @param $action
+     * @param $dataId
      * @return array
      */
-    function sendIOSBroadcast($alert, $action)
+    function sendIOSBroadcast($alert, $action, $dataId='')
     {
         try {
             $brocast = new IOSBroadcast();
@@ -231,6 +236,7 @@ class NotificationPush
             $brocast->setPredefinedKeyValue("production_mode", "false");
             // Set customized fields
             $brocast->setCustomizedField("action", $action);
+            $unicast->setCustomizedField("data-id", $dataId);
             $brocast->send();
 
             return ['result' => true, 'message' => ''];
@@ -248,7 +254,7 @@ class NotificationPush
      * @param $dataId
      * @return array
      */
-    function sendIOSUnicast($deviceToken, $alert, $action, $dataId)
+    function sendIOSUnicast($deviceToken, $alert, $action, $dataId='')
     {
         try {
             $unicast = new IOSUnicast();
