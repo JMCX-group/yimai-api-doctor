@@ -77,7 +77,9 @@ class Transformer
             'head_url' => ($user->avatar == '') ? null : $user->avatar,
             'hospital' => $user['hospital_id'],
             'department' => $user['dept_id'],
-            'job_title' => $user['title']
+            'job_title' => $user['title'],
+            'verify_switch' => $user['verify_switch'],
+            'friends_friends_appointment_switch' => $user['friends_friends_appointment_switch']
         ];
     }
 

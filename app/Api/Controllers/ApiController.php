@@ -1592,7 +1592,9 @@ class ApiController extends BaseController
                                 'head_url' => '头像URL',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室',
-                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师'
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
+                                'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
+                                'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
                             ],
                             'message' => '',
                             'error' => ''
@@ -1615,7 +1617,9 @@ class ApiController extends BaseController
                                 'head_url' => '头像URL',
                                 'hospital' => '所属医院',
                                 'department' => '所属科室',
-                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师'
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
+                                'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
+                                'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
                             ],
                             'message' => '',
                             'error' => ''
@@ -1640,6 +1644,8 @@ class ApiController extends BaseController
                                 'hospital' => '所属医院',
                                 'department' => '所属科室',
                                 'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
+                                'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
+                                'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
                                 'common_friend_count' => '共同好友数量'
                             ],
                             'message' => '',
