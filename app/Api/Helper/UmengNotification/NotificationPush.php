@@ -49,7 +49,7 @@ class NotificationPush
             $brocast->setPredefinedKeyValue("production_mode", "true");
             // [optional]Set extra fields
             $brocast->setExtraField("action", $action);
-            $unicast->setExtraField("data-id", $dataId);
+            $brocast->setExtraField("data-id", $dataId);
             $brocast->send();
 
             return ['result' => true, 'message' => ''];
@@ -236,7 +236,7 @@ class NotificationPush
             $brocast->setPredefinedKeyValue("production_mode", "false");
             // Set customized fields
             $brocast->setCustomizedField("action", $action);
-            $unicast->setCustomizedField("data-id", $dataId);
+            $brocast->setCustomizedField("data-id", $dataId);
             $brocast->send();
 
             return ['result' => true, 'message' => ''];
