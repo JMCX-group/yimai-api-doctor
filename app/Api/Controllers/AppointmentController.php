@@ -123,29 +123,6 @@ class AppointmentController extends BaseController
         ];
 
         /**
-         * 是否为已注册患者
-         * 注册患者发送单播通知；未注册患者需要发送短信
-         */
-        $patient = Patient::where('phone', $request['phone'])->get();
-        if ($patient->isEmpty()) {
-            $this->sendSMS($user, $doctor, $request['phone']);
-        }else{
-            /**
-             * 向患者端推送消息
-             */
-            require(dirname(dirname(__FILE__)) . '/Helper/UmengNotification/NotificationPush.php');
-            //患者端企业版
-            $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
-            //患者端AppStore
-//            $push = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
-            $pushResult = $push->sendIOSUnicast($patient->device_token, '您有新的约诊订单需要支付', 'appointment');
-
-            if ($pushResult['result'] == false) {
-            Log::info('push-appointment-patient', ['context' => $pushResult['message']]);
-            }
-        }
-
-        /**
          * 推送消息记录
          */
         $msgData = [
@@ -161,6 +138,29 @@ class AppointmentController extends BaseController
         try {
             Appointment::create($data);
             AppointmentMsg::create($msgData);
+
+            /**
+             * 是否为已注册患者
+             * 注册患者发送单播通知；未注册患者需要发送短信
+             */
+            $patient = Patient::where('phone', $request['phone'])->get();
+            if ($patient->isEmpty()) {
+                $this->sendSMS($user, $doctor, $request['phone']);
+            } else {
+                /**
+                 * 向患者端推送消息
+                 */
+                require(dirname(dirname(__FILE__)) . '/Helper/UmengNotification/NotificationPush.php');
+                //患者端企业版
+                $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
+                //患者端AppStore
+//            $push = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
+                $pushResult = $push->sendIOSUnicast($patient->device_token, '您有新的约诊订单需要支付', 'appointment');
+
+                if ($pushResult['result'] == false) {
+                    Log::info('push-appointment-patient', ['context' => $pushResult['message']]);
+                }
+            }
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
         }
