@@ -63,10 +63,10 @@ class SearchController extends BaseController
             $user['dp_code'] = User::getDpCode($user['id']);
             $user['is_friend'] = (DoctorRelation::getIsFriend($my->id, $user['id'])[0]->count) == 2 ? true : false;
             $data = Transformer::searchDoctorTransform_dpCode($user);
-
-            return response()->json(compact('data'));
         } else {
-            return response()->json(['success' => ''], 204);
+            $data = '';
         }
+
+        return response()->json(compact('data'));
     }
 }
