@@ -49,12 +49,14 @@ class ApiController extends BaseController
                     '广播' => [
                         '场景' => 'CMS发送广播，将会分医生或患者端推送',
                         'action' => 'radio',
-                        '跳转' => '广播列表',
+                        'data-id' => '广播ID',
+                        '跳转' => '指定的广播页面',
                     ],
                     '约诊' => [
                         '场景' => '代约医生新建约诊，将会给相应患者推送单播，提示缴费',
                         'action' => 'appointment',
-                        '跳转' => '约诊列表',
+                        'data-id' => '约诊ID',
+                        '跳转' => '指定的约诊页面',
                     ],
                 ]
             ],
