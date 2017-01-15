@@ -420,6 +420,8 @@ class ApiController extends BaseController
                                 'personal_introduction' => '个人简介',
                                 'qr_code_url' => '提供给其他用户扫描新增好友，数据格式：{"data":"用户ID号", "operation": "操作指令：add_friend"}; 如果判断没有该数据，请随便提交一次修改用户数据的接口，就可以生成，例如把性别1修改成性别1，返回的数据就有这个了',
                                 'is_auth' => '是否认证；未认证： ；认证成功：completed；认证中：processing；认证失败：fail；',
+                                'verify_switch' => '隐私设置: 添加好友验证开关; 默认值为1,即开',
+                                'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
                                 'common_friend_list' => [
                                     'id' => '用户id',
                                     'head_url' => '头像URL',

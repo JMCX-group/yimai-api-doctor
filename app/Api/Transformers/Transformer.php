@@ -162,6 +162,8 @@ class Transformer
                 'personal_introduction' => $user->profile,
                 'qr_code_url' => $user->qr_code_url,
                 'is_auth' => $user->auth,
+                'verify_switch' => $user->verify_switch,
+                'friends_friends_appointment_switch' => $user->friends_friends_appointment_switch,
                 'common_friend_list' => $user->common_friend_list,
             ]
         ];
