@@ -221,7 +221,7 @@ class WalletController extends BaseController
                         'total' => $total->total / 100, //单位是分
                         'year' => $year,
                         'month' => $month,
-                        'status' => 0 //结算状态； 0：未缴税；1：已完成结算，可提现]
+                        'status' => 0 //结算状态； 0：未缴税；1：已完成结算，可提现
                     ];
 
                     SettlementRecord::create($data);
@@ -229,6 +229,13 @@ class WalletController extends BaseController
                     break;
                 }
             }
+
+            /**
+             * 修改已经进行提现的流程的数据状态
+             */
+            $pendingIdList = Order::allPending($id, $year, $month);
+            Order::whereIn('id', $pendingIdList)
+                ->update(['settlement_status' => '待结算']); //settlement_status：结算状态:待结算、可提现
         }
     }
 }

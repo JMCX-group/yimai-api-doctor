@@ -81,8 +81,25 @@ class Order extends Model
                 date_format(`time_expire`, '%m') AS 'month',
                 sum(total_fee) AS total 
             FROM orders 
-            WHERE doctor_id=$doctorId 
+            WHERE doctor_id=$doctorId AND status='end'
             GROUP BY date_format(`time_expire`, '%Y-%m');
+        ");
+    }
+
+    /**
+     * 查询所有进入代缴税列表的id list，用于更新状态
+     *
+     * @param $doctorId
+     * @param $year
+     * @param $month
+     * @return mixed
+     */
+    public static function allPending($doctorId, $year, $month)
+    {
+        return DB::select("
+        SELECT id
+        FROM orders 
+        WHERE doctor_id=$doctorId AND status='end' AND date_format(`time_expire`, '%Y')=$year AND date_format(`time_expire`, '%m')=$month;
         ");
     }
 }
