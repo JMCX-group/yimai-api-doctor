@@ -56,7 +56,15 @@ class NotificationPush
         }
     }
 
-    function sendAndroidUnicast()
+    /**
+     * 安卓单播
+     *
+     * @param $deviceToken
+     * @param $title
+     * @param $action
+     * @return array
+     */
+    function sendAndroidUnicast($deviceToken, $title, $action)
     {
         try {
             $unicast = new AndroidUnicast();
@@ -64,21 +72,21 @@ class NotificationPush
             $unicast->setPredefinedKeyValue("appkey", $this->appkey);
             $unicast->setPredefinedKeyValue("timestamp", $this->timestamp);
             // Set your device tokens here
-            $unicast->setPredefinedKeyValue("device_tokens", "xx");
+            $unicast->setPredefinedKeyValue("device_tokens", $deviceToken);
             $unicast->setPredefinedKeyValue("ticker", "Android unicast ticker");
-            $unicast->setPredefinedKeyValue("title", "Android unicast title");
+            $unicast->setPredefinedKeyValue("title", $title);
             $unicast->setPredefinedKeyValue("text", "Android unicast text");
             $unicast->setPredefinedKeyValue("after_open", "go_app");
             // Set 'production_mode' to 'false' if it's a test device.
             // For how to register a test device, please see the developer doc.
             $unicast->setPredefinedKeyValue("production_mode", "true");
             // Set extra fields
-            $unicast->setExtraField("test", "helloworld");
-            print("Sending unicast notification, please wait...\r\n");
+            $unicast->setExtraField("action", $action);
             $unicast->send();
-            print("Sent SUCCESS\r\n");
+
+            return ['result' => true, 'message' => ''];
         } catch (Exception $e) {
-            print("Caught exception: " . $e->getMessage());
+            return ['result' => false, 'message' => $e->getMessage()];
         }
     }
 

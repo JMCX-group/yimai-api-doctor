@@ -144,24 +144,21 @@ class AppointmentController extends BaseController
              * 注册患者发送单播通知；未注册患者需要发送短信
              */
             $patient = Patient::where('phone', $request['phone'])->first();
-            if (!isset($patient->id)) {
-                $this->sendSMS($user, $doctor, $request['phone']);
-            } else {
+            if (isset($patient->id)) {
                 if ($patient->device_token != '' && $patient->device_token != null) {
                     /**
                      * 向患者端推送消息
                      */
-                    require(dirname(dirname(__FILE__)) . '/Helper/UmengNotification/NotificationPush.php');
-                    //患者端企业版
-                    $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
-                    //患者端AppStore
-//            $push = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
-                    $pushResult = $push->sendIOSUnicast($patient->device_token, '您有新的约诊订单需要支付', 'appointment');
-
+                    $pushResult = $this->pushMsg($patient->device_token);
                     if ($pushResult['result'] == false) {
                         Log::info('push-appointment-patient', ['context' => $pushResult['message']]);
                     }
                 }
+            } else {
+                /**
+                 * 向患者端发送短信
+                 */
+                $this->sendSMS($user, $doctor, $request['phone']);
             }
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
@@ -346,5 +343,33 @@ class AppointmentController extends BaseController
             $doctor->name . '医师的面诊，约诊费约为' .
             $doctor->fee . '元，请在12小时内安装“医者脉连-看专家”客户端进行确认。下载地址：http://pre.im/PHMF 。请确保使用本手机号码进行注册和登陆以便查看该笔预约。';
         $sms->sendSMS($phone, $txt);
+    }
+
+    /**
+     * 给患者推送约诊信息
+     *
+     * @param $deviceToken
+     * @return array
+     */
+    public function pushMsg($deviceToken)
+    {
+        require(dirname(dirname(__FILE__)) . '/Helper/UmengNotification/NotificationPush.php');
+
+        /**
+         * 判断是IOS还是Android：
+         * Android的device_token是44位字符串, iOS的device-token是64位。
+         */
+        if (strlen($deviceToken) > 44) {
+            //患者端企业版
+            $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
+            //患者端AppStore
+//            $push = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
+            $pushResult = $push->sendIOSUnicast($deviceToken, '您有新的约诊订单需要支付', 'appointment');
+        } else {
+            $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
+            $pushResult = $push->sendAndroidUnicast($deviceToken, '您有新的约诊订单需要支付', 'appointment');
+        }
+
+        return $pushResult;
     }
 }
