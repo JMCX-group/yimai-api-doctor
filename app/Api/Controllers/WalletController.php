@@ -46,12 +46,13 @@ class WalletController extends BaseController
         }
 
         $total = Order::totalFeeSum($user->id);
-        $billable = Order::billableSum($user->id);
-        $pending = Order::pendingSum($user->id);
+        $billable = Order::selectSum($user->id, '可提现');
+        $pending = Order::selectSum($user->id, '待结算');
+        $refunded = Order::selectSum($user->id, '已提现');
         $walletInfo->total = ($total[0]->sum_value) / 100;
         $walletInfo->billable = ($billable[0]->sum_value) / 100; //可提现
         $walletInfo->pending = ($pending[0]->sum_value) / 100; //待结算
-        //$walletInfo->refunded = 0; //已提现
+        $walletInfo->refunded = ($refunded[0]->sum_value) / 100; //已提现
         $walletInfo->save();
 
         return $this->response->item($walletInfo, new WalletTransformer());

@@ -46,25 +46,19 @@ class Order extends Model
     }
 
     /**
-     * 查询可提现总额
+     * 查询可提现/待结算/已提现总额
      *
      * @param $userId
+     * @param $status
      * @return mixed
      */
-    public static function billableSum($userId)
+    public static function selectSum($userId, $status)
     {
-        return DB::select("SELECT SUM(`total_fee`) as sum_value FROM orders WHERE doctor_id=" . $userId . " AND `settlement_status`='可提现'");
-    }
-
-    /**
-     * 查询待结算总额
-     *
-     * @param $userId
-     * @return mixed
-     */
-    public static function pendingSum($userId)
-    {
-        return DB::select("SELECT SUM(`total_fee`) as sum_value FROM orders WHERE doctor_id=" . $userId . " AND `settlement_status`='待结算'");
+        return DB::select("
+            SELECT SUM(`total_fee`) as sum_value 
+            FROM orders 
+            WHERE doctor_id=$userId
+            AND `settlement_status`=$status");
     }
 
     /**
