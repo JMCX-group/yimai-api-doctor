@@ -368,7 +368,7 @@ class AppointmentController extends BaseController
 //            $push = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
             $pushResult = $push->sendIOSUnicast($deviceToken, '您有新的约诊订单需要支付', 'appointment', $appointmentId);
         } else {
-            $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
+            $push = new \NotificationPush('587b786af43e4833800004cb', 'oth53caymcr5zxc2edhi0ghuoyuxbov3');
             $pushResult = $push->sendAndroidUnicast($deviceToken, '您有新的约诊订单需要支付', 'appointment', $appointmentId);
         }
 
