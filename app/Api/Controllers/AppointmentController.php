@@ -143,7 +143,7 @@ class AppointmentController extends BaseController
              * 是否为已注册患者
              * 注册患者发送单播通知；未注册患者需要发送短信
              */
-            $patient = Patient::where('phone', $request['phone'])->get();
+            $patient = Patient::where('phone', $request['phone'])->first();
             if ($patient->isEmpty()) {
                 $this->sendSMS($user, $doctor, $request['phone']);
             } else {
