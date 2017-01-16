@@ -77,9 +77,11 @@ class DoctorRelationController extends BaseController
             $data['doctor_id'] = $user->id;
             $data['doctor_read'] = 1;
             $data['doctor_friend_read'] = 0;
+            $data['confirm'] = ($friend['verify_switch'] == 0) ? 1 : 0; //是否确认；1：已确认，0：未确认；
 
             try {
-                if (DoctorRelation::create($data)) {
+                $relation = DoctorRelation::create($data);
+                if ($relation) {
                     /**
                      * 判断被加一方是否无需验证：
                      */
@@ -88,6 +90,7 @@ class DoctorRelationController extends BaseController
                         $friendData['doctor_friend_id'] = $user->id;
                         $friendData['doctor_read'] = 0;
                         $friendData['doctor_friend_read'] = 1;
+                        $friendData['confirm'] = 1;
                         DoctorRelation::create($friendData);
                     }
 
@@ -126,6 +129,7 @@ class DoctorRelationController extends BaseController
             $data['doctor_friend_id'] = $item;
             $data['doctor_read'] = 1;
             $data['doctor_friend_read'] = 0;
+            $data['confirm'] = 0; //是否确认；1：已确认，0：未确认；
 
             try {
                 DoctorRelation::create($data);
@@ -157,20 +161,28 @@ class DoctorRelationController extends BaseController
         /**
          * 查询是否有这条数据以及更新已读情况：
          */
-        $myRead = DoctorRelation::where('doctor_id', $request['id'])
+        $relation = DoctorRelation::where('doctor_id', $request['id'])
             ->where('doctor_friend_id', $user->id)
-            ->update(['doctor_friend_read' => 1]);
+            ->first();
 
-        if ($myRead) {
+        if ($relation) {
             $data = [
                 'doctor_id' => $user->id,
                 'doctor_friend_id' => $request['id'],
                 'doctor_read' => 1,
-                'doctor_friend_read' => 0
+                'doctor_friend_read' => 0,
+                'confirm' => 1 //是否确认；1：已确认，0：未确认；
             ];
 
             try {
                 if (DoctorRelation::create($data)) {
+                    /**
+                     * 更新已读和关系确认情况：
+                     */
+                    $relation->doctor_friend_read = 1;
+                    $relation->confirm = 1;
+                    $relation->save();
+
                     return response()->json(['success' => ''], 204);
                 } else {
                     return response()->json(['message' => '添加失败'], 500);

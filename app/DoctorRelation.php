@@ -24,7 +24,8 @@ class DoctorRelation extends Model
         'doctor_friend_id',
         'friend_remarks',
         'doctor_read',
-        'doctor_friend_read'
+        'doctor_friend_read',
+        'confirm' //是否确认；1：已确认，0：未确认；
     ];
 
     /**
@@ -156,7 +157,11 @@ class DoctorRelation extends Model
         $notSelectFriends = $myFriendList;
         array_push($notSelectFriends, $id);
 
+        /**
+         * 搜索好友的关系
+         */
         $friendsFriendData = DoctorRelation::select('doctor_friend_id')
+            ->where('confirm', 1)
             ->whereIn('doctor_id', $myFriendList)
             ->whereNotIn('doctor_friend_id', $notSelectFriends)
             ->distinct()
