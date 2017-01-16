@@ -43,15 +43,17 @@ class AppointmentController extends BaseController
             return $user;
         }
 
-        $appointment = Appointment::find($request['id']);
+        $appointmentId = $request['id'];
+        $doctorId = $request['doctor'];
 
-        $doctor = User::getDoctorAllInfo($request['doctor']);
+        $appointment = Appointment::find($appointmentId);
+        $doctor = User::find($doctorId);
 
         /**
          * 更新的约诊信息：
          */
         $appointment->price = $doctor->fee;
-        $appointment->doctor_id = $request['doctor'];
+        $appointment->doctor_id = $doctorId;
         $appointment->status = 'wait-1';//预约医生之后,进入待患者付款阶段
 
         try {

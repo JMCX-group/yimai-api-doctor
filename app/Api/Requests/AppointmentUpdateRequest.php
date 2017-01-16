@@ -31,7 +31,7 @@ class AppointmentUpdateRequest extends Request
     {
         return [
             'id' => 'required|exists:appointments',
-            'doctor' => 'required|exists:doctors'
+            'doctor' => 'required|exists:doctors,id'
         ];
     }
 
