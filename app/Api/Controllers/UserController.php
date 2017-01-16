@@ -302,7 +302,9 @@ class UserController extends BaseController
 
         Image::make($destinationPath . $filename)->fit(150)->save();
 
-        return $domain . '/' . $destinationPath . $filename;
+        $mark = '?v=' . time(); //修改URL
+
+        return $domain . '/' . $destinationPath . $filename . $mark;
     }
 
     /**
