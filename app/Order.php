@@ -57,8 +57,8 @@ class Order extends Model
         return DB::select("
             SELECT SUM(`total_fee`) as sum_value 
             FROM orders 
-            WHERE doctor_id=$userId
-            AND `settlement_status`=$status");
+            WHERE doctor_id=.$userId
+            AND `settlement_status`='$status'");
     }
 
     /**
