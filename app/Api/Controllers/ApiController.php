@@ -294,6 +294,7 @@ class ApiController extends BaseController
                     ],
                     '查询医生排班信息' => [
                         '说明' => 'data里总共会有n组数据，依次从当天开始，am和pm后面的是跟的字符串true或false',
+                        '特注' => '当days是60天时，会自动刷被查医生的相关排班信息',
                         'url' => $http . '/api/data/scheduling',
                         'method' => 'POST',
                         'params' => [
