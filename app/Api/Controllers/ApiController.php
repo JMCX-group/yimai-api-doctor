@@ -292,7 +292,7 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
-                    '查询当前登录医生排班信息' => [
+                    '查询医生排班信息' => [
                         '说明' => 'data里总共会有n组数据，依次从当天开始，am和pm后面的是跟的字符串true或false',
                         'url' => $http . '/api/data/scheduling',
                         'method' => 'POST',
