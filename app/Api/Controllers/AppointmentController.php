@@ -8,7 +8,8 @@
 
 namespace App\Api\Controllers;
 
-use App\Api\Helper\Sms;
+use App\Api\Helper\MsgAndNotification;
+use App\Api\Helper\SmsContent;
 use App\Api\Requests\AppointmentIdRequest;
 use App\Api\Requests\AppointmentRequest;
 use App\Api\Requests\AppointmentUpdateRequest;
@@ -16,20 +17,13 @@ use App\Api\Transformers\ReservationRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
-use App\AppointmentMsg;
 use App\Patient;
 use App\User;
 use Intervention\Image\Facades\Image;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Illuminate\Support\Facades\Log;
 
 class AppointmentController extends BaseController
 {
-    public function index()
-    {
-
-    }
-
     /**
      * 代约医生信息确认
      *
@@ -125,43 +119,22 @@ class AppointmentController extends BaseController
             'status' => 'wait-1' //新建约诊之后,进入待患者付款阶段
         ];
 
-        /**
-         * 推送消息记录
-         */
-        $msgData = [
-            'appointment_id' => $appointmentId,
-            'locums_id' => $user->id, //代理医生ID
-            'locums_name' => $user->name, //代理医生姓名
-            'patient_name' => $request['name'],
-            'doctor_id' => $request['doctor'],
-            'doctor_name' => $doctor->name,
-            'status' => 'wait-1' //新建约诊之后,进入待患者付款阶段
-        ];
-
         try {
             Appointment::create($data);
-            AppointmentMsg::create($msgData);
+            MsgAndNotification::sendAppointmentsMsg(Appointment::find($appointmentId)); //推送消息
 
             /**
              * 是否为已注册患者
              * 注册患者发送单播通知；未注册患者需要发送短信
              */
+            SmsContent::sendSMS_newPatient($user, $doctor, $request['phone']); //向患者端发送短信
             $patient = Patient::where('phone', $request['phone'])->first();
             if (isset($patient->id)) {
                 if ($patient->device_token != '' && $patient->device_token != null) {
-                    /**
-                     * 向患者端推送消息
-                     */
-                    $pushResult = $this->pushMsg($patient->device_token, $appointmentId);
-                    if ($pushResult['result'] == false) {
-                        Log::info('push-appointment-patient', ['context' => $pushResult['message']]);
-                    }
+                    MsgAndNotification::pushMsg($patient->device_token, $appointmentId); //向患者端推送消息
                 }
             } else {
-                /**
-                 * 向患者端发送短信
-                 */
-                $this->sendSMS($user, $doctor, $request['phone']);
+                SmsContent::sendSMS_newPatient($user, $doctor, $request['phone']); //向患者端发送短信
             }
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
@@ -326,54 +299,5 @@ class AppointmentController extends BaseController
         ];
 
         return response()->json(compact('data'));
-    }
-
-    /**
-     * 发送短信
-     *
-     * @param $user
-     * @param $doctor
-     * @param $phone
-     */
-    public function sendSMS($user, $doctor, $phone)
-    {
-        $sms = new Sms();
-        //文案：
-        $txt = '【医者脉连】' .
-            $user->name . '医生刚刚通过“医者脉连”平台为您预约' .
-            $doctor->hospital .
-            $doctor->dept .
-            $doctor->name . '医师的面诊，约诊费约为' .
-            (($doctor->fee) / 100) . '元，请在12小时内安装“医者脉连-看专家”客户端进行确认。下载地址：http://pre.im/PHMF 。请确保使用本手机号码进行注册和登陆以便查看该笔预约。';
-        $sms->sendSMS($phone, $txt);
-    }
-
-    /**
-     * 给患者推送约诊信息
-     *
-     * @param $deviceToken
-     * @param $appointmentId
-     * @return array
-     */
-    public function pushMsg($deviceToken, $appointmentId)
-    {
-        require(dirname(dirname(__FILE__)) . '/Helper/UmengNotification/NotificationPush.php');
-
-        /**
-         * 判断是IOS还是Android：
-         * Android的device_token是44位字符串, iOS的device-token是64位。
-         */
-        if (strlen($deviceToken) > 44) {
-            //患者端企业版
-            $push = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
-            //患者端AppStore
-//            $push = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
-            $pushResult = $push->sendIOSUnicast($deviceToken, '您有新的约诊订单需要支付', 'appointment', $appointmentId);
-        } else {
-            $push = new \NotificationPush('587b786af43e4833800004cb', 'oth53caymcr5zxc2edhi0ghuoyuxbov3');
-            $pushResult = $push->sendAndroidUnicast($deviceToken, '您有新的约诊订单需要支付', 'appointment', $appointmentId);
-        }
-
-        return $pushResult;
     }
 }
