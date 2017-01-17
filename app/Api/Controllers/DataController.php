@@ -31,7 +31,7 @@ class DataController extends BaseController
     }
 
     /**
-     * 生成未来14天的排班数据
+     * 生成未来n天的排班数据
      *
      * @param IdRequest $request
      * @return \Illuminate\Http\JsonResponse
@@ -42,14 +42,17 @@ class DataController extends BaseController
          * 获取医生数据
          */
         $user = User::find($request['id']);
+        if (isset($request['days']) && is_numeric($request['days'])) {
+            $days = $request['days'];
+        } else {
+            $days = 60;
+        }
 
         /**
          * 获取固定排班和灵活排班数组：
          */
         $fixed = json_decode($user->admission_set_fixed, true);
-        $flexible = json_decode($user->admission_set_flexible, true);
-        $user->admission_set_flexible = $this->delOutdated($flexible);
-        $user->save();
+        $flexible = $this->delOutdated_retArr(json_decode($user->admission_set_flexible, true));
 
         /**
          * 生成基础数据结构：
@@ -58,9 +61,9 @@ class DataController extends BaseController
         $data = array();
 
         /**
-         * 生成未来14天的数据:
+         * 生成未来n天的数据:
          */
-        for ($day = 0; $day < 14; $day++) {
+        for ($day = 0; $day < $days; $day++) {
             /**
              * 基础数据：今天周几，今天是几号，今天的数据结构
              */
@@ -109,6 +112,14 @@ class DataController extends BaseController
             array_push($data, $tmpData);
         }
 
+        /**
+         * 如果是60天的，则刷新该医生数据：
+         */
+        if($days == 60) {
+            $user->admission_set_flexible = json_encode($data);
+            $user->save();
+        }
+
         return response()->json(compact('data'));
     }
 
@@ -118,7 +129,7 @@ class DataController extends BaseController
      * @param $data
      * @return string
      */
-    public function delOutdated($data)
+    public function delOutdated_retArr($data)
     {
         $now = time();
         $newData = array();
@@ -128,6 +139,6 @@ class DataController extends BaseController
             }
         }
 
-        return json_encode($newData);
+        return $newData;
     }
 }
