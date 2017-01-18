@@ -46,6 +46,7 @@ class RadioStation extends Model
                     ->orWhere('d_or_p', 'all');
             })
 //            ->where('valid', '>', date('Y-m-d H:i:s')) //过期时间
+            ->orderBy('created_at', 'DESC')
             ->paginate(4);
     }
 
