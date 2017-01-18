@@ -4,19 +4,23 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RadioRead extends Model
+class DoctorRadioRead extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'radio_read';
+    protected $table = 'doctor_radio_read';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'radio_station_id', 'value'];
+    protected $fillable = [
+        'user_id',
+        'radio_station_id',
+        'value'
+    ];
 }

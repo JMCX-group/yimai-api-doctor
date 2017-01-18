@@ -26,14 +26,7 @@ class RadioStationController extends BaseController
             return $user;
         }
 
-        // 分页获取广播列表,并左连接获取广播已读状态表信息
-        $radioStations = RadioStation::leftJoin('radio_read', function ($join) use ($user) {
-            $join->on('radio_stations.id', '=', 'radio_read.radio_station_id')
-                ->where('radio_read.user_id', '=', $user->id);
-        })
-            ->where('status', 0)
-//            ->where('valid', '>', date('Y-m-d H:i:s'))
-            ->paginate(4);
+        $radioStations = RadioStation::getRadioList($user);
 
         return $this->response->paginator($radioStations, new RadioStationTransformer());
     }

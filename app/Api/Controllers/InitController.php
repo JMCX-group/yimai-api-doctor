@@ -64,14 +64,7 @@ class InitController extends BaseController
         /**
          * Get all system notification.
          */
-        $radioStationUnreadCount = RadioStation::leftJoin('radio_read', function ($join) use ($user) {
-            $join->on('radio_stations.id', '=', 'radio_read.radio_station_id')
-                ->where('radio_read.user_id', '=', $user->id);
-        })
-            ->where('status', 0)
-            ->where('valid', '>', date('Y-m-d H:i:s'))
-            ->where('radio_read.value', 1)
-            ->count();
+        $radioStationUnreadCount = RadioStation::getUnreadRadioCount($user);
 
         /**
          * Get all admissions msg.
