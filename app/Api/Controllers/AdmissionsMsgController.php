@@ -51,7 +51,7 @@ class AdmissionsMsgController extends BaseController
             return $user;
         }
 
-        $allMsg = AppointmentMsg::where('doctor_id', $user->id)->where('read_status', 0)->get();
+        $allMsg = AppointmentMsg::where('doctor_id', $user->id)->where('doctor_read', 0)->get();
 
         $retData = array();
         foreach ($allMsg as $item) {
@@ -74,7 +74,7 @@ class AdmissionsMsgController extends BaseController
     public function readMessage(Request $request)
     {
         $msg = AppointmentMsg::find($request['id']);
-        $msg->read_status = 1;
+        $msg->doctor_read = 1;
         $msg->save();
 
         return response()->json(['success' => ''], 204); //给肠媳适配。。
@@ -92,7 +92,7 @@ class AdmissionsMsgController extends BaseController
             return $user;
         }
 
-        AppointmentMsg::where('doctor_id', $user->id)->update(['read_status' => 1]);
+        AppointmentMsg::where('doctor_id', $user->id)->update(['doctor_read' => 1]);
 
         return response()->json(['success' => ''], 204);
     }

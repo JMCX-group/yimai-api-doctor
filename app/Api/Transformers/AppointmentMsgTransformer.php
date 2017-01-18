@@ -21,7 +21,7 @@ class AppointmentMsgTransformer
             'appointment_id' => $appointmentMsg['appointment_id'],
             'text' => self::generateContent($appointmentMsg),
             'type' => $appointmentMsg['type'],
-            'read' => $appointmentMsg['read_status'],
+            'read' => $appointmentMsg['locums_read'],
             'time' => $appointmentMsg['created_at']->format('Y-m-d H:i:s')
         ];
     }

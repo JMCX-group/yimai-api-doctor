@@ -69,14 +69,14 @@ class InitController extends BaseController
          * Get all admissions msg.
          */
         $admissionsUnreadCount = AppointmentMsg::where('doctor_id', $user->id)
-            ->where('read_status', 0)
+            ->where('doctor_read', 0)
             ->count();
 
         /**
          * Get all appointment msg.
          */
         $appointmentUnreadCount = AppointmentMsg::where('locums_id', $user->id)
-            ->where('read_status', 0)
+            ->where('locums_read', 0)
             ->count();
 
         return [

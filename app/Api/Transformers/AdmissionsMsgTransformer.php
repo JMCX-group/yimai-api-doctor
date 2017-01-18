@@ -21,7 +21,7 @@ class AdmissionsMsgTransformer
             'appointment_id' => $admissionsMsg['appointment_id'],
             'text' => self::generateContent($admissionsMsg),
             'type' => $admissionsMsg['type'],
-            'read' => $admissionsMsg['read_status'],
+            'read' => $admissionsMsg['doctor_read'],
             'time' => $admissionsMsg['created_at']->format('Y-m-d H:i:s')
         ];
     }
