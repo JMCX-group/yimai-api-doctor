@@ -23,4 +23,6 @@ class DoctorRadioRead extends Model
         'radio_station_id',
         'value'
     ];
+
+    public $timestamps = false;
 }
