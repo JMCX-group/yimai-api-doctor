@@ -8,7 +8,7 @@
 
 namespace App\Api\Controllers;
 
-use App\AdmissionsMsg;
+use App\AppointmentMsg;
 use App\Api\Transformers\AdmissionsMsgTransformer;
 use App\User;
 use Illuminate\Http\Request;
@@ -25,7 +25,7 @@ class AdmissionsMsgController extends BaseController
             return $user;
         }
 
-        $allMsg = AdmissionsMsg::where('doctor_id', $user->id)->get();
+        $allMsg = AppointmentMsg::where('doctor_id', $user->id)->get();
 
         $retData = array();
         foreach ($allMsg as $item) {
@@ -51,7 +51,7 @@ class AdmissionsMsgController extends BaseController
             return $user;
         }
 
-        $allMsg = AdmissionsMsg::where('doctor_id', $user->id)->where('read_status', 0)->get();
+        $allMsg = AppointmentMsg::where('doctor_id', $user->id)->where('read_status', 0)->get();
 
         $retData = array();
         foreach ($allMsg as $item) {
@@ -73,7 +73,7 @@ class AdmissionsMsgController extends BaseController
      */
     public function readMessage(Request $request)
     {
-        $msg = AdmissionsMsg::find($request['id']);
+        $msg = AppointmentMsg::find($request['id']);
         $msg->read_status = 1;
         $msg->save();
 
@@ -92,7 +92,7 @@ class AdmissionsMsgController extends BaseController
             return $user;
         }
 
-        AdmissionsMsg::where('doctor_id', $user->id)->update(['read_status' => 1]);
+        AppointmentMsg::where('doctor_id', $user->id)->update(['read_status' => 1]);
 
         return response()->json(['success' => ''], 204);
     }

@@ -8,7 +8,6 @@
 
 namespace App\Api\Controllers;
 
-use App\AdmissionsMsg;
 use App\Api\Transformers\Transformer;
 use App\Api\Transformers\UserTransformer;
 use App\AppointmentMsg;
@@ -69,7 +68,7 @@ class InitController extends BaseController
         /**
          * Get all admissions msg.
          */
-        $admissionsUnreadCount = AdmissionsMsg::where('doctor_id', $user->id)
+        $admissionsUnreadCount = AppointmentMsg::where('doctor_id', $user->id)
             ->where('read_status', 0)
             ->count();
 
