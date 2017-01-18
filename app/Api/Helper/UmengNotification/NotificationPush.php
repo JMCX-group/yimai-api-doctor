@@ -219,9 +219,10 @@ class NotificationPush
      * @param $alert
      * @param $action
      * @param $dataId
+     * @param $productionMode
      * @return array
      */
-    function sendIOSBroadcast($alert, $action, $dataId='')
+    function sendIOSBroadcast($alert, $action, $dataId='', $productionMode='false')
     {
         try {
             $brocast = new IOSBroadcast();
@@ -233,7 +234,7 @@ class NotificationPush
             $brocast->setPredefinedKeyValue("badge", 0);
             $brocast->setPredefinedKeyValue("sound", "chime");
             // Set 'production_mode' to 'true' if your app is under production mode
-            $brocast->setPredefinedKeyValue("production_mode", "false");
+            $brocast->setPredefinedKeyValue("production_mode", $productionMode);
             // Set customized fields
             $brocast->setCustomizedField("action", $action);
             $brocast->setCustomizedField("data-id", $dataId);
@@ -252,9 +253,10 @@ class NotificationPush
      * @param $alert
      * @param $action
      * @param $dataId
+     * @param $productionMode
      * @return array
      */
-    function sendIOSUnicast($deviceToken, $alert, $action, $dataId='')
+    function sendIOSUnicast($deviceToken, $alert, $action, $dataId='', $productionMode='false')
     {
         try {
             $unicast = new IOSUnicast();
@@ -267,7 +269,7 @@ class NotificationPush
             $unicast->setPredefinedKeyValue("badge", 0);
             $unicast->setPredefinedKeyValue("sound", "chime");
             // Set 'production_mode' to 'true' if your app is under production mode
-            $unicast->setPredefinedKeyValue("production_mode", "false");
+            $unicast->setPredefinedKeyValue("production_mode", $productionMode);
             // Set customized fields
             $unicast->setCustomizedField("action", $action);
             $unicast->setCustomizedField("data-id", $dataId);
