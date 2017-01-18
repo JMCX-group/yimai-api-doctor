@@ -9,7 +9,7 @@
 namespace App\Api\Controllers;
 
 use App\Api\Transformers\RadioStationTransformer;
-use App\RadioRead;
+use App\DoctorRadioRead;
 use App\RadioStation;
 use App\User;
 use Illuminate\Http\Request;
@@ -44,7 +44,7 @@ class RadioStationController extends BaseController
             return $user;
         }
 
-        RadioRead::where('user_id', $user->id)
+        DoctorRadioRead::where('user_id', $user->id)
             ->where('radio_station_id', $request->id)
             ->delete();
 
@@ -63,7 +63,7 @@ class RadioStationController extends BaseController
             return $user;
         }
 
-        RadioRead::where('user_id', $user->id)->delete();
+        DoctorRadioRead::where('user_id', $user->id)->delete();
 
         return response()->json(['success' => ''], 204);
     }
