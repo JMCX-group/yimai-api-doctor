@@ -39,12 +39,21 @@ class Kernel extends ConsoleKernel
     {
         /**
          * 更新过期（12小时）未支付的信息并推送：
+         * wait-0 to close-2
+         */
+        $wait0Appointments = Appointment::getOverdueAcceptedList();
+        MsgAndNotification::sendAppointmentsMsg_list($wait0Appointments, 'close-2');
+
+        /**
+         * 更新过期（12小时）未支付的信息并推送：
+         * wait-1 to close-1
          */
         $wait1Appointments = Appointment::getOverduePaymentList();
         MsgAndNotification::sendAppointmentsMsg_list($wait1Appointments, 'close-1');
 
         /**
          * 更新过期（48小时）未接诊的信息并推送：
+         * wait-2 to close-2
          */
         $wait2Appointments = Appointment::getOverdueNotAdmissionsList();
         MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'close-2');

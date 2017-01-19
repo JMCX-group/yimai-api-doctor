@@ -59,6 +59,18 @@ class Appointment extends Model
     ];
 
     /**
+     * 查询过期（24小时）未受理代约的
+     *
+     * @return mixed
+     */
+    public static function getOverdueAcceptedList()
+    {
+        return Appointment::where('status', 'wait-0')
+            ->where('updated_at', '<', date('Y-m-d H:i:s', time() - 24 * 3600))
+            ->get();
+    }
+
+    /**
      * 查询过期（12小时）未支付的
      *
      * @return mixed
