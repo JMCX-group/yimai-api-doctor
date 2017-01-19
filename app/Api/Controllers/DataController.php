@@ -52,7 +52,10 @@ class DataController extends BaseController
          * 获取固定排班和灵活排班数组：
          */
         $fixed = json_decode($user->admission_set_fixed, true);
-        $flexible = $this->delOutdated_retArr(json_decode($user->admission_set_flexible, true));
+        $flexible = null;
+        if ($user->admission_set_flexible != null && $user->admission_set_flexible != '') {
+            $flexible = $this->delOutdated_retArr(json_decode($user->admission_set_flexible, true));
+        }
 
         /**
          * 生成基础数据结构：
@@ -80,8 +83,10 @@ class DataController extends BaseController
              */
             foreach ($fixed as $item) {
                 if ($item['week'] == $tmpWeek) {
-                    $tmpData['am'] = ($item['am'] == 'true' || $item['am'] == true) ? 'true' : 'false';
-                    $tmpData['pm'] = ($item['pm'] == 'true' || $item['pm'] == true) ? 'true' : 'false';
+//                    $tmpData['am'] = ($item['am'] == 'true') ? 'true' : 'false';
+//                    $tmpData['pm'] = ($item['pm'] == 'true') ? 'true' : 'false';
+                    $tmpData['am'] = $item['am'];
+                    $tmpData['pm'] = $item['pm'];
 
                     break;
                 }
@@ -115,7 +120,7 @@ class DataController extends BaseController
         /**
          * 如果是60天的，则刷新该医生数据：
          */
-        if($days == 60) {
+        if ($days == 60) {
             $user->admission_set_flexible = json_encode($data);
             $user->save();
         }
