@@ -12,4 +12,6 @@ class Cron extends Model
      * @var string
      */
     protected $table = 'cron_test';
+
+    protected $fillable = ['id', 'txt'];
 }

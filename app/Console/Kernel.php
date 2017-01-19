@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('inspire')
 //                 ->hourly();
         $schedule->call(function () {
-            Cron::insert();
+            Cron::insert(['txt' => date('Y-m-d H:i:s')]);
         })->everyMinute();
     }
 }
