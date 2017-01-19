@@ -98,11 +98,11 @@ class DataController extends BaseController
                 if ($tmpData['am'] == 'false' || $tmpData['pm'] == 'false') {
                     foreach ($flexible as $item) {
                         if ($item['date'] == $tmpDate) {
-                            if ($item['am'] == 'true' || $item['am'] == true) {
+                            if ($item['am'] == 'true') {
                                 $tmpData['am'] = 'true';
                             }
 
-                            if ($item['pm'] == 'true' || $item['pm'] == true) {
+                            if ($item['pm'] == 'true') {
                                 $tmpData['am'] = 'true';
                             }
 
