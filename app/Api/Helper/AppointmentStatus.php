@@ -267,7 +267,7 @@ class AppointmentStatus
                 break;
 
             case 'close-1':
-                $retData = '待患者付款';
+                $retData = '患者逾期未付款,约诊关闭';
                 break;
             case 'close-2':
                 $retData = '医生过期未接诊,约诊关闭';
