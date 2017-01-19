@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Api\Controllers\PayController;
 use App\Api\Helper\MsgAndNotification;
 use App\Appointment;
 use App\Cron;
@@ -29,6 +30,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             self::updateExpiredAndPushAppointment();
+            self::processOrders();
         })->everyMinute();
     }
 
@@ -57,5 +59,17 @@ class Kernel extends ConsoleKernel
          */
         $wait2Appointments = Appointment::getOverdueNotAdmissionsList();
         MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'close-2');
+    }
+
+    /**
+     * 处理已支付没有回调处理的订单
+     */
+    public static function processOrders()
+    {
+        $needProcessAppointments = Appointment::getPaidNoCallbackList();
+        if (count($needProcessAppointments) > 0) {
+            $payCtrl = new PayController();
+            $payCtrl->batProcessing($needProcessAppointments);
+        }
     }
 }

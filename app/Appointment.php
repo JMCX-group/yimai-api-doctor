@@ -96,17 +96,15 @@ class Appointment extends Model
     }
 
     /**
-     * 获取全部待缴费状态的id list。
+     * 获取全部wait-1和已支付状态的订单
      *
-     * @param $id
-     * @param $phone
      * @return mixed
      */
-    public static function getAllWait1AppointmentIdList($id, $phone)
+    public static function getPaidNoCallbackList()
     {
-        return DB::select(
-            "select `id` from `appointments` where ((`patient_id`='$id' OR `patient_phone`='$phone') AND `status`='wait-1')"
-        );
+        return Appointment::where('status', 'wait-1')
+            ->where('is_pay', '1')
+            ->get();
     }
 
     /**

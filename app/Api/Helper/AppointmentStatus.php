@@ -254,13 +254,13 @@ class AppointmentStatus
                 $retData = '您有新的约诊订单需要支付';
                 break;
             case 'wait-2':
-                $retData = '患者已付款，待医生确认';
+                $retData = '患者已付款，待您确认';
                 break;
             case 'wait-3':
                 $retData = '医生确认接诊，待面诊';
                 break;
             case 'wait-4':
-                $retData = '医生改期，待患者确认';
+                $retData = '医生改期，待您确认';
                 break;
             case 'wait-5':
                 $retData = '患者确认改期，待面诊';
@@ -277,32 +277,20 @@ class AppointmentStatus
                 break;
 
             case 'cancel-1':
-                $retData = '患者取消约诊; 未付款';
+            case 'cancel-3':
+            case 'cancel-5':
+            case 'cancel-6':
+                $retData = '患者取消约诊';
                 break;
             case 'cancel-2':
-                $retData = '医生取消约诊';
-                break;
-            case 'cancel-3':
-                $retData = '患者取消约诊; 已付款后';
-                break;
             case 'cancel-4':
-                $retData = '医生改期之后,医生取消约诊';
-                break;
-            case 'cancel-5':
-                $retData = '医生改期之后,患者取消约诊';
-                break;
-            case 'cancel-6':
-                $retData = '医生改期之后,患者确认之后,患者取消约诊';
-                break;
             case 'cancel-7':
-                $retData = '医生改期之后,患者确认之后,医生取消约诊';
+                $retData = '医生取消约诊';
                 break;
 
             case 'completed-1':
-                $retData = '已完成';
-                break;
             case 'completed-2':
-                $retData = '改期后完成';
+                $retData = '面诊已完成';
                 break;
 
             default:
