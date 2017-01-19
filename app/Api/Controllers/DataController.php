@@ -83,10 +83,8 @@ class DataController extends BaseController
              */
             foreach ($fixed as $item) {
                 if ($item['week'] == $tmpWeek) {
-//                    $tmpData['am'] = ($item['am'] == 'true') ? 'true' : 'false';
-//                    $tmpData['pm'] = ($item['pm'] == 'true') ? 'true' : 'false';
-                    $tmpData['am'] = $item['am'];
-                    $tmpData['pm'] = $item['pm'];
+                    $tmpData['am'] = ($item['am'] == 'true') ? 'true' : 'false';
+                    $tmpData['pm'] = ($item['pm'] == 'true') ? 'true' : 'false';
 
                     break;
                 }
