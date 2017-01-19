@@ -30,6 +30,8 @@ class AppointmentMsg extends Model
         'locums_read',
         'patient_read',
         'doctor_read',
-        'type'
+        'type',
+        'created_at',
+        'updated_at'
     ];
 }
