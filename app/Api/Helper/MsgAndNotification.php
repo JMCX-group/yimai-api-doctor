@@ -29,7 +29,7 @@ class MsgAndNotification
      */
     public static function sendAppointmentsMsg_list($appointments, $status)
     {
-        if(count($appointments) == 0) {
+        if (count($appointments) == 0) {
             return;
         }
 
@@ -48,7 +48,7 @@ class MsgAndNotification
             /**
              * 生成推送消息
              */
-            array_push($appointmentMsgList, self::generateAppointmentsMsg($appointment, $status));
+            array_push($appointmentMsgList, self::generateAppointmentsMsg($appointment, $status, true));
 
             /**
              * 符合条件的患者device_token
@@ -85,9 +85,10 @@ class MsgAndNotification
      *
      * @param $appointments
      * @param string $status
+     * @param bool $time
      * @return array
      */
-    public static function generateAppointmentsMsg($appointments, $status='')
+    public static function generateAppointmentsMsg($appointments, $status = '', $time = false)
     {
         return [
             'appointment_id' => $appointments->id,
@@ -97,6 +98,8 @@ class MsgAndNotification
             'patient_name' => $appointments->patient_name,
             'doctor_id' => $appointments->doctor_id,
             'doctor_name' => ($appointments->doctor_id == '') ? '无' : Doctor::find($appointments->doctor_id)->first()->name, //医生姓名
+            'created_at' => $time ? '' : date('Y-m-d H:i:s'),
+            'updated_at' => $time ? '' : date('Y-m-d H:i:s')
         ];
     }
 
@@ -106,7 +109,7 @@ class MsgAndNotification
      * @param $appointments
      * @param string $status
      */
-    public static function sendAppointmentsMsg($appointments, $status='')
+    public static function sendAppointmentsMsg($appointments, $status = '')
     {
         AppointmentMsg::create(self::generateAppointmentsMsg($appointments, $status));
     }
@@ -129,7 +132,7 @@ class MsgAndNotification
         $content = AppointmentStatus::pushContent($appointmentStatus);
         $action = 'appointment';
 
-        if($recipient == 'doctor'){
+        if ($recipient == 'doctor') {
             /**
              * 判断是IOS还是Android：
              * Android的device_token是44位字符串, iOS的device_token是64位。
@@ -157,7 +160,7 @@ class MsgAndNotification
 
                 self::pushBroadcastAndroidLog($action, $recipient, $pushResult, $deviceToken);
             }
-        }else{
+        } else {
             /**
              * 判断是IOS还是Android：
              * Android的device_token是44位字符串, iOS的device_token是64位。
