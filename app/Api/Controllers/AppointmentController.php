@@ -52,6 +52,12 @@ class AppointmentController extends BaseController
 
         try {
             if ($appointment->save()) {
+                MsgAndNotification::sendAppointmentsMsg(Appointment::find($appointmentId)); //推送消息
+                $patient = Patient::where('phone', $request['phone'])->first();
+                if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
+                    MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointmentId); //向患者端推送消息
+                }
+
                 return response()->json(['success' => ''], 204);
             } else {
                 return response()->json(['message' => '保存失败'], 500);
@@ -130,7 +136,7 @@ class AppointmentController extends BaseController
             $patient = Patient::where('phone', $request['phone'])->first();
             if (isset($patient->id)) {
                 if ($patient->device_token != '' && $patient->device_token != null) {
-                    MsgAndNotification::pushAppointmentMsg($patient->device_token, 'wait-0', $appointmentId); //向患者端推送消息
+                    MsgAndNotification::pushAppointmentMsg($patient->device_token, $data['status'], $appointmentId); //向患者端推送消息
                 }
             } else {
                 SmsContent::sendSMS_newPatient($user, $doctor, $request['phone']); //向患者端发送短信
@@ -251,23 +257,6 @@ class AppointmentController extends BaseController
         if (!isset($user->id)) {
             return $user;
         }
-
-        /**
-         * 更新过期未支付的：
-         */
-        Appointment::where('locums_id', $user->id)
-            ->where('is_pay', '0')
-            ->where('status', 'wait-1')
-            ->where('updated_at', '<', date('Y-m-d H:i:s', time() - 12 * 3600))
-            ->update(['status' => 'close-1']); //close-1: 待患者付款，关闭
-
-        /**
-         * 更新已付款，48小时未确认的：
-         */
-        Appointment::where('locums_id', $user->id)
-            ->where('status', 'wait-2')
-            ->where('updated_at', '<', date('Y-m-d H:i:s', time() - 48 * 3600))
-            ->update(['status' => 'close-2']); //close-2: 医生过期未接诊,约诊关闭
 
         /**
          * 获取返回信息：

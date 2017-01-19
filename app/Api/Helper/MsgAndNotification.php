@@ -7,8 +7,10 @@
  */
 namespace App\Api\Helper;
 
+use App\Appointment;
 use App\AppointmentMsg;
 use App\Doctor;
+use App\Patient;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -20,26 +22,91 @@ use Illuminate\Support\Facades\Log;
 class MsgAndNotification
 {
     /**
-     * 发送约诊信息
+     * 批量生成和推送
      *
      * @param $appointments
+     * @param $status
      */
-    public static function sendAppointmentsMsg($appointments)
+    public static function sendAppointmentsMsg_list($appointments, $status)
     {
+        if(count($appointments) == 0) {
+            return;
+        }
+
         /**
-         * 推送消息记录
+         * 生成数据：
          */
-        $msgData = [
+        $appointmentIdList = array();
+        $appointmentMsgList = array();
+        $deviceTokens = array();
+        foreach ($appointments as $appointment) {
+            /**
+             * 符合条件的约诊号
+             */
+            array_push($appointmentIdList, $appointment->id);
+
+            /**
+             * 生成推送消息
+             */
+            array_push($appointmentMsgList, self::generateAppointmentsMsg($appointment));
+
+            /**
+             * 符合条件的患者device_token
+             */
+            $patient = Patient::where('phone', $appointment->patient_phone)->first();
+            if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
+                array_push($deviceTokens, ['device_token' => $patient->device_token, 'id' => $appointment->id]);
+            }
+        }
+
+        /**
+         * 推送消息
+         */
+        try {
+            $result = Appointment::whereIn('id', $appointmentIdList)
+                ->update(['status' => $status]); //close-1: 待患者付款，
+
+            if ($result) {
+                AppointmentMsg::create($appointmentMsgList); //批量插入推送消息
+
+                foreach ($deviceTokens as $deviceToken) {
+                    self::pushAppointmentMsg($deviceToken['device_token'], $status, $deviceToken['id']); //向患者端推送消息
+                }
+            } else {
+                Log::info('kernel-updateExpiredAndPushAppointment-update', ['context' => json_encode($appointmentIdList)]);
+            }
+        } catch (\Exception $e) {
+            Log::info('kernel-updateExpiredAndPushAppointment', ['context' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * 生成约诊推送信息内容
+     *
+     * @param $appointments
+     * @return array
+     */
+    public static function generateAppointmentsMsg($appointments)
+    {
+        return [
             'appointment_id' => $appointments->id,
+            'status' => $appointments->status, //根据上面流程赋值
             'locums_id' => $appointments->locums_id, //代理医生ID
             'locums_name' => Doctor::find($appointments->locums_id)->first()->name, //代理医生姓名
             'patient_name' => $appointments->patient_name,
             'doctor_id' => $appointments->doctor_id,
             'doctor_name' => Doctor::find($appointments->doctor_id)->first()->name, //医生姓名
-            'status' => $appointments->status //根据上面流程赋值
         ];
+    }
 
-        AppointmentMsg::create($msgData);
+    /**
+     * 推送约诊信息
+     *
+     * @param $appointments
+     */
+    public static function sendAppointmentsMsg($appointments)
+    {
+        AppointmentMsg::create(self::generateAppointmentsMsg($appointments));
     }
 
     /**

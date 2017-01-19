@@ -281,6 +281,43 @@ class NotificationPush
         }
     }
 
+    /**
+     * IOS列播
+     *
+     * @param $deviceTokens
+     * @param $alert
+     * @param $action
+     * @param $dataId
+     * @param $productionMode
+     * @return array
+     */
+    function sendIOSListcast($deviceTokens, $alert, $action, $dataId='', $productionMode='false')
+    {
+        try {
+            $listcast = new IOSListcast();
+            $listcast->setAppMasterSecret($this->appMasterSecret);
+            $listcast->setPredefinedKeyValue("appkey", $this->appkey);
+            $listcast->setPredefinedKeyValue("timestamp", $this->timestamp);
+            // Set your device tokens here
+            // 不能超过500个,
+            // 多个device_token用英文逗号分隔：device1,device2,…
+            $listcast->setPredefinedKeyValue("device_tokens", $deviceTokens);
+            $listcast->setPredefinedKeyValue("alert", $alert);
+            $listcast->setPredefinedKeyValue("badge", 0);
+            $listcast->setPredefinedKeyValue("sound", "chime");
+            // Set 'production_mode' to 'true' if your app is under production mode
+            $listcast->setPredefinedKeyValue("production_mode", $productionMode);
+            // Set customized fields
+            $listcast->setCustomizedField("action", $action);
+            $listcast->setCustomizedField("data-id", $dataId);
+            $listcast->send();
+
+            return ['result' => true, 'message' => ''];
+        } catch (Exception $e) {
+            return ['result' => false, 'message' => $e->getMessage()];
+        }
+    }
+
     function sendIOSFilecast()
     {
         try {
