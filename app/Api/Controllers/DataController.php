@@ -60,7 +60,7 @@ class DataController extends BaseController
         /**
          * 生成基础数据结构：
          */
-        $week = array('sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat');
+        $week = array('', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
         $data = array();
 
         /**
@@ -103,10 +103,8 @@ class DataController extends BaseController
                             }
 
                             if ($item['pm'] == 'true') {
-                                $tmpData['am'] = 'true';
+                                $tmpData['pm'] = 'true';
                             }
-
-                            break;
                         }
                     }
                 }
