@@ -41,8 +41,9 @@ class WalletController extends BaseController
          */
         $walletInfo = DoctorWallet::where('doctor_id', $user->id)->first();
         if (!isset($walletInfo->doctor_id)) {
-            DoctorWallet::insert(['doctor_id' => $user->id]);
-            $walletInfo = DoctorWallet::where('doctor_id', $user->id)->first();
+            $walletInfo = new DoctorWallet();
+            $walletInfo->doctor_id = $user->id;
+            $walletInfo->save();
         }
 
         $total = Order::totalFeeSum($user->id);
