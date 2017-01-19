@@ -8,6 +8,7 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Helper\MsgAndNotification;
 use App\Api\Requests\AgreeAdmissionsRequest;
 use App\Api\Requests\CompleteAdmissionsRequest;
 use App\Api\Requests\RefusalAdmissionsRequest;
@@ -16,9 +17,11 @@ use App\Api\Transformers\AdmissionsRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
-use App\AppointmentMsg;
+use App\Doctor;
 use App\Hospital;
+use App\Patient;
 use App\User;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AdmissionsController extends BaseController
 {
@@ -41,9 +44,22 @@ class AdmissionsController extends BaseController
             $appointment->remark = (isset($request['remark']) && $request['remark'] != null) ? $request['remark'] : ''; //附加信息
 
             $appointment->confirm_admissions_time = date('Y-m-d H:i:s'); //确认接诊时间
-            $appointment->save();
 
-            return $this->getDetailInfo($request['id']);
+            try {
+                if ($appointment->save()) {
+                    MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
+                    $patient = Patient::where('phone', $appointment['patient_phone'])->first();
+                    if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
+                        MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
+                    }
+
+                    return $this->getDetailInfo($request['id']);
+                } else {
+                    return response()->json(['message' => '保存失败'], 500);
+                }
+            } catch (JWTException $e) {
+                return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+            }
         } else {
             return response()->json(['message' => '状态错误'], 400);
         }
@@ -64,9 +80,22 @@ class AdmissionsController extends BaseController
             $appointment->refusal_reason = $request['reason'];
 
             $appointment->confirm_admissions_time = date('Y-m-d H:i:s'); //确认接诊时间
-            $appointment->save();
 
-            return $this->getDetailInfo($request['id']);
+            try {
+                if ($appointment->save()) {
+                    MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
+                    $patient = Patient::where('phone', $appointment['patient_phone'])->first();
+                    if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
+                        MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
+                    }
+
+                    return $this->getDetailInfo($request['id']);
+                } else {
+                    return response()->json(['message' => '保存失败'], 500);
+                }
+            } catch (JWTException $e) {
+                return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+            }
         } else {
             return response()->json(['message' => '状态错误'], 400);
         }
@@ -84,35 +113,22 @@ class AdmissionsController extends BaseController
 
         if ($appointment->status == 'wait-2') {
             $appointment->doctor_id = $request['doctor_id']; //修改医生信息
-            $appointment->save();
 
-            /**
-             * 代理医生信息,1为平台代约,0为没有代约医生
-             */
-            if($appointment->locums_id == 0){
-                $locumsName = '';
-            }elseif($appointment->locums_id == 1){
-                $locumsName = '医脉平台';
-            }else{
-                $locumsName = User::find($appointment->locums_id)->first()->name; //代理医生姓名
+            try {
+                if ($appointment->save()) {
+                    MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
+                    $doctor = Doctor::where('id', $appointment->doctor_id)->first();
+                    if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
+                        MsgAndNotification::pushAppointmentMsg($doctor->device_token, $appointment->status, $appointment->id, 'doctor'); //向医生端推送消息
+                    }
+
+                    return response()->json(['success' => ''], 204);
+                } else {
+                    return response()->json(['message' => '保存失败'], 500);
+                }
+            } catch (JWTException $e) {
+                return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
             }
-
-            /**
-             * 推送消息记录
-             */
-            $msgData = [
-                'appointment_id' => $request['id'],
-                'locums_id' => $appointment->locums_id, //代理医生ID
-                'locums_name' => $locumsName,
-                'patient_name' => $appointment->patient_name,
-                'doctor_id' => $request['doctor_id'],
-                'doctor_name' => User::find($request['doctor_id'])->first()->name,
-                'status' => 'wait-2' //患者已付款，待医生确认
-            ];
-            
-            AppointmentMsg::create($msgData);
-
-            return response()->json(['success' => ''], 204); //给肠媳适配。。
         } else {
             return response()->json(['message' => '状态错误'], 400);
         }
@@ -137,9 +153,22 @@ class AdmissionsController extends BaseController
 
             $appointment->refusal_reason = $request['reason'];
             $appointment->completed_admissions_time = date('Y-m-d H:i:s'); //完成面诊时间
-            $appointment->save();
 
-            return $this->getDetailInfo($request['id']);
+            try {
+                if ($appointment->save()) {
+                    MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
+                    $patient = Patient::where('phone', $appointment['patient_phone'])->first();
+                    if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
+                        MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
+                    }
+
+                    return $this->getDetailInfo($request['id']);
+                } else {
+                    return response()->json(['message' => '保存失败'], 500);
+                }
+            } catch (JWTException $e) {
+                return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+            }
         } else {
             return response()->json(['message' => '状态错误'], 400);
         }
@@ -156,9 +185,22 @@ class AdmissionsController extends BaseController
         $appointment = Appointment::find($request['id']);
         $appointment->status = 'wait-4'; //医生改期
         $appointment->rescheduled_time = date('Y-m-d H:i:s', strtotime($request['visit_time']));
-        $appointment->save();
 
-        return $this->getDetailInfo($request['id']);
+        try {
+            if ($appointment->save()) {
+                MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
+                $patient = Patient::where('phone', $appointment['patient_phone'])->first();
+                if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
+                    MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
+                }
+
+                return $this->getDetailInfo($request['id']);
+            } else {
+                return response()->json(['message' => '保存失败'], 500);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+        }
     }
 
     /**
@@ -183,9 +225,22 @@ class AdmissionsController extends BaseController
 
         $appointment->refusal_reason = $request['reason'];
         $appointment->confirm_admissions_time = date('Y-m-d H:i:s'); //确认接诊时间
-        $appointment->save();
 
-        return $this->getDetailInfo($request['id']);
+        try {
+            if ($appointment->save()) {
+                MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
+                $patient = Patient::where('phone', $appointment['patient_phone'])->first();
+                if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
+                    MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
+                }
+
+                return $this->getDetailInfo($request['id']);
+            } else {
+                return response()->json(['message' => '保存失败'], 500);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+        }
     }
 
     /**

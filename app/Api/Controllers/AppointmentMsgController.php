@@ -25,7 +25,7 @@ class AppointmentMsgController extends BaseController
             return $user;
         }
 
-        $allMsg = AppointmentMsg::where('locums_id', $user->id)->get();
+        $allMsg = AppointmentMsg::where('locums_id', $user->id)->orderBy('id', 'DESC')->get();
 
         $retData = array();
         foreach ($allMsg as $item) {
@@ -51,7 +51,7 @@ class AppointmentMsgController extends BaseController
             return $user;
         }
 
-        $allMsg = AppointmentMsg::where('locums_id', $user->id)->where('locums_read', 0)->get();
+        $allMsg = AppointmentMsg::where('locums_id', $user->id)->where('locums_read', 0)->orderBy('id', 'DESC')->get();
 
         $retData = array();
         foreach ($allMsg as $item) {

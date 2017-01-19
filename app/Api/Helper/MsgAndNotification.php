@@ -90,14 +90,18 @@ class MsgAndNotification
      */
     public static function generateAppointmentsMsg($appointments, $status = '', $time = false)
     {
+        $status = ($status == '') ? $appointments->status : $status; //有则表示是新状态的，没有则表示通知当前状态
+        $type = (in_array($status, array('completed-1', 'completed-2'))) ? 0 : 1; //0为普通，1为重要
+
         return [
             'appointment_id' => $appointments->id,
-            'status' => ($status == '') ? $appointments->status : $status, //有表示是新状态的，没有则表示通知当前状态
+            'status' => $status,
             'locums_id' => $appointments->locums_id, //代理医生ID
             'locums_name' => ($appointments->locums_id == 0) ? '无' : Doctor::find($appointments->locums_id)->first()->name, //代理医生姓名
             'patient_name' => $appointments->patient_name,
             'doctor_id' => $appointments->doctor_id,
             'doctor_name' => ($appointments->doctor_id == '') ? '无' : Doctor::find($appointments->doctor_id)->first()->name, //医生姓名
+            'type' => $type,
             'created_at' => $time ? '' : date('Y-m-d H:i:s'),
             'updated_at' => $time ? '' : date('Y-m-d H:i:s')
         ];
