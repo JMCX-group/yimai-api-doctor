@@ -426,6 +426,7 @@ class ApiController extends BaseController
                                 'friends_friends_appointment_switch' => '隐私设置: 好友的好友可以向我发起约诊开关; 默认值为0,即关',
                                 'common_friend_list' => [
                                     'id' => '用户id',
+                                    'name' => '用户姓名',
                                     'head_url' => '头像URL',
                                     'is_auth' => '是否认证,1为认证,0为未认证'
                                 ]
@@ -459,6 +460,7 @@ class ApiController extends BaseController
                                 'is_auth' => '是否认证；未认证： ；认证成功：completed；认证中：processing；认证失败：fail；',
                                 'common_friend_list' => [
                                     'id' => '用户id',
+                                    'name' => '用户姓名',
                                     'head_url' => '头像URL',
                                     'is_auth' => '是否认证,1为认证,0为未认证'
                                 ]
@@ -2850,6 +2852,7 @@ class ApiController extends BaseController
                                 ],
                                 'common_friend_list' => [
                                     'id' => '用户id',
+                                    'name' => '用户姓名',
                                     'head_url' => '头像URL',
                                     'is_auth' => '是否认证,1为认证,0为未认证'
                                 ]

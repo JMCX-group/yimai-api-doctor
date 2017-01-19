@@ -29,6 +29,18 @@ class DoctorRelation extends Model
     ];
 
     /**
+     *  获取共同好友的ID/NAME/AVATAR/AUTH
+     *
+     * @param $myId
+     * @param $id
+     * @return mixed
+     */
+    public static function getCommonFriendList($myId, $id)
+    {
+        return User::select('id', 'name', 'avatar as head_url', 'auth as is_auth')
+            ->find(self::getCommonFriendIdList($myId, $id));
+    }
+    /**
      * 获取和某个医生的共同好友的id list.
      *
      * @param $myId

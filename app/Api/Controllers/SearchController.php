@@ -61,7 +61,12 @@ class SearchController extends BaseController
         $user = User::getDoctorForDpCode($request->get('dp_code'));
         if (isset($user['id']) && $user['id'] != '' && $user['id'] != null) {
             $user['dp_code'] = User::getDpCode($user['id']);
-            $user['is_friend'] = (DoctorRelation::getIsFriend($my->id, $user['id'])[0]->count) == 2 ? true : false;
+            if((DoctorRelation::getIsFriend($my->id, $user['id'])[0]->count) == 2){
+                $user['is_friend'] = true;
+                $user['common_friend_list'] = DoctorRelation::getCommonFriendList($my->id, $user['id']);
+            }else{
+                $user['is_friend'] = false;
+            }
             $data = Transformer::searchDoctorTransform_dpCode($user);
         } else {
             $data = '';
