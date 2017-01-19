@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
     public static function updateExpiredAndPushAppointment()
     {
         /**
-         * 更新过期（12小时）未支付的信息并推送：
+         * 更新过期（12小时）未处理的信息并推送：
          * wait-0 to close-2
          */
         $wait0Appointments = Appointment::getOverdueAcceptedList();

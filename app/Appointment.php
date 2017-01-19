@@ -79,7 +79,15 @@ class Appointment extends Model
     {
         return Appointment::where('is_pay', '0')
             ->where('status', 'wait-1')
-            ->where('updated_at', '<', date('Y-m-d H:i:s', time() - 12 * 3600))
+            ->where(function ($query) {
+                $query->where(function ($query) {
+                    $query->where('locums_id', '0')
+                        ->where('created_at', '<', date('Y-m-d H:i:s', time() - 12 * 3600));
+                })
+                    ->orWhere(function ($query) {
+                        $query->where('updated_at', '<', date('Y-m-d H:i:s', time() - 12 * 3600));
+                    });
+            })
             ->get();
     }
 
