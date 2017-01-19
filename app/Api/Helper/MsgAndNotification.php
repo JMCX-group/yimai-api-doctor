@@ -67,7 +67,7 @@ class MsgAndNotification
                 ->update(['status' => $status]); //close-1: 待患者付款，
 
             if ($result) {
-                AppointmentMsg::create($appointmentMsgList); //批量插入推送消息
+                AppointmentMsg::insert($appointmentMsgList); //批量插入推送消息
 
                 foreach ($deviceTokens as $deviceToken) {
                     self::pushAppointmentMsg($deviceToken['device_token'], $status, $deviceToken['id']); //向患者端推送消息
