@@ -95,7 +95,7 @@ class MsgAndNotification
             'locums_name' => ($appointments->locums_id == 0) ? '无' : Doctor::find($appointments->locums_id)->first()->name, //代理医生姓名
             'patient_name' => $appointments->patient_name,
             'doctor_id' => $appointments->doctor_id,
-            'doctor_name' => Doctor::find($appointments->doctor_id)->first()->name, //医生姓名
+            'doctor_name' => ($appointments->doctor_id == '') ? '无' : Doctor::find($appointments->doctor_id)->first()->name, //医生姓名
         ];
     }
 
