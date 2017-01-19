@@ -11,6 +11,7 @@ namespace App\Api\Controllers;
 use App\Api\Helper\MsgAndNotification;
 use App\Api\Helper\WeiXinPay;
 use App\Appointment;
+use App\Doctor;
 use App\Patient;
 use Illuminate\Http\Request;
 use App\Order;
@@ -96,6 +97,32 @@ class PayController extends BaseController
                 $this->paymentProcessing($wxData);
             } else {
                 Log::info('wx-order-query-error', ['context' => json_encode($wxData)]);
+                if($wxData['trade_state'] == 'NOTPAY'){
+                    $this->notPayProcessing($wxData);
+                }
+            }
+        }
+    }
+
+    /**
+     * 处理未支付的
+     *
+     * @param $wxData
+     */
+    public function notPayProcessing($wxData)
+    {
+        $outTradeNo = $wxData['out_trade_no'];
+        $order = Order::where('out_trade_no', $outTradeNo)->first();
+        if (!empty($order->id)) {
+            $order->ret_data = json_encode($wxData);
+            $order->save();
+
+            $appointment = Appointment::find($outTradeNo);
+            if (!empty($appointment->id)) {
+                if ($appointment->status == 'wait-1') {
+                    $appointment->is_pay = '0';
+                    $appointment->save();
+                }
             }
         }
     }
@@ -126,9 +153,9 @@ class PayController extends BaseController
 
                 MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息记录
 
-                $patient = Patient::where('phone', $appointment['patient_phone'])->first();
-                if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
-                    MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'doctor'); //向医生端推送消息
+                $doctor = Doctor::where('id', $appointment['doctor_id'])->first();
+                if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
+                    MsgAndNotification::pushAppointmentMsg($doctor->device_token, $appointment->status, $appointment->id, 'doctor'); //向医生端推送消息
                 }
             }
 
