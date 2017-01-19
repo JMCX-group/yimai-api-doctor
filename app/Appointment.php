@@ -85,7 +85,8 @@ class Appointment extends Model
                         ->where('created_at', '<', date('Y-m-d H:i:s', time() - 12 * 3600));
                 })
                     ->orWhere(function ($query) {
-                        $query->where('updated_at', '<', date('Y-m-d H:i:s', time() - 12 * 3600));
+                        $query->where('confirm_locums_time', '<', date('Y-m-d H:i:s', time() - 12 * 3600))
+                        ->orWhere('updated_at', '<', date('Y-m-d H:i:s', time() - 12 * 3600));
                     });
             })
             ->get();

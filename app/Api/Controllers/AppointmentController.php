@@ -25,7 +25,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class AppointmentController extends BaseController
 {
     /**
-     * 代约医生信息确认
+     * 代约医生确认代约
      *
      * @param AppointmentUpdateRequest $request
      * @return \Illuminate\Http\JsonResponse|mixed
@@ -46,6 +46,7 @@ class AppointmentController extends BaseController
         /**
          * 更新的约诊信息：
          */
+        $appointment->confirm_locums_time = date('Y-m-d H:i:s'); //确认代约时间
         $appointment->price = $doctor->fee;
         $appointment->doctor_id = $doctorId;
         $appointment->status = 'wait-1';//预约医生之后,进入待患者付款阶段
