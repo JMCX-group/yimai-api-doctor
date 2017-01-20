@@ -25,7 +25,10 @@ class AdmissionsMsgController extends BaseController
             return $user;
         }
 
-        $allMsg = AppointmentMsg::where('doctor_id', $user->id)->orderBy('id', 'DESC')->get();
+        $allMsg = AppointmentMsg::where('doctor_id', $user->id)
+            ->whereIn('status', array('wait-2', 'wait-5', 'cancel-3', 'cancel-5', 'cancel-6'))
+            ->orderBy('id', 'DESC')
+            ->get();
 
         $retData = array();
         foreach ($allMsg as $item) {
@@ -51,7 +54,11 @@ class AdmissionsMsgController extends BaseController
             return $user;
         }
 
-        $allMsg = AppointmentMsg::where('doctor_id', $user->id)->where('doctor_read', 0)->orderBy('id', 'DESC')->get();
+        $allMsg = AppointmentMsg::where('doctor_id', $user->id)
+            ->whereIn('status', array('wait-2', 'wait-5', 'cancel-3', 'cancel-5', 'cancel-6'))
+            ->where('doctor_read', 0)
+            ->orderBy('id', 'DESC')
+            ->get();
 
         $retData = array();
         foreach ($allMsg as $item) {

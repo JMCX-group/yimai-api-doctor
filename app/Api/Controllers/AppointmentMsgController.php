@@ -25,7 +25,10 @@ class AppointmentMsgController extends BaseController
             return $user;
         }
 
-        $allMsg = AppointmentMsg::where('locums_id', $user->id)->orderBy('id', 'DESC')->get();
+        $allMsg = AppointmentMsg::where('locums_id', $user->id)
+            ->whereNotIn('status', array('wait-2', 'wait-3', 'wait-4', 'wait-5'))
+            ->orderBy('id', 'DESC')
+            ->get();
 
         $retData = array();
         foreach ($allMsg as $item) {
@@ -51,7 +54,11 @@ class AppointmentMsgController extends BaseController
             return $user;
         }
 
-        $allMsg = AppointmentMsg::where('locums_id', $user->id)->where('locums_read', 0)->orderBy('id', 'DESC')->get();
+        $allMsg = AppointmentMsg::where('locums_id', $user->id)
+            ->whereNotIn('status', array('wait-2', 'wait-3', 'wait-4', 'wait-5'))
+            ->where('locums_read', 0)
+            ->orderBy('id', 'DESC')
+            ->get();
 
         $retData = array();
         foreach ($allMsg as $item) {
