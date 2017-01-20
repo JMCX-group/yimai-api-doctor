@@ -127,8 +127,9 @@ class AppointmentController extends BaseController
         ];
 
         try {
-            Appointment::create($data);
-            MsgAndNotification::sendAppointmentsMsg(Appointment::find($appointmentId)); //推送消息
+            $appointment = Appointment::create($data);
+            $appointment['id'] = $appointmentId;
+            MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
 
             /**
              * 是否为已注册患者

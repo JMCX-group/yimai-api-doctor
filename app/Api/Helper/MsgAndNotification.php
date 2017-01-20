@@ -121,11 +121,11 @@ class MsgAndNotification
             'appointment_id' => $appointments->id,
             'status' => $status,
             'locums_id' => $appointments->locums_id, //代理医生ID
-            'locums_name' => ($appointments->locums_id == 0) ? '无' : Doctor::find($appointments->locums_id)->first()->name, //代理医生姓名
+            'locums_name' => ($appointments->locums_id == 0) ? '无' : Doctor::find($appointments->locums_id)->name, //代理医生姓名
             'patient_id' => $patientId,
             'patient_name' => $appointments->patient_name,
             'doctor_id' => $appointments->doctor_id,
-            'doctor_name' => ($appointments->doctor_id == '') ? '无' : Doctor::find($appointments->doctor_id)->first()->name, //医生姓名
+            'doctor_name' => ($appointments->doctor_id == '') ? '无' : Doctor::find($appointments->doctor_id)->name, //医生姓名
             'type' => $type,
             'created_at' => $time ? '' : date('Y-m-d H:i:s'),
             'updated_at' => $time ? '' : date('Y-m-d H:i:s')

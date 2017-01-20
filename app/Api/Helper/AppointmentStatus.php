@@ -8,6 +8,7 @@
 namespace App\Api\Helper;
 
 use App\Appointment;
+use App\Doctor;
 
 /**
  * 约诊状态翻译
@@ -73,7 +74,7 @@ class AppointmentStatus
                 break;
 
             case 'close-3':
-                $retText = $doctor . '医生拒绝了您替患者' . $patient . '发起的约诊请求（预约号' . $id . '），原因为' . Appointment::find($id)->first()->refusal_reason . '，约诊关闭。';
+                $retText = $doctor . '医生拒绝了您替患者' . $patient . '发起的约诊请求（预约号' . $id . '），原因为' . Appointment::find($id)->refusal_reason . '，约诊关闭。';
                 break;
 
             case 'cancel-2':
@@ -146,7 +147,7 @@ class AppointmentStatus
                 $retText = '您收到一条' . $locums . '替患者' . $patient . '发起的约诊请求（预约号' . $id . '），请在48小时内处理。';
                 break;
             case 'wait-5':
-                $retText = '患者' . $patient . '已确认您将原定的约诊时间改为：' . Appointment::find($id)->first()->rescheduled_time . '。（预约号' . $id . '）';
+                $retText = '患者' . $patient . '已确认您将原定的约诊时间改为：' . Appointment::find($id)->rescheduled_time . '。（预约号' . $id . '）';
                 break;
             case 'cancel-3':
             case 'cancel-5':
@@ -166,12 +167,13 @@ class AppointmentStatus
      * 给患者看的
      *
      * @param $status
+     * @param $doctorId
      * @param $doctor
      * @param $locums
      * @param $id
      * @return bool|string
      */
-    public static function appointmentMsgContent_patient($status, $doctor, $locums, $id)
+    public static function appointmentMsgContent_patient($status, $doctorId, $doctor, $locums, $id)
     {
         /**
          * Wait:
@@ -202,7 +204,10 @@ class AppointmentStatus
          */
         switch ($status) {
             case 'wait-1':
-                $retText = $locums . '医生替您向' . $doctor . '(XX医院XX科XX医师)发起了约诊（预约号' . $id . '），请在12小时内缴费确认。';
+                $doctorInfo = Doctor::findDoctor($doctorId);
+                $retText = $locums . '医生替您向' . $doctor . '(' .
+                    $doctorInfo['hospital'] . $doctorInfo['dept'] . $doctorInfo['title'] .
+                    ')发起了约诊（预约号' . $id . '），请在12小时内缴费确认。';
                 break;
             case 'wait-3':
                 $retText = $doctor . '医生确认接诊（预约号' . $id . '），请按时到医院就诊。';

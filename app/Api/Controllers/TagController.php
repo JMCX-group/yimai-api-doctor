@@ -70,7 +70,7 @@ class TagController extends BaseController
              */
             $tags = Tag::select('id', 'name')->where('dept_lv2_id', $user->dept_id)->get();
             $newData = [
-                'dept' => DeptStandard::find($user->dept_id)->first()->name,
+                'dept' => DeptStandard::find($user->dept_id)->name,
                 'tags' => $tags
             ];
             array_push($data, $newData);
