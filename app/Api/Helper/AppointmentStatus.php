@@ -241,11 +241,11 @@ class AppointmentStatus
      * 约诊推送文案
      *
      * @param $status
+     * @param string $recipient
      * @return string
      */
-    public static function pushContent($status)
+    public static function pushContent($status, $recipient = 'patient')
     {
-
         switch ($status) {
             case 'wait-0':
                 $retData = '有患者请求您代约';
@@ -267,7 +267,7 @@ class AppointmentStatus
                 break;
 
             case 'close-1':
-                $retData = '患者逾期未付款,约诊关闭';
+                $retData = '您逾期未付款,约诊关闭';
                 break;
             case 'close-2':
                 $retData = '医生过期未接诊,约诊关闭';

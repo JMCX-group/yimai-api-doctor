@@ -158,7 +158,7 @@ class MsgAndNotification
         /**
          * 获取推送文案和动作
          */
-        $content = AppointmentStatus::pushContent($appointmentStatus);
+        $content = AppointmentStatus::pushContent($appointmentStatus, $recipient);
         $action = 'appointment';
 
         if ($recipient == 'doctor') {
