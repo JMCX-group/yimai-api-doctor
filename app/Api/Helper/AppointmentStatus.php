@@ -210,10 +210,10 @@ class AppointmentStatus
                     ')发起了约诊（预约号' . $id . '），请在12小时内缴费确认。';
                 break;
             case 'wait-3':
-                $retText = $doctor . '医生确认接诊（预约号' . $id . '），请按时到医院就诊。';
+                $retText = $doctor . '医生已确认接诊（预约号' . $id . '），请按时到医院就诊。';
                 break;
             case 'wait-4':
-                $retText = $doctor . '医生的接诊（预约号' . $id . '）改期，请及时确认。';
+                $retText = $doctor . '医生已将接诊（预约号' . $id . '）改期，请及时确认。';
                 break;
 
             case 'close-2':
