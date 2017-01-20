@@ -20,6 +20,8 @@ Route::get('share/index', 'ShareController@index');
 
 Route::get('banner/{banner_id}', 'BannerController@getBannerContent');
 
+Route::get('log', 'LogController@index');
+
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', function ($api) {
