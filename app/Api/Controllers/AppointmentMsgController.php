@@ -64,7 +64,7 @@ class AppointmentMsgController extends BaseController
         foreach ($allMsg as $item) {
             $text = AppointmentMsgTransformer::transformerMsgList($item);
 
-            if ($text) {
+            if ($text && $text['text']) {
                 array_push($retData, $text);
             }
         }

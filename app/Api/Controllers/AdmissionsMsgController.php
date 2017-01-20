@@ -64,7 +64,7 @@ class AdmissionsMsgController extends BaseController
         foreach ($allMsg as $item) {
             $text = AdmissionsMsgTransformer::transformerMsgList($item);
 
-            if ($text) {
+            if ($text && $text['text']) {
                 array_push($retData, $text);
             }
         }
