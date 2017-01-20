@@ -23,11 +23,13 @@ class MsgAndNotification
 {
     /**
      * 批量生成和推送
+     * 默认推送给患者
      *
      * @param $appointments
      * @param $status
+     * @param bool $isPushDoctor
      */
-    public static function sendAppointmentsMsg_list($appointments, $status)
+    public static function sendAppointmentsMsg_list($appointments, $status, $isPushDoctor = false)
     {
         if (count($appointments) == 0) {
             return;
@@ -39,6 +41,7 @@ class MsgAndNotification
         $appointmentIdList = array();
         $appointmentMsgList = array();
         $deviceTokens = array();
+        $deviceTokens_doctor = array();
         foreach ($appointments as $appointment) {
             /**
              * 符合条件的约诊号
@@ -57,6 +60,16 @@ class MsgAndNotification
             if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
                 array_push($deviceTokens, ['device_token' => $patient->device_token, 'id' => $appointment->id]);
             }
+
+            /**
+             * 符合条件的医生device_token
+             */
+            if ($isPushDoctor) {
+                $doctor = Doctor::where('id', $appointment->doctor_id)->first();
+                if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
+                    array_push($deviceTokens_doctor, ['device_token' => $doctor->device_token, 'id' => $appointment->id]);
+                }
+            }
         }
 
         /**
@@ -71,6 +84,12 @@ class MsgAndNotification
 
                 foreach ($deviceTokens as $deviceToken) {
                     self::pushAppointmentMsg($deviceToken['device_token'], $status, $deviceToken['id'], 'patient'); //向患者端推送消息
+                }
+
+                if ($isPushDoctor) {
+                    foreach ($deviceTokens_doctor as $item) {
+                        self::pushAppointmentMsg($item['device_token'], $status, $item['id'], 'doctor'); //向医生端推送消息
+                    }
                 }
             } else {
                 Log::info('kernel-updateExpiredAndPushAppointment-update', ['context' => json_encode($appointmentIdList)]);

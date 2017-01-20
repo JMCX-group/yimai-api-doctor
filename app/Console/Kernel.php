@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
     public static function updateExpiredAndPushAppointment()
     {
         /**
-         * 更新过期（12小时）未处理的信息并推送：
+         * 更新过期（24小时）未处理的信息并推送：
          * wait-0 to close-2
          */
         $wait0Appointments = Appointment::getOverdueAcceptedList();
@@ -59,6 +59,27 @@ class Kernel extends ConsoleKernel
          */
         $wait2Appointments = Appointment::getOverdueNotAdmissionsList();
         MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'close-2');
+
+        /**
+         * 更新过期（4小时）未确认完成面诊的信息并推送：
+         * wait-3 to completed-1
+         */
+        $wait2Appointments = Appointment::getOverdueNotConfirmedFace('wait-3');
+        MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'completed-1', true);
+
+        /**
+         * 更新过期（到面诊时间）未确认医生改期的信息并推送：
+         * wait-4 to cancel-5
+         */
+        $wait2Appointments = Appointment::getOverdueNotConfirmedRescheduled();
+        MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'cancel-5', true);
+
+        /**
+         * 更新过期（4小时）未确认完成面诊的信息并推送：
+         * wait-5 to completed-2
+         */
+        $wait2Appointments = Appointment::getOverdueNotConfirmedFace('wait-5');
+        MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'completed-2', true);
     }
 
     /**

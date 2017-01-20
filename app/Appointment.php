@@ -105,6 +105,31 @@ class Appointment extends Model
     }
 
     /**
+     * 查询过期（4小时）未确认完成面诊的
+     *
+     * @param $status
+     * @return mixed
+     */
+    public static function getOverdueNotConfirmedFace($status)
+    {
+        return Appointment::where('status', $status)
+            ->where('visit_time', '<', date('Y-m-d H:i:s', time() - 4 * 3600))
+            ->get();
+    }
+
+    /**
+     * 查询过期（到面诊时间）未确认医生改期的
+     *
+     * @return mixed
+     */
+    public static function getOverdueNotConfirmedRescheduled()
+    {
+        return Appointment::where('status', 'wait-4')
+            ->where('rescheduled_time', '<', date('Y-m-d H:i:s', time()))
+            ->get();
+    }
+
+    /**
      * 获取全部wait-1和已支付状态的订单
      *
      * @return mixed
