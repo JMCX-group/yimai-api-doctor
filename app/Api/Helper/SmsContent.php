@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * 推送短信文案编辑处
  *
- * Class GetDoctor
+ * Class SmsContent
  * @package App\Api\Helper
  */
 class SmsContent

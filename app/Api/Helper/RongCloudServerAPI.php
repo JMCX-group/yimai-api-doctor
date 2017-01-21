@@ -23,19 +23,6 @@ class RongCloudServerAPI
     private $format = 'json';                //数据格式 json/xml
 
     /**
-     * 参数初始化
-     * @param $appKey
-     * @param $appSecret
-     * @param string $format
-     */
-    public function __construct($appKey, $appSecret, $format = 'json')
-    {
-        $this->appKey = $appKey;
-        $this->appSecret = $appSecret;
-        $this->format = $format;
-    }
-
-    /**
      * 获取 Token 方法
      * @param $userId   用户 Id，最大长度 32 字节。是用户在 App 中的唯一标识码，必须保证在同一个 App 内不重复，重复的用户 Id 将被当作是同一用户。
      * @param $name     用户名称，最大长度 128 字节。用来在 Push 推送时，或者客户端没有提供用户信息时，显示用户的名称。

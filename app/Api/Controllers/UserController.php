@@ -10,6 +10,7 @@ namespace App\Api\Controllers;
 
 use App\Api\Helper\GetDoctor;
 use App\Api\Helper\RongCloudServerAPI;
+use App\Api\Helper\SaveImage;
 use App\Api\Requests\SearchUserRequest;
 use App\Api\Requests\UserRequest;
 use App\Api\Transformers\Transformer;
@@ -19,10 +20,8 @@ use App\DoctorRelation;
 use App\Hospital;
 use App\User;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Illuminate\Support\Facades\Log;
 use Validator;
 use JWTAuth;
 
@@ -32,10 +31,7 @@ class UserController extends BaseController
 
     public function __construct()
     {
-        $appKey = 'sfci50a7c75di';
-        $appSecret = '0nSirFWWxVPi';
-        $format = 'json';
-        $this->rongYunSer = new RongCloudServerAPI($appKey, $appSecret, $format);
+        $this->rongYunSer = new RongCloudServerAPI();
     }
 
     /**
@@ -51,11 +47,11 @@ class UserController extends BaseController
             return $user;
         }
 
-        $imgUrl_1 = isset($request['img-1']) ? $this->saveImg($user->id, $request->file('img-1')) : '';
-        $imgUrl_2 = isset($request['img-2']) ? $this->saveImg($user->id, $request->file('img-2'), 2) : '';
-        $imgUrl_3 = isset($request['img-3']) ? $this->saveImg($user->id, $request->file('img-3'), 3) : '';
-        $imgUrl_4 = isset($request['img-4']) ? $this->saveImg($user->id, $request->file('img-4'), 4) : '';
-        $imgUrl_5 = isset($request['img-5']) ? $this->saveImg($user->id, $request->file('img-5'), 5) : '';
+        $imgUrl_1 = isset($request['img-1']) ? SaveImage::authImg($user->id, $request->file('img-1')) : '';
+        $imgUrl_2 = isset($request['img-2']) ? SaveImage::authImg($user->id, $request->file('img-2'), 2) : '';
+        $imgUrl_3 = isset($request['img-3']) ? SaveImage::authImg($user->id, $request->file('img-3'), 3) : '';
+        $imgUrl_4 = isset($request['img-4']) ? SaveImage::authImg($user->id, $request->file('img-4'), 4) : '';
+        $imgUrl_5 = isset($request['img-5']) ? SaveImage::authImg($user->id, $request->file('img-5'), 5) : '';
 
         $user->auth_img = ($imgUrl_1 != '') ? $imgUrl_1 . ',' : '';
         $user->auth_img .= ($imgUrl_2 != '') ? $imgUrl_2 . ',' : '';
@@ -68,36 +64,6 @@ class UserController extends BaseController
         $user->save();
 
         return ['url' => $user->auth_img];
-    }
-
-    /**
-     * 保存图像。
-     *
-     * @param $userId
-     * @param $imgFile
-     * @param $count
-     * @return string
-     */
-    public function saveImg($userId, $imgFile, $count=0)
-    {
-        $domain = \Config::get('constants.DOMAIN');
-        $destinationPath =
-            \Config::get('constants.AUTH_PATH') .
-            $userId . '/';
-        $filename = time() + $count . '.jpg';
-
-//        try {
-        $imgFile->move($destinationPath, $filename);
-//        } catch (\Exception $e) {
-//            Log::info('save img', ['context' => $e->getMessage()]);
-//        }
-
-        $fullPath = $destinationPath . $filename;
-        $newPath = str_replace('.jpg', '_thumb.jpg', $fullPath);
-
-        Image::make($fullPath)->encode('jpg', 50)->save($newPath); //按50的品质压缩图片
-
-        return $domain. '/' . $newPath;
     }
 
     /**
@@ -130,8 +96,7 @@ class UserController extends BaseController
             $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
         }
         if (isset($request['head_img']) && !empty($request['head_img'])) {
-//            Log::info('upload-head-img', ['context' => $request->file('head_img')]);
-            $user->avatar = $this->avatar($user->id, $request->file('head_img'));
+            $user->avatar = SaveImage::avatar($user->id, $request->file('head_img'));
             $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
         }
         // 传0会判断成false,需要判断:
@@ -218,8 +183,8 @@ class UserController extends BaseController
                 'data' => $user->id,
                 'operation' => 'add_friend'
             ];
-            QrCode::format('png')->size(200)->generate(json_encode($qrData), 'qrcode/'.$user->id.'.png');
-            $user->qr_code_url = '/qrcode/'.$user->id.'.png';
+            QrCode::format('png')->size(200)->generate(json_encode($qrData), 'qrcode/' . $user->id . '.png');
+            $user->qr_code_url = '/qrcode/' . $user->id . '.png';
         }
 
         /**
@@ -284,27 +249,6 @@ class UserController extends BaseController
         }
 
         return json_encode($newData);
-    }
-
-    /**
-     * 存储头像文件并压缩成150*150
-     *
-     * @param $userId
-     * @param $avatarFile
-     * @return string
-     */
-    public function avatar($userId, $avatarFile)
-    {
-        $domain = \Config::get('constants.DOMAIN');
-        $destinationPath = \Config::get('constants.AVATAR_SAVE_PATH');
-        $filename = $userId . '.jpg';
-        $avatarFile->move($destinationPath, $filename);
-
-        Image::make($destinationPath . $filename)->fit(150)->save();
-
-        $mark = '?v=' . time(); //修改URL
-
-        return $domain . '/' . $destinationPath . $filename . $mark;
     }
 
     /**
