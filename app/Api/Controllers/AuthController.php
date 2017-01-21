@@ -8,18 +8,17 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Helper\SmsContent;
 use App\Api\Requests\AuthRequest;
 use App\Api\Requests\InviterRequest;
 use App\Api\Requests\ResetPhoneRequest;
 use App\Api\Requests\ResetPwdRequest;
 use App\Api\Transformers\UserTransformer;
 use App\User;
-use App\AppUserVerifyCode;
 use Illuminate\Http\Request;
 use Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Api\Helper\Sms;
 
 class AuthController extends BaseController
 {
@@ -146,11 +145,6 @@ class AuthController extends BaseController
 
         // all good so return the token
         return response()->json(compact('token'));
-
-//        $user = User::where('phone', $request->get('phone'))->get();
-//        $token = JWTAuth::fromUser($user);
-//
-//        return response()->json(compact('token'));
     }
 
     /**
@@ -176,31 +170,7 @@ class AuthController extends BaseController
      */
     public function sendVerifyCode(AuthRequest $request)
     {
-        $newCode = [
-            'phone' => $request->get('phone'),
-            'code' => rand(1001, 9998)
-        ];
-
-        /**
-         * 发送短信:
-         */
-        $sms = new Sms();
-        $txt = '【医者脉连】您的验证码是:' . $newCode['code']; //文案
-        $result = $sms->sendSMS($newCode['phone'], $txt);
-        $result = $sms->execResult($result);
-
-        if ($result[1] == 0) {
-            $code = AppUserVerifyCode::where('phone', '=', $request->get('phone'))->get();
-            if (empty($code->all())) {
-                AppUserVerifyCode::create($newCode);
-            } else {
-                AppUserVerifyCode::where('phone', $request->get('phone'))->update(['code' => $newCode['code']]);
-            }
-
-            return response()->json(['debug' => $newCode['code']], 200);
-        } else {
-            return response()->json(['message' => '短信发送失败'], 500);
-        }
+        return SmsContent::sendSMS_newUser($request->get('phone'));
     }
 
     /**
