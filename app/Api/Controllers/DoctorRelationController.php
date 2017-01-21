@@ -9,7 +9,7 @@
 namespace App\Api\Controllers;
 
 use App\Api\Helper\MsgAndNotification;
-use App\Api\Helper\Sms;
+use App\Api\Helper\SmsContent;
 use App\Api\Requests\AddressRequest;
 use App\Api\Requests\RelationDelRequest;
 use App\Api\Requests\RelationIdRequest;
@@ -564,7 +564,7 @@ class DoctorRelationController extends BaseController
 
         $phoneList = $request['phone'];
         $phoneArr = explode(',', $phoneList);
-        $this->sendSMS(User::getDpCode($user->id), $user->name, $phoneArr);
+        SmsContent::sendSms_invite(User::getDpCode($user->id), $user->name, $phoneArr);
 
         /**
          * 记录是否发过短信：
@@ -600,24 +600,8 @@ class DoctorRelationController extends BaseController
     {
         $allFriends = DoctorAddressBook::find($userId);
         $phoneArr = explode(',', $allFriends->not_in_ym);
-        $this->sendSMS(User::getDpCode($userId), $userName, $phoneArr);
+        SmsContent::sendSms_invite(User::getDpCode($userId), $userName, $phoneArr);
 
         return response()->json(['success' => ''], 204);
-    }
-
-    /**
-     * 发送短信。
-     *
-     * @param $dpCode
-     * @param $name
-     * @param $phoneArr
-     */
-    public function sendSMS($dpCode, $name, $phoneArr)
-    {
-        foreach ($phoneArr as $item) {
-            $sms = new Sms();
-            $txt = '【医者脉连】您的医生朋友' . $name . '邀请您共同使用"医者脉连"，互相约诊更方便。医者仁心，脉脉相连。下载地址：http://pre.im/H5P2 。下载后输入医脉码' . $dpCode . '可直接添加' . $name . '为好友。'; //文案
-            $sms->sendSMS($item, $txt);
-        }
     }
 }
