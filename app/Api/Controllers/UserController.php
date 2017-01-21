@@ -47,11 +47,11 @@ class UserController extends BaseController
             return $user;
         }
 
-        $imgUrl_1 = isset($request['img-1']) ? SaveImage::authImg($user->id, $request->file('img-1')) : '';
-        $imgUrl_2 = isset($request['img-2']) ? SaveImage::authImg($user->id, $request->file('img-2'), 2) : '';
-        $imgUrl_3 = isset($request['img-3']) ? SaveImage::authImg($user->id, $request->file('img-3'), 3) : '';
-        $imgUrl_4 = isset($request['img-4']) ? SaveImage::authImg($user->id, $request->file('img-4'), 4) : '';
-        $imgUrl_5 = isset($request['img-5']) ? SaveImage::authImg($user->id, $request->file('img-5'), 5) : '';
+        $imgUrl_1 = isset($request['img-1']) ? SaveImage::auth($user->id, $request->file('img-1')) : '';
+        $imgUrl_2 = isset($request['img-2']) ? SaveImage::auth($user->id, $request->file('img-2'), 2) : '';
+        $imgUrl_3 = isset($request['img-3']) ? SaveImage::auth($user->id, $request->file('img-3'), 3) : '';
+        $imgUrl_4 = isset($request['img-4']) ? SaveImage::auth($user->id, $request->file('img-4'), 4) : '';
+        $imgUrl_5 = isset($request['img-5']) ? SaveImage::auth($user->id, $request->file('img-5'), 5) : '';
 
         $user->auth_img = ($imgUrl_1 != '') ? $imgUrl_1 . ',' : '';
         $user->auth_img .= ($imgUrl_2 != '') ? $imgUrl_2 . ',' : '';

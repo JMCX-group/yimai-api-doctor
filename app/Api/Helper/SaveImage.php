@@ -45,20 +45,46 @@ class SaveImage
      * @param int $count
      * @return string
      */
-    public static function authImg($dirName, $imgFile, $count = 0)
+    public static function auth($dirName, $imgFile, $count = 0)
     {
         $domain = \Config::get('constants.DOMAIN');
         $destinationPath = \Config::get('constants.AUTH_PATH') . $dirName . '/';
         $suffix = '.png';
         $filename = time() + $count . $suffix;
         $fullPath = $destinationPath . $filename;
-        $newPath = str_replace('.png', '_thumb.png', $fullPath);
+        $newPath = str_replace($suffix, '_thumb.png', $fullPath);
 
         try {
             $imgFile->move($destinationPath, $filename);
-            Image::make($fullPath)->encode('jpg', 50)->save($newPath); //按50的品质压缩图片
+            Image::make($fullPath)->encode('png', 30)->save($newPath); //按30的品质压缩图片
         } catch (\Exception $e) {
-            Log::info('save img', ['context' => $e->getMessage()]);
+            Log::info('save-img-auth', ['context' => $e->getMessage()]);
+        }
+
+        return $domain . '/' . $newPath;
+    }
+
+    /**
+     * 保存约诊图片
+     *
+     * @param $dirName
+     * @param $file
+     * @return string
+     */
+    public static function appointment($dirName, $file)
+    {
+        $domain = \Config::get('constants.DOMAIN');
+        $destinationPath = \Config::get('constants.CASE_HISTORY_SAVE_PATH') . date('Y') . '/' . date('m') . '/' . $dirName . '/';
+        $suffix = '.png';
+        $filename = time() . $suffix;
+        $fullPath = $destinationPath . $filename;
+        $newPath = str_replace($suffix, '_thumb.png', $fullPath);
+
+        try {
+            $file->move($destinationPath, $filename);
+            Image::make($fullPath)->encode('png', 30)->save($newPath); //按30的品质压缩图片
+        } catch (\Exception $e) {
+            Log::info('save-img-appointment', ['context' => $e->getMessage()]);
         }
 
         return $domain . '/' . $newPath;

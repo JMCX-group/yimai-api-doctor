@@ -19,7 +19,7 @@ use App\Api\Transformers\Transformer;
 use App\Appointment;
 use App\Patient;
 use App\User;
-use Intervention\Image\Facades\Image;
+use App\Api\Helper\SaveImage;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AppointmentController extends BaseController
@@ -159,7 +159,7 @@ class AppointmentController extends BaseController
     public function uploadImg(AppointmentIdRequest $request)
     {
         $appointment = Appointment::find($request['id']);
-        $imgUrl = $this->saveImg($appointment->id, $request->file('img'));
+        $imgUrl = SaveImage::appointment($appointment->id, $request->file('img'));
 
         if (strlen($appointment->patient_imgs) > 0) {
             $appointment->patient_imgs .= ',' . $imgUrl;
@@ -170,32 +170,6 @@ class AppointmentController extends BaseController
         $appointment->save();
 
         return ['url' => $imgUrl];
-    }
-
-    /**
-     * 保存图片并另存一个压缩图片
-     *
-     * @param $appointmentId
-     * @param $imgFile
-     * @return string
-     */
-    public function saveImg($appointmentId, $imgFile)
-    {
-        $domain = \Config::get('constants.DOMAIN');
-        $destinationPath =
-            \Config::get('constants.CASE_HISTORY_SAVE_PATH') .
-            date('Y') . '/' . date('m') . '/' .
-            $appointmentId . '/';
-        $filename = time() . '.jpg';
-
-        $imgFile->move($destinationPath, $filename);
-
-        $fullPath = $destinationPath . $filename;
-        $newPath = str_replace('.jpg', '_thumb.jpg', $fullPath);
-
-        Image::make($fullPath)->encode('jpg', 30)->save($newPath); //按30的品质压缩图片
-
-        return $domain . '/' . $newPath;
     }
 
     /**
