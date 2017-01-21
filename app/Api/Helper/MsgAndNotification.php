@@ -153,8 +153,6 @@ class MsgAndNotification
      */
     public static function pushAppointmentMsg($deviceToken, $appointmentStatus, $appointmentId, $recipient)
     {
-        require_once('UmengNotification/NotificationPush.php');
-
         /**
          * 获取推送文案和动作
          */
@@ -162,61 +160,108 @@ class MsgAndNotification
         $action = 'appointment';
 
         if ($recipient == 'doctor') {
+            self::pushDoctorUnicast($deviceToken, $content, $action, $appointmentId);
+        } else {
+            self::pushPatientUnicast($deviceToken, $content, $action, $appointmentId);
+        }
+    }
+
+    /**
+     * 给医生用户推送添加好友信息
+     *
+     * @param $deviceToken
+     * @param $doctorId
+     */
+    public static function pushAddFriendMsg($deviceToken, $doctorId)
+    {
+        /**
+         * 获取推送文案和动作
+         */
+        $content = '您有新的好友添加通知';
+        $action = 'add-friend';
+
+        self::pushDoctorUnicast($deviceToken, $content, $action, $doctorId);
+    }
+
+    /**
+     * 给IOS和Android医生推送单播消息
+     *
+     * @param $deviceToken
+     * @param $content
+     * @param $action
+     * @param $dataId
+     */
+    public static function pushDoctorUnicast($deviceToken, $content, $action, $dataId)
+    {
+        require_once('UmengNotification/NotificationPush.php');
+
+        /**
+         * 判断是IOS还是Android：
+         * Android的device_token是44位字符串, iOS的device_token是64位。
+         */
+        if (strlen($deviceToken) > 44) {
             /**
-             * 判断是IOS还是Android：
-             * Android的device_token是44位字符串, iOS的device_token是64位。
+             * IOS推送
              */
-            if (strlen($deviceToken) > 44) {
-                /**
-                 * IOS推送
-                 */
-                //医生端企业版
-                $pushE = new \NotificationPush('58073c2ae0f55a4ac00023e4', 'npypnjmmor5ufydocxyia3o6lwq1vh5n');
-                $pushE_falseResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $appointmentId);
-                $pushE_trueResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $appointmentId, 'true');
-                //医生端AppStore
-                $pushApp = new \NotificationPush('587704278f4a9d795e001f79', 'ajcvonw3kas06oyljq1xcujvuadqszcj');
-                $pushApp_falseResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $appointmentId);
-                $pushApp_trueResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $appointmentId, 'true');
+            //医生端企业版
+            $pushE = new \NotificationPush('58073c2ae0f55a4ac00023e4', 'npypnjmmor5ufydocxyia3o6lwq1vh5n');
+            $pushE_falseResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId);
+            $pushE_trueResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId, 'true');
+            //医生端AppStore
+            $pushApp = new \NotificationPush('587704278f4a9d795e001f79', 'ajcvonw3kas06oyljq1xcujvuadqszcj');
+            $pushApp_falseResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId);
+            $pushApp_trueResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId, 'true');
 
-                self::pushBroadcastIosLog($action, $recipient, $pushE_falseResult, $pushE_trueResult, $pushApp_falseResult, $pushApp_trueResult, $deviceToken);
-            } else {
-                /**
-                 * 安卓推送
-                 */
-                $push = new \NotificationPush('58073313e0f55a4825002a47', '0hmugthtu84nyou6egw3kmdsf6v4zmom');
-                $pushResult = $push->sendAndroidUnicast($deviceToken, $content, $action, $appointmentId);
-
-                self::pushBroadcastAndroidLog($action, $recipient, $pushResult, $deviceToken);
-            }
+            self::pushBroadcastIosLog($action, 'doctor', $pushE_falseResult, $pushE_trueResult, $pushApp_falseResult, $pushApp_trueResult, $deviceToken);
         } else {
             /**
-             * 判断是IOS还是Android：
-             * Android的device_token是44位字符串, iOS的device_token是64位。
+             * 安卓推送
              */
-            if (strlen($deviceToken) > 44) {
-                /**
-                 * IOS推送
-                 */
-                //患者端企业版
-                $pushE = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
-                $pushE_falseResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $appointmentId);
-                $pushE_trueResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $appointmentId, 'true');
-                //患者端AppStore
-                $pushApp = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
-                $pushApp_falseResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $appointmentId);
-                $pushApp_trueResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $appointmentId, 'true');
+            $push = new \NotificationPush('58073313e0f55a4825002a47', '0hmugthtu84nyou6egw3kmdsf6v4zmom');
+            $pushResult = $push->sendAndroidUnicast($deviceToken, $content, $action, $dataId);
 
-                self::pushBroadcastIosLog($action, $recipient, $pushE_falseResult, $pushE_trueResult, $pushApp_falseResult, $pushApp_trueResult, $deviceToken);
-            } else {
-                /**
-                 * 安卓推送
-                 */
-                $push = new \NotificationPush('587b786af43e4833800004cb', 'oth53caymcr5zxc2edhi0ghuoyuxbov3');
-                $pushResult = $push->sendAndroidUnicast($deviceToken, $content, $action, $appointmentId);
+            self::pushBroadcastAndroidLog($action, 'doctor', $pushResult, $deviceToken);
+        }
+    }
 
-                self::pushBroadcastAndroidLog($action, $recipient, $pushResult, $deviceToken);
-            }
+    /**
+     * 给IOS和Android患者推送单播消息
+     *
+     * @param $deviceToken
+     * @param $content
+     * @param $action
+     * @param $dataId
+     */
+    public static function pushPatientUnicast($deviceToken, $content, $action, $dataId)
+    {
+        require_once('UmengNotification/NotificationPush.php');
+
+        /**
+         * 判断是IOS还是Android：
+         * Android的device_token是44位字符串, iOS的device_token是64位。
+         */
+        if (strlen($deviceToken) > 44) {
+            /**
+             * IOS推送
+             */
+            //患者端企业版
+            $pushE = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
+            $pushE_falseResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId);
+            $pushE_trueResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId, 'true');
+            //患者端AppStore
+            $pushApp = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
+            $pushApp_falseResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId);
+            $pushApp_trueResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId, 'true');
+
+            self::pushBroadcastIosLog($action, 'patient', $pushE_falseResult, $pushE_trueResult, $pushApp_falseResult, $pushApp_trueResult, $deviceToken);
+        } else {
+            /**
+             * 安卓推送
+             */
+            $push = new \NotificationPush('587b786af43e4833800004cb', 'oth53caymcr5zxc2edhi0ghuoyuxbov3');
+            $pushResult = $push->sendAndroidUnicast($deviceToken, $content, $action, $dataId);
+
+            self::pushBroadcastAndroidLog($action, 'patient', $pushResult, $deviceToken);
         }
     }
 

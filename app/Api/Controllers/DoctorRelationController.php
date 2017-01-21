@@ -8,12 +8,14 @@
 
 namespace App\Api\Controllers;
 
+use App\Api\Helper\MsgAndNotification;
 use App\Api\Helper\Sms;
 use App\Api\Requests\AddressRequest;
 use App\Api\Requests\RelationDelRequest;
 use App\Api\Requests\RelationIdRequest;
 use App\Api\Requests\RemarksRequest;
 use App\Api\Transformers\Transformer;
+use App\Doctor;
 use App\DoctorAddressBook;
 use App\DoctorContactRecord;
 use App\DoctorRelation;
@@ -21,15 +23,9 @@ use App\DoctorVIcon;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Api\Helper\GetDoctor;
 
 class DoctorRelationController extends BaseController
 {
-    public function index()
-    {
-
-    }
-
     /**
      * 新增好友关系
      *
@@ -85,13 +81,21 @@ class DoctorRelationController extends BaseController
                     /**
                      * 判断被加一方是否无需验证：
                      */
-                    if($friend['verify_switch'] == 0){
+                    if ($friend['verify_switch'] == 0) {
                         $friendData['doctor_id'] = $friend['id'];
                         $friendData['doctor_friend_id'] = $user->id;
                         $friendData['doctor_read'] = 0;
                         $friendData['doctor_friend_read'] = 1;
                         $friendData['confirm'] = 1;
                         DoctorRelation::create($friendData);
+                    }
+
+                    /**
+                     * 推送相关信息：
+                     */
+                    $doctor = Doctor::find($request['id']);
+                    if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
+                        MsgAndNotification::pushAddFriendMsg($doctor->device_token, $request['id']); //向相关医生推送消息
                     }
 
                     return response()->json(['success' => ''], 204);
@@ -182,6 +186,14 @@ class DoctorRelationController extends BaseController
                     $relation->doctor_friend_read = 1;
                     $relation->confirm = 1;
                     $relation->save();
+
+                    /**
+                     * 推送相关信息：
+                     */
+                    $doctor = Doctor::find($request['id']);
+                    if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
+                        MsgAndNotification::pushAddFriendMsg($doctor->device_token, $request['id']); //向相关医生推送消息
+                    }
 
                     return response()->json(['success' => ''], 204);
                 } else {
@@ -487,19 +499,19 @@ class DoctorRelationController extends BaseController
         //请求240万数据库数据：
 //        $in_DoctorDBList = GetDoctor::getDoctor($otherPhoneStr, 'phone');
 //        if ($in_DoctorDBList != false) {
-            $otherPart1 = array();
-            $otherPart2 = array();
-            $otherPart3 = array();
-            foreach ($others as $other) {
-                if (in_array($other['phone'], $in_DoctorVIconDBArr)) {
-                    array_push($otherPart1, $other);
+        $otherPart1 = array();
+        $otherPart2 = array();
+        $otherPart3 = array();
+        foreach ($others as $other) {
+            if (in_array($other['phone'], $in_DoctorVIconDBArr)) {
+                array_push($otherPart1, $other);
 //                } elseif (in_array($other['phone'], $in_DoctorDBList)) {
 //                    array_push($otherPart2, $other);
-                } else {
-                    array_push($otherPart3, $other);
-                }
+            } else {
+                array_push($otherPart3, $other);
             }
-            $others = array_merge($otherPart1, $otherPart2, $otherPart3);
+        }
+        $others = array_merge($otherPart1, $otherPart2, $otherPart3);
 //        }
 
         $addressBook = DoctorAddressBook::find($userId);
