@@ -396,7 +396,7 @@ class Transformer
             'name' => $user->name,
             'head_url' => ($user->avatar == '') ? null : $user->avatar,
             'job_title' => $user->title,
-            'city' => $user->city_id->name,
+            'city' => isset($user->city_id) ? $user->city_id->name : '',
             'hospital' => $user->hospital_id,
 //            'hospital' => [
 //                'id' => $user->hospital_id,

@@ -11,9 +11,9 @@ namespace App\Api\Controllers;
 use App\Api\Requests\DpCodeRequest;
 use App\Api\Requests\SearchDoctorForIdRequest;
 use App\Api\Transformers\Transformer;
+use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\User;
-use Illuminate\Http\Request;
 
 class SearchController extends BaseController
 {
@@ -25,22 +25,51 @@ class SearchController extends BaseController
      */
     public function doctors(SearchDoctorForIdRequest $request)
     {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
         $idList = explode(',', $request->get('id_list'));
         $newIdList = array();
 
         /**
          * 自动过滤1-5内置用户：
          */
-        foreach ($idList as $item){
-            if($item > 5){
+        foreach ($idList as $item) {
+            if ($item > 5) {
                 array_push($newIdList, $item);
             }
         }
 
         $doctors = User::find($newIdList);
 
+
+        /**
+         * 获取辅助数据: 最近通讯记录 / 好友ID列表 / 好友的好友ID列表
+         */
+        $contactRecords = DoctorContactRecord::where('doctor_id', $user->id)->lists('contacts_id_list');
+        $contactRecordsIdList = (count($contactRecords) != 0) ? explode(',', $contactRecords[0]) : $contactRecords;
+        $friendsIdList = DoctorRelation::getFriendIdList($user->id);
+        $friendsFriendsIdList = DoctorRelation::getFriendsFriendsIdList($friendsIdList, $user->id);
+
         $data = array();
         foreach ($doctors as $doctor) {
+            if (empty($contactRecordsIdList) && in_array($doctor->id, $contactRecordsIdList)) {
+                array_push($data, Transformer::searchDoctorTransform_2($doctor, 1));
+                continue;
+            }
+
+            if (in_array($doctor->id, $friendsIdList)) {
+                array_push($data, Transformer::searchDoctorTransform_2($doctor, 1));
+                continue;
+            }
+
+            if (in_array($doctor->id, $friendsFriendsIdList)) {
+                array_push($data, Transformer::searchDoctorTransform_2($doctor, 2));
+                continue;
+            }
+
             array_push($data, Transformer::searchDoctorTransform_2($doctor));
         }
 
