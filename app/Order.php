@@ -55,10 +55,11 @@ class Order extends Model
     public static function selectSum($userId, $status)
     {
         return DB::select("
-            SELECT SUM(`total_fee`) as sum_value 
+            SELECT SUM(`total_fee`) AS sum_value 
             FROM orders 
-            WHERE doctor_id=.$userId
-            AND `settlement_status`='$status'");
+            WHERE doctor_id=$userId
+            AND `settlement_status`='$status'
+            ");
     }
 
     /**
