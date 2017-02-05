@@ -42,4 +42,23 @@ class TransactionRecordTransformer extends TransformerAbstract
             'time' => $record['created_at']->format('Y-m-d H:i:s')
         ];
     }
+
+    /**
+     * 返回数据变形
+     *
+     * @param $record
+     * @return array
+     */
+    public static function transformData_fee($record)
+    {
+        return [
+            'id' => $record['id'],
+            'name' => '约诊',
+            'transaction_id' => $record['appointment_id'],
+            'price' => $record['reception_fee'] / 100, //单位：分
+            'type' => '收入',
+            'status' => $record['settlement_status'],
+            'time' => $record['created_at']->format('Y-m-d H:i:s')
+        ];
+    }
 }
