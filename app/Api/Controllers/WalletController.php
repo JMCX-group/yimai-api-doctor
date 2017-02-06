@@ -13,7 +13,6 @@ use App\Api\Transformers\TransactionRecordTransformer;
 use App\Api\Transformers\WalletTransformer;
 use App\AppointmentFee;
 use App\DoctorWallet;
-use App\Order;
 use App\SettlementRecord;
 use App\User;
 use Illuminate\Http\Request;
@@ -50,10 +49,10 @@ class WalletController extends BaseController
         /**
          * 老的通过微信支付的：
          */
-        $total = Order::totalFeeSum($user->id);
-        $billable = Order::selectSum($user->id, '可提现');
-        $pending = Order::selectSum($user->id, '待结算');
-        $refunded = Order::selectSum($user->id, '已提现');
+//        $total = Order::totalFeeSum($user->id);
+//        $billable = Order::selectSum($user->id, '可提现');
+//        $pending = Order::selectSum($user->id, '待结算');
+//        $refunded = Order::selectSum($user->id, '已提现');
 
         /**
          * 新的通过钱包余额支付的：
@@ -63,10 +62,14 @@ class WalletController extends BaseController
         $pendingFee = AppointmentFee::selectSum($user->id, '待结算');
         $refundedFee = AppointmentFee::selectSum($user->id, '已提现');
 
-        $walletInfo->total = ($total[0]->sum_value + $totalFee[0]->sum_value) / 100;
-        $walletInfo->billable = ($billable[0]->sum_value + $billableFee[0]->sum_value) / 100; //可提现
-        $walletInfo->pending = ($pending[0]->sum_value + $pendingFee[0]->sum_value) / 100; //待结算
-        $walletInfo->refunded = ($refunded[0]->sum_value + $refundedFee[0]->sum_value) / 100; //已提现
+//        $walletInfo->total = ($total[0]->sum_value + $totalFee[0]->sum_value) / 100;
+//        $walletInfo->billable = ($billable[0]->sum_value + $billableFee[0]->sum_value) / 100; //可提现
+//        $walletInfo->pending = ($pending[0]->sum_value + $pendingFee[0]->sum_value) / 100; //待结算
+//        $walletInfo->refunded = ($refunded[0]->sum_value + $refundedFee[0]->sum_value) / 100; //已提现
+        $walletInfo->total = $totalFee[0]->sum_value / 100;
+        $walletInfo->billable = $billableFee[0]->sum_value / 100; //可提现
+        $walletInfo->pending = $pendingFee[0]->sum_value / 100; //待结算
+        $walletInfo->refunded = $refundedFee[0]->sum_value / 100; //已提现
         $walletInfo->save();
 
         return $this->response->item($walletInfo, new WalletTransformer());
@@ -85,32 +88,28 @@ class WalletController extends BaseController
             return $user;
         }
 
-        if (isset($request['type'])) {
-            $type = $request['type'];
-            if ($type == 'billable') { //可提现
-                $record = Order::where('doctor_id', $user->id)
-                    ->where('settlement_status', '可提现')
-                    ->orderBy('created_at', 'DESC')
-                    ->get();
-            } elseif ($type == 'pending') { //待结算，
-                $record = Order::where('doctor_id', $user->id)
-                    ->where('settlement_status', '待结算')
-                    ->orderBy('created_at', 'DESC')
-                    ->get();
-            } else {
-                $record = Order::where('doctor_id', $user->id)
-                    ->orderBy('created_at', 'DESC')
-                    ->get();
-            }
+        if (isset($request['type']) && $request['type'] == 'billable') {
+            $record = AppointmentFee::where('doctor_id', $user->id)
+                ->where('status', 'completed')
+                ->where('settlement_status', '可提现')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        } elseif (isset($request['type']) && $request['type'] == 'pending') {
+            $record = AppointmentFee::where('doctor_id', $user->id)
+                ->where('status', 'completed')
+                ->where('settlement_status', '待结算')
+                ->orderBy('created_at', 'DESC')
+                ->get();
         } else {
-            $record = Order::where('doctor_id', $user->id)
+            $record = AppointmentFee::where('doctor_id', $user->id)
+                ->where('status', 'completed')
                 ->orderBy('created_at', 'DESC')
                 ->get();
         }
 
         $data = array();
         foreach ($record as $item) {
-            $recordData = TransactionRecordTransformer::transformData($item);
+            $recordData = TransactionRecordTransformer::transformData_fee($item);
             array_push($data, $recordData);
         }
 
@@ -129,10 +128,13 @@ class WalletController extends BaseController
             return $user;
         }
 
-        $record = Order::where('doctor_id', $user->id)->orderBy('created_at', 'DESC')->get();
+        $record = AppointmentFee::where('doctor_id', $user->id)
+            ->where('status', 'completed')
+            ->orderBy('created_at', 'DESC')
+            ->get();
         $data = array();
         foreach ($record as $item) {
-            $recordData = TransactionRecordTransformer::transformData($item);
+            $recordData = TransactionRecordTransformer::transformData_fee($item);
             array_push($data, $recordData);
         }
 
@@ -152,8 +154,8 @@ class WalletController extends BaseController
             return $user;
         }
 
-        $order = Order::find($id);
-        $data = TransactionRecordTransformer::transformData($order);
+        $order = AppointmentFee::find($id);
+        $data = TransactionRecordTransformer::transformData_fee($order);
 
         return response()->json(compact('data'));
     }
@@ -228,7 +230,7 @@ class WalletController extends BaseController
             ->where('month', $month)
             ->first();
         if (!isset($settlement->id)) {
-            $totals = Order::sumTotal($id);
+            $totals = AppointmentFee::sumTotal($id);
             foreach ($totals as $total) {
                 if ($total->year == $year && $total->month == $month) {
                     $data = [
@@ -248,9 +250,9 @@ class WalletController extends BaseController
             /**
              * 修改已经进行提现的流程的数据状态
              */
-            $pendingIdList = Order::allPending($id, $year, $month);
-            Order::whereIn('id', $pendingIdList)
-                ->update(['settlement_status' => '待结算']); //settlement_status：结算状态:待结算、可提现
+//            $pendingIdList = Order::allPending($id, $year, $month);
+//            Order::whereIn('id', $pendingIdList)
+//                ->update(['settlement_status' => '待结算']); //settlement_status：结算状态:待结算、可提现
 
             $pendingIdList_fee = AppointmentFee::allPending($id, $year, $month);
             AppointmentFee::whereIn('id', $pendingIdList_fee)

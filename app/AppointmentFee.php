@@ -31,6 +31,7 @@ class AppointmentFee extends Model
         'guide_fee',
         'default_fee',
         'status',
+        'time_expire',
         'settlement_status'
     ];
 
@@ -47,7 +48,7 @@ class AppointmentFee extends Model
         return DB::select("
             SELECT SUM(`total_fee`) AS fee
             FROM `appointment_fees` 
-            WHERE patient_id=$patientId AND `status`=$status;
+            WHERE patient_id=$patientId AND `status`='$status';
         ");
     }
 
@@ -123,6 +124,25 @@ class AppointmentFee extends Model
             SELECT SUM(`reception_fee`) AS sum_value 
             FROM `appointment_fees` 
             WHERE `doctor_id`=$userId AND `settlement_status`='$status' AND `status`='completed'
+        ");
+    }
+
+    /**
+     * 按月查询某医生当月收入总额
+     *
+     * @param $doctorId
+     * @return mixed
+     */
+    public static function sumTotal($doctorId)
+    {
+        return DB::select("
+            SELECT 
+                date_format(`time_expire`, '%Y') AS 'year',
+                date_format(`time_expire`, '%m') AS 'month',
+                sum(total_fee) AS total 
+            FROM `appointment_fees` 
+            WHERE doctor_id=$doctorId AND status='completed'
+            GROUP BY date_format(`time_expire`, '%Y-%m');
         ");
     }
 }

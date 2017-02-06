@@ -8,6 +8,7 @@
 namespace App\Api\Helper;
 
 use App\Appointment;
+use App\AppointmentFee;
 use App\AppointmentMsg;
 use App\Doctor;
 use App\Patient;
@@ -76,10 +77,24 @@ class MsgAndNotification
          * 推送消息
          */
         try {
+            /**
+             * 更新约诊状态
+             */
             $result = Appointment::whereIn('id', $appointmentIdList)
                 ->update(['status' => $status]);
 
             if ($result) {
+                /**
+                 * 更新约诊支付状态
+                 */
+                if (in_array($status, array('completed-1', 'completed-2'))) {
+                    AppointmentFee::whereIn('appointment_id', $appointmentIdList)
+                        ->update([
+                            'status' => 'completed', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
+                            'time_expire' => date('Y-m-d H:i:s')
+                        ]);
+                }
+
                 AppointmentMsg::insert($appointmentMsgList); //批量插入推送消息
 
                 foreach ($deviceTokens as $deviceToken) {

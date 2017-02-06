@@ -2,12 +2,10 @@
 
 namespace App\Console;
 
-use App\Api\Controllers\PayController;
 use App\Api\Helper\MsgAndNotification;
 use App\Appointment;
-use App\Cron;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
@@ -30,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             self::updateExpiredAndPushAppointment();
-            self::processOrders();
+//            self::processOrders(); //已经不需要了，使用appointment fee管理支付了
         })->everyMinute();
     }
 
@@ -85,12 +83,12 @@ class Kernel extends ConsoleKernel
     /**
      * 处理已支付没有回调处理的订单
      */
-    public static function processOrders()
-    {
-        $needProcessAppointments = Appointment::getPaidNoCallbackList();
-        if (count($needProcessAppointments) > 0) {
-            $payCtrl = new PayController();
-            $payCtrl->batProcessing($needProcessAppointments);
-        }
-    }
+//    public static function processOrders()
+//    {
+//        $needProcessAppointments = Appointment::getPaidNoCallbackList();
+//        if (count($needProcessAppointments) > 0) {
+//            $payCtrl = new PayController();
+//            $payCtrl->batProcessing($needProcessAppointments);
+//        }
+//    }
 }
