@@ -84,16 +84,7 @@ class MsgAndNotification
                 ->update(['status' => $status]);
 
             if ($result) {
-                /**
-                 * 更新约诊支付状态
-                 */
-                if (in_array($status, array('completed-1', 'completed-2'))) {
-                    AppointmentFee::whereIn('appointment_id', $appointmentIdList)
-                        ->update([
-                            'status' => 'completed', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
-                            'time_expire' => date('Y-m-d H:i:s')
-                        ]);
-                }
+                self::updateAppointmentsPayStatus($appointmentIdList, $status); //批量更新约诊支付状态
 
                 AppointmentMsg::insert($appointmentMsgList); //批量插入推送消息
 
@@ -111,6 +102,35 @@ class MsgAndNotification
             }
         } catch (\Exception $e) {
             Log::info('kernel-updateExpiredAndPushAppointment', ['context' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * 更新相应的支付状态
+     *
+     * @param $appointmentIdList
+     * @param $status
+     */
+    public static function updateAppointmentsPayStatus($appointmentIdList, $status)
+    {
+        if (in_array($status, array('completed-1', 'completed-2'))) {
+            AppointmentFee::whereIn('appointment_id', $appointmentIdList)
+                ->update([
+                    'status' => 'completed', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
+                    'time_expire' => date('Y-m-d H:i:s')
+                ]);
+        } elseif (in_array($status, array('close-2', 'close-3'))) {
+            AppointmentFee::whereIn('appointment_id', $appointmentIdList)
+                ->update([
+                    'status' => 'cancelled', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
+                    'time_expire' => date('Y-m-d H:i:s')
+                ]);
+        } elseif (in_array($status, array('cancel-2', 'cancel-3', 'cancel-4', 'cancel-5', 'cancel-6', 'cancel-7'))) {
+            AppointmentFee::whereIn('appointment_id', $appointmentIdList)
+                ->update([
+                    'status' => 'cancelled', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
+                    'time_expire' => date('Y-m-d H:i:s')
+                ]);
         }
     }
 
