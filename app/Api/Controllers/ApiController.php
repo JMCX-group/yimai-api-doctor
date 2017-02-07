@@ -163,7 +163,26 @@ class ApiController extends BaseController
                     '医脉简介' => $http . '/about/introduction',
                     '律师信息' => $http . '/about/lawyer',
                     '用户协议' => $http . '/agreement/doctor',
-                    '分享文案' => $http . '/share/index'
+                    '分享文案' => $http . '/share/index',
+
+                    '约诊详细信息分享页面-IOS' => [
+                        'URL' => $http . '/YMShareiOS/index.php',
+                        '参数说明' => [
+                            'username' => '这个是医生的姓名',
+                            'usercode' => '这个是医生的医脉码',
+                            'userid' => '这个是医生的用户id'
+                        ],
+                        '例' => $http . '/YMShareiOS/index.php?username=李建&usercode=1111&userid=108'
+                    ],
+                    '约诊详细信息分享页面-Android' => [
+                        'URL' => $http . '/YMShareAndroid/index.php',
+                        '参数说明' => [
+                            'username' => '这个是医生的姓名',
+                            'usercode' => '这个是医生的医脉码',
+                            'userid' => '这个是医生的用户id'
+                        ],
+                        '例' => $http . '/YMShareAndroid/index.php?username=李建&usercode=1111&userid=108'
+                    ]
                 ]
             ],
 

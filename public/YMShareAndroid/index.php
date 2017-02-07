@@ -66,7 +66,7 @@ if(!isset($_GET['userid'])){
          }'
     ></a>
 
-    <img id="page-qr" src="http://d.medi-link.cn/qrcode/<?php echo $_GET["userid"] ?>" class="cf-row"
+    <img id="page-qr" src="http://d.medi-link.cn/qrcode/<?php echo $_GET["userid"] ?>.png" class="cf-row"
          data-cf-layout='{"width": 200, "height": 200, "top": 1762, "left": 60}'>
 
     <div id="pag-code" class="cf-row"
