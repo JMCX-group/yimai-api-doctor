@@ -24,7 +24,8 @@ class AdmissionsMsgTransformer
             'text' => AppointmentStatus::admissionsMsgContent($admissionsMsg['status'], $admissionsMsg['doctor_name'], $admissionsMsg['patient_name'], $admissionsMsg['appointment_id']),
             'type' => $admissionsMsg['type'],
             'read' => $admissionsMsg['doctor_read'],
-            'time' => $admissionsMsg['created_at']->format('Y-m-d H:i:s')
+            'time' => $admissionsMsg['created_at']->format('Y-m-d H:i:s'),
+            'status' => $admissionsMsg['status']
         ];
     }
 }

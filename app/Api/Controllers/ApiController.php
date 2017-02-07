@@ -2614,7 +2614,8 @@ class ApiController extends BaseController
                                 'text' => '显示文案',
                                 'type' => '是否重要,0为不重要,1为重要; 重要的内容必须点开告知服务器变为已读; 不重要内容点开列表就全部变已读',
                                 'read' => '是否已读,0为未读,1为已读; 该状态后期会将type为0的,获取时直接全部置为已读',
-                                'time' => '时间'
+                                'time' => '时间',
+                                'status' => '接诊状态：wait-2, wait-5, cancel-3, cancel-5, cancel-6'
                             ],
                             'message' => '',
                             'error' => ''
@@ -2634,7 +2635,8 @@ class ApiController extends BaseController
                                 'text' => '显示文案',
                                 'type' => '是否重要,0为不重要,1为重要; 重要的内容必须点开告知服务器变为已读; 不重要内容点开列表就全部变已读',
                                 'read' => '是否已读,0为未读,1为已读; 该状态后期会将type为0的,获取时直接全部置为已读',
-                                'time' => '时间'
+                                'time' => '时间',
+                                'status' => '接诊状态：wait-2, wait-5, cancel-3, cancel-5, cancel-6'
                             ],
                             'message' => '',
                             'error' => ''
