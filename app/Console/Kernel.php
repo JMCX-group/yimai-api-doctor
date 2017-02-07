@@ -3,9 +3,13 @@
 namespace App\Console;
 
 use App\Api\Helper\MsgAndNotification;
+use App\Api\Helper\WeiXinPay;
 use App\Appointment;
+use App\PatientRechargeRecord;
+use App\PatientWallet;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,10 +30,101 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        /**
+         * 每分钟刷新订单信息：
+         */
         $schedule->call(function () {
             self::updateExpiredAndPushAppointment();
 //            self::processOrders(); //已经不需要了，使用appointment fee管理支付了
         })->everyMinute();
+
+        /**
+         * 每10分钟刷新支付信息：
+         */
+        $schedule->call(function () {
+            self::updateWeChatPayInfo();
+        })->everyTenMinutes();
+    }
+
+    /**
+     * 更新微信支付信息
+     */
+    public static function updateWeChatPayInfo()
+    {
+        $wxPay = new WeiXinPay();
+        $errPayList = PatientRechargeRecord::getErrList();
+        foreach ($errPayList as $item) {
+            $wxData = $wxPay->wxOrderQuery($item->out_trade_no);
+            Log::info('auto-wechat-query', ['context' => json_encode($wxData)]); //测试期间
+            if ($wxData['return_code'] == 'SUCCESS' && $wxData['trade_state'] == 'SUCCESS') {
+                self::rechargeSuccess($wxData);
+            } else {
+                self::rechargeFailed($wxData);
+            }
+        }
+    }
+
+    /**
+     * 充值失败
+     *
+     * @param $wxData
+     */
+    public static function rechargeFailed($wxData)
+    {
+        $outTradeNo = $wxData['out_trade_no'];
+
+        try {
+            /**
+             * 订单状态更新
+             */
+            $rechargeRecord = PatientRechargeRecord::where('out_trade_no', $outTradeNo)->first();
+            if (!empty($rechargeRecord->id)) {
+                $rechargeRecord->status = 'err';
+                $rechargeRecord->time_expire = $wxData['time_end'];
+                $rechargeRecord->ret_data = json_encode($wxData);
+                $rechargeRecord->save();
+            }
+        } catch (\Exception $e) {
+            Log::info('auto-wechat-query-recharge-failed', ['context' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * 充值成功
+     *
+     * @param $wxData
+     */
+    public static function rechargeSuccess($wxData)
+    {
+        $outTradeNo = $wxData['out_trade_no'];
+
+        try {
+            /**
+             * 订单状态更新
+             */
+            $rechargeRecord = PatientRechargeRecord::where('out_trade_no', $outTradeNo)->first();
+            if (!empty($rechargeRecord->id)) {
+                $rechargeRecord->status = 'end';
+                $rechargeRecord->time_expire = $wxData['time_end'];
+                $rechargeRecord->ret_data = json_encode($wxData);
+                $rechargeRecord->save();
+
+                /**
+                 * 钱包信息更新
+                 */
+                $wallet = PatientWallet::where('patient_id', $rechargeRecord->patient_id)->first();
+                if (!isset($wallet->patient_id)) {
+                    $wallet = new PatientWallet();
+                    $wallet->patient_id = $rechargeRecord->patient_id;
+                    $wallet->total = 0;
+                }
+                $wallet->total += ($wxData['total_fee'] / 100);
+                $wallet->total = $wallet->total * 10000; //TODO 测试期间乘以10000倍
+                $wallet->save();
+            }
+        } catch (\Exception $e) {
+            Log::info('auto-wechat-query-recharge-success', ['context' => $e->getMessage()]);
+        }
     }
 
     /**
