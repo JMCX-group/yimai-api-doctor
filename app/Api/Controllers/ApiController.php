@@ -165,7 +165,7 @@ class ApiController extends BaseController
                     '用户协议' => $http . '/agreement/doctor',
                     '分享文案' => $http . '/share/index',
 
-                    '约诊详细信息分享页面-IOS' => [
+                    '医生名片分享页面-IOS' => [
                         'URL' => $http . '/YMShareiOS/index.php',
                         '参数说明' => [
                             'username' => '这个是医生的姓名',
@@ -174,7 +174,7 @@ class ApiController extends BaseController
                         ],
                         '例' => $http . '/YMShareiOS/index.php?username=李建&usercode=1111&userid=108'
                     ],
-                    '约诊详细信息分享页面-Android' => [
+                    '医生名片分享页面-Android' => [
                         'URL' => $http . '/YMShareAndroid/index.php',
                         '参数说明' => [
                             'username' => '这个是医生的姓名',
