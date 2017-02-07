@@ -338,7 +338,7 @@ class TimeLineTransformer
 
         return [[
             'name' => \Config::get('constants.TREATMENT_TIME'),
-            'content' => $appointments->visit_time . ' ' . (($appointments->am_pm == 'am') ? '上午' : '下午')
+            'content' => date('Y-m-d', strtotime($appointments->visit_time)) . ' ' . (($appointments->am_pm == 'am') ? '上午' : '下午')
         ], [
             'name' => \Config::get('constants.TREATMENT_HOSPITAL'),
             'content' => $doctors->hospital

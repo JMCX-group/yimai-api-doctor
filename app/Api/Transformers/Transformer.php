@@ -351,7 +351,7 @@ class Transformer
                 'appointment_id' => $appointments->id,
                 'history' => $appointments->patient_history,
                 'img_url' => $appointments->patient_imgs,
-                'date' => $appointments->visit_time,
+                'date' => date('Y-m-d', strtotime($appointments->visit_time)),
                 'hospital' => ($doctor == null) ? null : $doctor->hospital,
                 'remark' => $appointments->remark,
                 'supplement' => $appointments->supplement,

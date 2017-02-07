@@ -37,7 +37,7 @@ class AdmissionsController extends BaseController
 
         if ($appointment->status == 'wait-2') {
             $appointment->status = 'wait-3'; //医生确认接诊
-            $appointment->visit_time = date('Y-m-d', strtotime($request['visit_time']));
+            $appointment->visit_time = date('Y-m-d H:i:s', strtotime($request['visit_time']));
             $amOrPm = date('H', strtotime($request['visit_time']));
             $appointment->am_pm = $amOrPm <= 12 ? 'am' : 'pm';
             $appointment->supplement = (isset($request['supplement']) && $request['supplement'] != null) ? $request['supplement'] : ''; //补充说明

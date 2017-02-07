@@ -154,7 +154,7 @@ class Kernel extends ConsoleKernel
         MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'close-2');
 
         /**
-         * 更新过期（24小时）未确认完成面诊的信息并推送：
+         * 更新过期（4小时）未确认完成面诊的信息并推送：
          * wait-3 to completed-1
          */
         $wait2Appointments = Appointment::getOverdueNotConfirmedFace('wait-3');
