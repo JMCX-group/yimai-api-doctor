@@ -105,7 +105,7 @@ class Appointment extends Model
     }
 
     /**
-     * 查询过期（4小时）未确认完成面诊的
+     * 查询过期（24小时）未确认完成面诊的
      *
      * @param $status
      * @return mixed
@@ -113,7 +113,7 @@ class Appointment extends Model
     public static function getOverdueNotConfirmedFace($status)
     {
         return Appointment::where('status', $status)
-            ->where('visit_time', '<', date('Y-m-d H:i:s', time() - 4 * 3600))
+            ->where('visit_time', '<', date('Y-m-d H:i:s', time() - 24 * 3600))
             ->get();
     }
 
