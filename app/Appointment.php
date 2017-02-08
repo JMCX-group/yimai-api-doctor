@@ -46,6 +46,7 @@ class Appointment extends Model
         'remark',
         'refusal_reason',
         'doctor_refusal_time',
+        'doctor_cancel_time',
         'patient_cancel_time',
         'deposit',
         'price',
@@ -226,7 +227,7 @@ class Appointment extends Model
             'appointments.created_at', 'appointments.updated_at',
             'doctors.name AS doctor')
             ->leftJoin('doctors', 'doctors.id', '=', 'appointments.doctor_id')
-            ->whereIn('appointments.status', ['close-1', 'close-2', 'close-3', 'cancel-1', 'cancel-2', 'cancel-3', 'cancel-4', 'cancel-5', 'cancel-6', 'cancel-7'])
+            ->whereIn('appointments.status', ['close-1', 'close-2', 'close-3', 'close-4', 'cancel-1', 'cancel-2', 'cancel-3', 'cancel-4', 'cancel-5', 'cancel-6', 'cancel-7'])
             ->orderBy('updated_at', 'desc')
             ->paginate(15);
     }
@@ -307,7 +308,7 @@ class Appointment extends Model
             ->leftJoin('doctors', 'doctors.id', '=', 'appointments.doctor_id')
             ->where('appointments.platform_or_doctor', 'p')
             ->whereIn('appointments.status', [
-                'close-1', 'close-2', 'close-3',
+                'close-1', 'close-2', 'close-3', 'close-4',
                 'cancel-1', 'cancel-2', 'cancel-3', 'cancel-4', 'cancel-5', 'cancel-6', 'cancel-7',
                 'completed-1', 'completed-2'
             ])

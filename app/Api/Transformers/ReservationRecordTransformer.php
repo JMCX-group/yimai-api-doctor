@@ -55,6 +55,7 @@ class ReservationRecordTransformer extends TransformerAbstract
                 break;
 
             case 'close-1':
+            case 'close-4':
             case 'cancel-1':
             case 'cancel-3':
             case 'cancel-5':

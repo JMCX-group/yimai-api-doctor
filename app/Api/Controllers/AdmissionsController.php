@@ -79,7 +79,7 @@ class AdmissionsController extends BaseController
             $appointment->status = 'close-3'; //医生拒绝接诊
             $appointment->refusal_reason = $request['reason'];
 
-            $appointment->confirm_admissions_time = date('Y-m-d H:i:s'); //确认接诊时间
+            $appointment->doctor_refusal_time = date('Y-m-d H:i:s'); //确认接诊时间
 
             try {
                 if ($appointment->save()) {
@@ -151,7 +151,6 @@ class AdmissionsController extends BaseController
                 $appointment->status = 'completed-2'; //改期后完成面诊
             }
 
-            $appointment->refusal_reason = $request['reason'];
             $appointment->completed_admissions_time = date('Y-m-d H:i:s'); //完成面诊时间
 
             try {
@@ -209,7 +208,7 @@ class AdmissionsController extends BaseController
      * @param RefusalAdmissionsRequest $request
      * @return array|mixed
      */
-    public function cancelAdmissions(RefusalAdmissionsRequest $request)
+    public function cancel(RefusalAdmissionsRequest $request)
     {
         $appointment = Appointment::find($request['id']);
 
@@ -224,7 +223,7 @@ class AdmissionsController extends BaseController
         }
 
         $appointment->refusal_reason = $request['reason'];
-        $appointment->doctor_refusal_time = date('Y-m-d H:i:s'); //取消接诊时间
+        $appointment->doctor_cancel_time = date('Y-m-d H:i:s'); //医生取消接诊时间
 
         try {
             if ($appointment->save()) {

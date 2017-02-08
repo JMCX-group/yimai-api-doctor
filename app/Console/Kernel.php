@@ -162,10 +162,10 @@ class Kernel extends ConsoleKernel
 
         /**
          * 更新过期（到面诊时间）未确认医生改期的信息并推送：
-         * wait-4 to cancel-5
+         * wait-4 to close-4
          */
         $wait2Appointments = Appointment::getOverdueNotConfirmedRescheduled();
-        MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'cancel-5', true);
+        MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'close-4', true);
 
         /**
          * 更新过期（4小时）未确认完成面诊的信息并推送：

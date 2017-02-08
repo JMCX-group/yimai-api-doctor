@@ -70,6 +70,7 @@ class AdmissionsRecordTransformer extends TransformerAbstract
              * close-1: 待患者付款
              * close-2: 医生过期未接诊,约诊关闭
              * close-3: 医生拒绝接诊
+             * close-4: 患者过期未确认,约诊关闭
              * cancel:
              * cancel-1: 患者取消约诊; 未付款
              * cancel-2: 医生取消约诊
@@ -80,6 +81,7 @@ class AdmissionsRecordTransformer extends TransformerAbstract
              * cancel-7: 医生改期之后,患者确认之后,医生取消约诊;
              */
             case 'close-1':
+            case 'close-4':
             case 'cancel-1':
             case 'cancel-3':
             case 'cancel-5':

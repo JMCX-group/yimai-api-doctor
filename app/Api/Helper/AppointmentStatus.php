@@ -43,6 +43,7 @@ class AppointmentStatus
          * close-1: 待患者付款
          * close-2: 医生过期未接诊,约诊关闭
          * close-3: 医生拒绝接诊
+         * close-4: 患者过期未确认,约诊关闭
          *
          * Cancel:
          * cancel-1: 患者取消约诊; 未付款
@@ -75,6 +76,10 @@ class AppointmentStatus
 
             case 'close-3':
                 $retText = $doctor . '医生拒绝了您替患者' . $patient . '发起的约诊请求（预约号' . $id . '），原因为' . Appointment::find($id)->refusal_reason . '，约诊关闭。';
+                break;
+
+            case 'close-4':
+                $retText = '患者' . $patient . '逾期未确认' . $doctor . '医生的改期，约诊关闭。（预约号' . $id . '）';
                 break;
 
             case 'cancel-2':
@@ -128,6 +133,7 @@ class AppointmentStatus
          * close-1: 待患者付款
          * close-2: 医生过期未接诊,约诊关闭
          * close-3: 医生拒绝接诊
+         * close-4: 患者过期未确认,约诊关闭
          *
          * Cancel:
          * cancel-1: 患者取消约诊; 未付款
@@ -188,6 +194,7 @@ class AppointmentStatus
          * close-1: 待患者付款
          * close-2: 医生过期未接诊,约诊关闭
          * close-3: 医生拒绝接诊
+         * close-4: 患者过期未确认,约诊关闭
          *
          * Cancel:
          * cancel-1: 患者取消约诊; 未付款
@@ -221,6 +228,9 @@ class AppointmentStatus
                 break;
             case 'close-3':
                 $retText = $doctor . '医生拒绝接诊（预约号' . $id . '），接诊关闭。';
+                break;
+            case 'close-4':
+                $retText = '您逾期未确认' . $doctor . '医生的改期，约诊关闭。（预约号' . $id . '）';
                 break;
 
             case 'cancel-2':
@@ -274,6 +284,9 @@ class AppointmentStatus
                 break;
             case 'close-3':
                 $retData = '医生拒绝接诊';
+                break;
+            case 'close-4':
+                $retData = '患者逾期未确认改期，约诊关闭';
                 break;
 
             case 'cancel-1':
@@ -350,6 +363,9 @@ class AppointmentStatus
                 break;
             case 'close-3':
                 $retData = '医生拒绝接诊';
+                break;
+            case 'close-4':
+                $retData = (($recipient == 'patient') ? '您' : '患者') . '逾期未确认改期，约诊关闭';
                 break;
 
             case 'cancel-1':

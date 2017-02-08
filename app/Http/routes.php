@@ -157,7 +157,7 @@ $api->version('v1', function ($api) {
                 $api->post('refusal', 'AdmissionsController@refusalAdmissions');
                 $api->post('complete', 'AdmissionsController@completeAdmissions');
                 $api->post('rescheduled', 'AdmissionsController@rescheduledAdmissions');
-                $api->post('cancel', 'AdmissionsController@cancelAdmissions');
+                $api->post('cancel', 'AdmissionsController@cancel');
                 $api->post('transfer', 'AdmissionsController@transferAdmissions');
             });
 
