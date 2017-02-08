@@ -316,7 +316,7 @@ class TimeLineTransformer
      */
     private static function otherInfoContent_completed($appointments, $retData)
     {
-        $time = $appointments->completed_admissions_time->format('Y-m-d H:i:s');
+        $time = $appointments->completed_admissions_time;
         $infoText = \Config::get('constants.FACE_CONSULTATION_COMPLETE');
         return self::copyTransformer($retData, $time, $infoText, null, 'completed');
     }
