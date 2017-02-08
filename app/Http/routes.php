@@ -151,14 +151,14 @@ $api->version('v1', function ($api) {
             
             //Admissions
             $api->group(['prefix' => 'admissions'], function ($api) {
-                $api->get('list', 'AdmissionsController@getAdmissionsRecord');
-                $api->get('detail/{admissions}', 'AdmissionsController@getDetailInfo');
-                $api->post('agree', 'AdmissionsController@agreeAdmissions');
-                $api->post('refusal', 'AdmissionsController@refusalAdmissions');
-                $api->post('complete', 'AdmissionsController@completeAdmissions');
-                $api->post('rescheduled', 'AdmissionsController@rescheduledAdmissions');
+                $api->get('list', 'AdmissionsController@myList');
+                $api->get('detail/{admissions}', 'AdmissionsController@detail');
+                $api->post('agree', 'AdmissionsController@agree');
+                $api->post('refusal', 'AdmissionsController@refusal');
+                $api->post('complete', 'AdmissionsController@complete');
+                $api->post('rescheduled', 'AdmissionsController@rescheduled');
                 $api->post('cancel', 'AdmissionsController@cancel');
-                $api->post('transfer', 'AdmissionsController@transferAdmissions');
+                $api->post('transfer', 'AdmissionsController@transfer');
             });
 
             //Patient

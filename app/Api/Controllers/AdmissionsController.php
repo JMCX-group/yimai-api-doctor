@@ -27,11 +27,11 @@ class AdmissionsController extends BaseController
 {
     /**
      * 同意接诊。
-     * 
+     *
      * @param AgreeAdmissionsRequest $request
      * @return array|\Illuminate\Http\JsonResponse|mixed
      */
-    public function agreeAdmissions(AgreeAdmissionsRequest $request)
+    public function agree(AgreeAdmissionsRequest $request)
     {
         $appointment = Appointment::find($request['id']);
 
@@ -53,7 +53,7 @@ class AdmissionsController extends BaseController
                         MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
                     }
 
-                    return $this->getDetailInfo($request['id']);
+                    return $this->detail($request['id']);
                 } else {
                     return response()->json(['message' => '保存失败'], 500);
                 }
@@ -64,14 +64,14 @@ class AdmissionsController extends BaseController
             return response()->json(['message' => '状态错误'], 400);
         }
     }
-    
+
     /**
      * 拒绝接诊。
-     * 
+     *
      * @param RefusalAdmissionsRequest $request
      * @return array|\Illuminate\Http\JsonResponse|mixed
      */
-    public function refusalAdmissions(RefusalAdmissionsRequest $request)
+    public function refusal(RefusalAdmissionsRequest $request)
     {
         $appointment = Appointment::find($request['id']);
 
@@ -89,7 +89,7 @@ class AdmissionsController extends BaseController
                         MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
                     }
 
-                    return $this->getDetailInfo($request['id']);
+                    return $this->detail($request['id']);
                 } else {
                     return response()->json(['message' => '保存失败'], 500);
                 }
@@ -103,11 +103,11 @@ class AdmissionsController extends BaseController
 
     /**
      * 转诊。
-     * 
+     *
      * @param RefusalRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function transferAdmissions(RefusalRequest $request)
+    public function transfer(RefusalRequest $request)
     {
         $appointment = Appointment::find($request['id']);
 
@@ -140,7 +140,7 @@ class AdmissionsController extends BaseController
      * @param CompleteAdmissionsRequest $request
      * @return array|\Illuminate\Http\JsonResponse|mixed
      */
-    public function completeAdmissions(CompleteAdmissionsRequest $request)
+    public function complete(CompleteAdmissionsRequest $request)
     {
         $appointment = Appointment::find($request['id']);
 
@@ -161,7 +161,7 @@ class AdmissionsController extends BaseController
                         MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
                     }
 
-                    return $this->getDetailInfo($request['id']);
+                    return $this->detail($request['id']);
                 } else {
                     return response()->json(['message' => '保存失败'], 500);
                 }
@@ -175,11 +175,11 @@ class AdmissionsController extends BaseController
 
     /**
      * 医生改期。
-     * 
+     *
      * @param AgreeAdmissionsRequest $request
      * @return array|mixed
      */
-    public function rescheduledAdmissions(AgreeAdmissionsRequest $request)
+    public function rescheduled(AgreeAdmissionsRequest $request)
     {
         $appointment = Appointment::find($request['id']);
         $appointment->status = 'wait-4'; //医生改期
@@ -193,7 +193,7 @@ class AdmissionsController extends BaseController
                     MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
                 }
 
-                return $this->getDetailInfo($request['id']);
+                return $this->detail($request['id']);
             } else {
                 return response()->json(['message' => '保存失败'], 500);
             }
@@ -204,7 +204,7 @@ class AdmissionsController extends BaseController
 
     /**
      * 医生取消约诊。
-     * 
+     *
      * @param RefusalAdmissionsRequest $request
      * @return array|mixed
      */
@@ -233,7 +233,7 @@ class AdmissionsController extends BaseController
                     MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointment->id, 'patient'); //向患者端推送消息
                 }
 
-                return $this->getDetailInfo($request['id']);
+                return $this->detail($request['id']);
             } else {
                 return response()->json(['message' => '保存失败'], 500);
             }
@@ -247,7 +247,7 @@ class AdmissionsController extends BaseController
      *
      * @return array|\Dingo\Api\Http\Response|mixed
      */
-    public function getAdmissionsRecord()
+    public function myList()
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
@@ -319,13 +319,25 @@ class AdmissionsController extends BaseController
      * @param $id
      * @return array|mixed
      */
-    public function getDetailInfo($id)
+    public function detail($id)
     {
         $user = User::getAuthenticatedUser();
         if (!isset($user->id)) {
             return $user;
         }
 
+        return self::appointmentDetailInfo($id, $user->id);
+    }
+
+    /**
+     * 约诊信息生成
+     *
+     * @param $id
+     * @param $userId
+     * @return array
+     */
+    public static function appointmentDetailInfo($id, $userId)
+    {
         $appointments = Appointment::where('appointments.id', $id)
             ->leftJoin('doctors', 'doctors.id', '=', 'appointments.locums_id')
             ->leftJoin('patients', 'patients.id', '=', 'appointments.patient_id')
@@ -357,8 +369,7 @@ class AdmissionsController extends BaseController
             ->get()
             ->first();
 
-        $appointments['time_line'] = TimeLineTransformer::generateTimeLine($appointments, $doctors, $user->id, $locumsDoctors);
-
+        $appointments['time_line'] = TimeLineTransformer::generateTimeLine($appointments, $doctors, $userId, $locumsDoctors);
         $appointments['progress'] = TimeLineTransformer::generateProgressStatus($appointments->status);
 
         return Transformer::appointmentsTransform($appointments, $locumsDoctors);
