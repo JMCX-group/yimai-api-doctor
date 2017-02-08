@@ -185,8 +185,8 @@ class TimeLineTransformer
                 $retData = self::otherInfoContent_alreadyPaid($appointments, $retData);
                 $retData = self::otherInfoContent_confirmAdmissions($appointments, $doctors, $retData);
 
-                $time = $appointments->completed_admissions_time;
-                $infoText = \Config::get('constants.CONFIRM_ADMISSIONS');
+                $time = $appointments->confirm_admissions_time;
+                $infoText = self::confirmFaceConsultation($appointments, $myId);
                 $retData = self::copyTransformer($retData, $time, $infoText, null, 'pass');
 
                 $retData = self::otherInfoContent_completed($appointments, $retData);
@@ -316,7 +316,7 @@ class TimeLineTransformer
      */
     private static function otherInfoContent_completed($appointments, $retData)
     {
-        $time = $appointments->updated_at->format('Y-m-d H:i:s');
+        $time = $appointments->completed_admissions_time->format('Y-m-d H:i:s');
         $infoText = \Config::get('constants.FACE_CONSULTATION_COMPLETE');
         return self::copyTransformer($retData, $time, $infoText, null, 'completed');
     }
@@ -460,6 +460,26 @@ class TimeLineTransformer
         } else {
             $text = \Config::get('constants.CONFIRM_APPOINTMENT');
             $text = str_replace('{人称}', $locumsDoctor['name'], $text);
+        }
+
+        return $text;
+    }
+
+    /**
+     * 确认面诊文案的角色名称替换
+     *
+     * @param $appointments
+     * @param $myId
+     * @return mixed
+     */
+    public static function confirmFaceConsultation($appointments, $myId)
+    {
+        if ($appointments->locums_id == $myId){
+            $text = \Config::get('constants.CONFIRM_FACE_CONSULTATION');
+            $text = str_replace('{人称}', '医生', $text);
+        } else {
+            $text = \Config::get('constants.CONFIRM_FACE_CONSULTATION');
+            $text = str_replace('{人称}', '您', $text);
         }
 
         return $text;

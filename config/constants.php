@@ -21,6 +21,7 @@ return [
 
     'CONFIRM_ADMISSIONS_WAIT_FACE_CONSULTATION' => '医生确认接诊,待面诊',
     'CONFIRM_ADMISSIONS' => '医生确认接诊',
+    'CONFIRM_FACE_CONSULTATION' => '{人称}已确认面诊',
     'CONFIRM_APPOINTMENT' => '{人称}确认代约',
 
     'DOCTOR_RESCHEDULED_WAIT_CONFIRM' => '医生改期,待患者确认',
