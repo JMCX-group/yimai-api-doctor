@@ -224,7 +224,7 @@ class AdmissionsController extends BaseController
         }
 
         $appointment->refusal_reason = $request['reason'];
-        $appointment->confirm_admissions_time = date('Y-m-d H:i:s'); //确认接诊时间
+        $appointment->doctor_refusal_time = date('Y-m-d H:i:s'); //取消接诊时间
 
         try {
             if ($appointment->save()) {

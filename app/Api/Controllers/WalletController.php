@@ -47,14 +47,6 @@ class WalletController extends BaseController
         }
 
         /**
-         * 老的通过微信支付的：
-         */
-//        $total = Order::totalFeeSum($user->id);
-//        $billable = Order::selectSum($user->id, '可提现');
-//        $pending = Order::selectSum($user->id, '待结算');
-//        $refunded = Order::selectSum($user->id, '已提现');
-
-        /**
          * 新的通过钱包余额支付的：
          */
         $totalFee = AppointmentFee::totalFeeSum($user->id);
@@ -62,10 +54,6 @@ class WalletController extends BaseController
         $pendingFee = AppointmentFee::selectSum($user->id, '待结算');
         $refundedFee = AppointmentFee::selectSum($user->id, '已提现');
 
-//        $walletInfo->total = ($total[0]->sum_value + $totalFee[0]->sum_value) / 100;
-//        $walletInfo->billable = ($billable[0]->sum_value + $billableFee[0]->sum_value) / 100; //可提现
-//        $walletInfo->pending = ($pending[0]->sum_value + $pendingFee[0]->sum_value) / 100; //待结算
-//        $walletInfo->refunded = ($refunded[0]->sum_value + $refundedFee[0]->sum_value) / 100; //已提现
         $walletInfo->total = $totalFee[0]->sum_value / 100;
         $walletInfo->billable = $billableFee[0]->sum_value / 100; //可提现
         $walletInfo->pending = $pendingFee[0]->sum_value / 100; //待结算
@@ -90,19 +78,19 @@ class WalletController extends BaseController
 
         if (isset($request['type']) && $request['type'] == 'billable') {
             $record = AppointmentFee::where('doctor_id', $user->id)
-                ->where('status', 'completed')
+                ->where('status', '!=', 'paid')
                 ->where('settlement_status', '可提现')
                 ->orderBy('created_at', 'DESC')
                 ->get();
         } elseif (isset($request['type']) && $request['type'] == 'pending') {
             $record = AppointmentFee::where('doctor_id', $user->id)
-                ->where('status', 'completed')
+                ->where('status', '!=', 'paid')
                 ->where('settlement_status', '待结算')
                 ->orderBy('created_at', 'DESC')
                 ->get();
         } else {
             $record = AppointmentFee::where('doctor_id', $user->id)
-                ->where('status', 'completed')
+                ->where('status', '!=', 'paid')
                 ->orderBy('created_at', 'DESC')
                 ->get();
         }
@@ -129,7 +117,7 @@ class WalletController extends BaseController
         }
 
         $record = AppointmentFee::where('doctor_id', $user->id)
-            ->where('status', 'completed')
+            ->where('status', '!=', 'paid')
             ->orderBy('created_at', 'DESC')
             ->get();
         $data = array();

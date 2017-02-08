@@ -29,7 +29,7 @@ class AppointmentFee extends Model
         'platform_fee',
         'intermediary_fee',
         'guide_fee',
-        'default_fee',
+        'default_fee_rate',
         'status',
         'time_expire',
         'settlement_status'
@@ -61,7 +61,7 @@ class AppointmentFee extends Model
     public static function getDefaultFees($patientId)
     {
         return DB::select("
-            SELECT SUM(`default_fee`) AS fee
+            SELECT SUM(`total_fee`) AS fee
             FROM `appointment_fees` 
             WHERE patient_id=$patientId AND `status`='cancelled';
         ");
@@ -107,7 +107,7 @@ class AppointmentFee extends Model
         return DB::select("
             SELECT SUM(`reception_fee`) AS sum_value 
             FROM `appointment_fees` 
-            WHERE `doctor_id`='$userId' AND status='completed'
+            WHERE `doctor_id`='$userId' AND `status`!='paid' 
         ");
     }
 
@@ -123,7 +123,7 @@ class AppointmentFee extends Model
         return DB::select("
             SELECT SUM(`reception_fee`) AS sum_value 
             FROM `appointment_fees` 
-            WHERE `doctor_id`=$userId AND `settlement_status`='$status' AND `status`='completed'
+            WHERE `doctor_id`=$userId AND `settlement_status`='$status' AND `status`!='paid' 
         ");
     }
 
@@ -139,9 +139,9 @@ class AppointmentFee extends Model
             SELECT 
                 date_format(`time_expire`, '%Y') AS 'year',
                 date_format(`time_expire`, '%m') AS 'month',
-                sum(total_fee) AS total 
+                sum(`reception_fee`) AS total 
             FROM `appointment_fees` 
-            WHERE doctor_id=$doctorId AND status='completed'
+            WHERE `doctor_id`=$doctorId AND `status`!='paid' 
             GROUP BY date_format(`time_expire`, '%Y-%m');
         ");
     }

@@ -45,6 +45,8 @@ class Appointment extends Model
         'supplement',
         'remark',
         'refusal_reason',
+        'doctor_refusal_time',
+        'patient_cancel_time',
         'deposit',
         'price',
         'transaction_id',
