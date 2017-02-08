@@ -86,7 +86,7 @@ class MsgAndNotification
             if ($result) {
                 self::updateAppointmentsPayStatus($appointmentIdList, $status); //批量更新约诊支付状态
 
-                AppointmentMsg::insert($appointmentMsgList); //批量插入推送消息
+                AppointmentMsg::create($appointmentMsgList); //批量插入推送消息
 
                 foreach ($deviceTokens as $deviceToken) {
                     self::pushAppointmentMsg($deviceToken['device_token'], $status, $deviceToken['id'], 'patient'); //向患者端推送消息
@@ -161,9 +161,7 @@ class MsgAndNotification
             'patient_name' => $appointments->patient_name,
             'doctor_id' => $appointments->doctor_id,
             'doctor_name' => ($appointments->doctor_id == '') ? '无' : Doctor::find($appointments->doctor_id)->name, //医生姓名
-            'type' => $type,
-            'created_at' => $time ? '' : date('Y-m-d H:i:s'),
-            'updated_at' => $time ? '' : date('Y-m-d H:i:s')
+            'type' => $type
         ];
     }
 
