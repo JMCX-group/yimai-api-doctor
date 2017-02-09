@@ -10,7 +10,11 @@ class LogController extends Controller
         $fileName = $dir . 'laravel-' . date('Y-m-d', time()) . '.log';
 
         if (file_exists($fileName)) {
-            chmod($fileName, 0777); //修改文件的权限，防止被访问之后无法使用；权限用的八进制
+            try {
+                chmod($fileName, 0777); //修改文件的权限，防止被访问之后无法使用；权限用的八进制
+            } catch (\Exception $e) {
+                //
+            }
 
             $content = file_get_contents($fileName);
             $data['content'] = dump($content);
