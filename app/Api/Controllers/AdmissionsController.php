@@ -17,6 +17,7 @@ use App\Api\Transformers\AdmissionsRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
+use App\AppointmentFee;
 use App\Doctor;
 use App\Hospital;
 use App\Patient;
@@ -83,6 +84,8 @@ class AdmissionsController extends BaseController
 
             try {
                 if ($appointment->save()) {
+                    $this->paymentStatusRefresh($appointment->id); //刷新支付状态
+
                     MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
                     $patient = Patient::where('phone', $appointment['patient_phone'])->first();
                     if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
@@ -227,6 +230,8 @@ class AdmissionsController extends BaseController
 
         try {
             if ($appointment->save()) {
+                $this->paymentStatusRefresh($appointment->id); //刷新支付状态
+
                 MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
                 $patient = Patient::where('phone', $appointment['patient_phone'])->first();
                 if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
@@ -240,6 +245,26 @@ class AdmissionsController extends BaseController
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
         }
+    }
+
+    /**
+     * 医生在取消或拒绝时给患者退款
+     *
+     * @param $appointmentIdList
+     */
+    public function paymentStatusRefresh($appointmentIdList)
+    {
+        AppointmentFee::whereIn('appointment_id', $appointmentIdList)
+            ->update([
+                'total_fee' => 0,
+                'reception_fee' => 0,
+                'platform_fee' => 0,
+                'intermediary_fee' => 0,
+                'guide_fee' => 0,
+                'default_fee_rate' => 0,
+                'status' => 'cancelled', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
+                'time_expire' => date('Y-m-d H:i:s')
+            ]);
     }
 
     /**
