@@ -10,7 +10,7 @@
         "dingo/api": "1.0.*@dev",
         "tymon/jwt-auth": "0.5.*",
         "intervention/image": "^2.3",
-        "barryvdh/laravel-ide-helper": "v2.1.4",
+        "barryvdh/laravel-ide-helper": ">v2.0",
         "simplesoftwareio/simple-qrcode": "^1.5"
     },
     "require-dev": {
@@ -45,6 +45,8 @@
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "php artisan ide-helper:generate",
+            "php artisan ide-helper:meta",
             "php artisan optimize"
         ]
     },
