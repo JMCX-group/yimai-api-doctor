@@ -9,6 +9,7 @@
 namespace App\Api\Controllers;
 
 use App\Api\Helper\GetDoctor;
+use App\Api\Helper\MsgAndNotification;
 use App\Api\Helper\RongCloudServerAPI;
 use App\Api\Helper\SaveImage;
 use App\Api\Requests\SearchUserRequest;
@@ -22,8 +23,7 @@ use App\User;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Validator;
-use JWTAuth;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends BaseController
 {
@@ -70,7 +70,7 @@ class UserController extends BaseController
      * Update user info.
      *
      * @param UserRequest $request
-     * @return \Dingo\Api\Http\Response|void
+     * @return \Dingo\Api\Http\Response|\Illuminate\Http\JsonResponse|void
      */
     public function update(UserRequest $request)
     {
@@ -226,6 +226,14 @@ class UserController extends BaseController
             }
 
             $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
+
+            /**
+             * 有了融云信息，则表示已经更新过一次信息，则进行自动添加邀请人：
+             */
+            if ($user->inviter_dp_code != '' && $user->inviter_dp_code != null) {
+                $inviter = User::getInviter($request['inviter_dp_code']);
+                $this->autoAddFriend($user->id, $inviter);
+            }
         }
 
         try {
@@ -236,6 +244,52 @@ class UserController extends BaseController
             }
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+        }
+    }
+
+    /**
+     * 自动和邀请者添加好友
+     *
+     * @param $myId
+     * @param $friendInfo
+     */
+    public function autoAddFriend($myId, $friendInfo)
+    {
+        try {
+            /**
+             * 增加自己和好友的关系
+             */
+            $dr = DoctorRelation::where('doctor_id', $myId)->where('doctor_friend_id', $friendInfo->id)->first();
+            if (!$dr) {
+                $data['doctor_id'] = $myId;
+                $data['doctor_friend_id'] = $friendInfo->id;
+                $data['doctor_read'] = 1;
+                $data['doctor_friend_read'] = 0;
+                $data['confirm'] = 1;
+                DoctorRelation::create($data);
+            }
+
+            /**
+             * 增加好友和自己的关系
+             */
+            $dr2 = DoctorRelation::where('doctor_id', $friendInfo->id)->where('doctor_friend_id', $myId)->first();
+            if ($dr2) {
+                $friendData['doctor_id'] = $friendInfo->id;
+                $friendData['doctor_friend_id'] = $myId;
+                $friendData['doctor_read'] = 0;
+                $friendData['doctor_friend_read'] = 1;
+                $friendData['confirm'] = 1;
+                DoctorRelation::create($friendData);
+            }
+
+            /**
+             * 推送相关信息：
+             */
+            if (isset($friendInfo->id) && ($friendInfo->device_token != '' && $friendInfo->device_token != null)) {
+                MsgAndNotification::pushAddFriendMsg($friendInfo->device_token, $friendInfo->id); //向相关医生推送消息
+            }
+        } catch (\Exception $e) {
+            Log::info('auto-add-friend', ['context' => $e->getMessage()]);
         }
     }
 

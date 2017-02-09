@@ -101,9 +101,10 @@ class ApiController extends BaseController
                         'url' => $http . '/api/user/register',
                         'method' => 'POST',
                         'form-data' => [
-                            'phone' => '11位长的纯数字手机号码',
-                            'password' => '6-60位密码',
-                            'verify_code' => '4位数字验证码'
+                            'phone' => '11位长的纯数字手机号码；必填',
+                            'password' => '6-60位密码；必填',
+                            'verify_code' => '4位数字验证码；必填',
+                            'inviter_dp_code' => '邀请者DP Code，目前是6位长的数值，请用字符串形式传，否则0开头的会没有；选填'
                         ],
                         'response' => [
                             'token' => '成功后会返回登录之后的token值',
@@ -125,7 +126,7 @@ class ApiController extends BaseController
                         'url' => $http . '/api/user/inviter',
                         'method' => 'POST',
                         'form-data' => [
-                            'inviter' => '8位长的纯数字号码'
+                            'inviter' => '6位长的号码，请用字符串形式传，否则0开头的会没有'
                         ],
                         'response' => [
                             'name' => '返回正确数字号码对应的用户姓名',

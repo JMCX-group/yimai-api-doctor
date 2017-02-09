@@ -148,21 +148,14 @@ class User extends Model implements AuthenticatableContract,
      * Get inviter name.
      *
      * @param $dpCode
-     * @return bool
+     * @return mixed
      */
     public static function getInviter($dpCode)
     {
-        $data = User::select('name')
-//            ->where('city_id', City::select('id')->where('code', substr($dpCode, 0, 3))->get()->first()->id)
+        return User::select('*')
             ->where('dept_id', substr($dpCode, 0, 3))
             ->where('dp_code', substr($dpCode, 3))
-            ->get();
-
-        if (isset($data->first()->name)) {
-            return $data->first()->name;
-        } else {
-            return false;
-        }
+            ->first();
     }
 
     /**

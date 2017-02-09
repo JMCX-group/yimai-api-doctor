@@ -16,7 +16,6 @@ use App\Api\Requests\ResetPwdRequest;
 use App\Api\Transformers\UserTransformer;
 use App\User;
 use Illuminate\Http\Request;
-use Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -64,6 +63,8 @@ class AuthController extends BaseController
         $newUser = [
             'phone' => $request->get('phone'),
             'password' => bcrypt($request->get('password')),
+
+            'inviter_dp_code' => isset($request['inviter_dp_code']) ? $request->get('inviter_dp_code') : '',
 
             'avatar' => $domain . '/uploads/avatar/default.jpg',
             'admission_set_fixed' => '[{"week":"sun","am":"false","pm":"false"},{"week":"mon","am":"false","pm":"false"},{"week":"tue","am":"false","pm":"false"},{"week":"wed","am":"false","pm":"false"},{"week":"thu","am":"false","pm":"false"},{"week":"fri","am":"false","pm":"false"},{"week":"sat","am":"false","pm":"false"}]'
@@ -181,12 +182,12 @@ class AuthController extends BaseController
      */
     public function getInviter(InviterRequest $request)
     {
-        $data = User::getInviter($request->get('inviter'));
+        $inviter = User::getInviter($request->get('inviter'));
 
-        if ($data) {
-            return response()->json(['name' => $data]);
+        if ($inviter) {
+            return response()->json(['name' => $inviter->name]);
         } else {
-            return response()->json(['message' => '无法识别邀请人']);
+            return response()->json(['message' => '无法识别邀请人'], 400);
         }
     }
 }
