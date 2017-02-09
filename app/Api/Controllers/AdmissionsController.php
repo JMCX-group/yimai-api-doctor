@@ -118,6 +118,9 @@ class AdmissionsController extends BaseController
         }
 
         $appointment = Appointment::find($request['id']);
+        if ($appointment->is_transfer == 1) {
+            return response()->json(['message' => '已经转诊'], 400);
+        }
 
         if ($appointment->status == 'wait-2') {
             /**
