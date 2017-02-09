@@ -262,6 +262,7 @@ class ApiController extends BaseController
                                 'refuse_info' => '拒绝理由',
                                 'role' => '权限，功能还未完成，请先接收到前台',
                                 'blacklist' => '黑名单； 用户ID list，用逗号分隔',
+                                'common_text' => '常用文本',
                                 'inviter' => '邀请者'
                             ],
                             'relations' => [
@@ -419,6 +420,7 @@ class ApiController extends BaseController
                                 'refuse_info' => '拒绝理由',
                                 'role' => '权限，功能还未完成，请先接收到前台',
                                 'blacklist' => '黑名单； 用户ID list，用逗号分隔',
+                                'common_text' => '常用文本',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',
@@ -1071,7 +1073,8 @@ class ApiController extends BaseController
                             'receive_phone' => '收件电话',
                             'express_no' => '快递单号',
                             'refuse_info' => '拒绝理由',
-                            'blacklist' => '黑名单； 用户ID list，用逗号分隔'
+                            'blacklist' => '黑名单； 用户ID list，用逗号分隔',
+                            'common_text' => '常用文本',
                         ],
                         'response' => [
                             'user' => [
@@ -1140,6 +1143,7 @@ class ApiController extends BaseController
                                 'refuse_info' => '拒绝理由',
                                 'role' => '权限，功能还未完成，请先接收到前台',
                                 'blacklist' => '黑名单； 用户ID list，用逗号分隔； 增加/删除都更新改字段即可',
+                                'common_text' => '常用文本',
                                 'inviter' => '邀请者'
                             ],
                             'message' => '',

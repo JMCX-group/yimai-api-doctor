@@ -68,6 +68,7 @@ class UserTransformer extends TransformerAbstract
             'refuse_info' => $user['refuse_info'],
             'role' => $user['role'],
             'blacklist' => $user['blacklist'],
+            'common_text' => $user['common_text'],
             'inviter' => $user['inviter_dp_code']
         ];
     }
@@ -179,6 +180,7 @@ class UserTransformer extends TransformerAbstract
             'refuse_info' => $user['refuse_info'],
             'role' => $user['role'],
             'blacklist' => $user['blacklist'],
+            'common_text' => $user['common_text'],
             'inviter' => $user['inviter_dp_code']
         ];
     }

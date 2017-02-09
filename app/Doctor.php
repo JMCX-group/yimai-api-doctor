@@ -39,6 +39,8 @@ class Doctor extends Model
         'address',
         'addressee',
         'receive_phone',
+        'blacklist',
+        'common_text',
         'inviter_dp_code',
         'role',
         'remember_token'

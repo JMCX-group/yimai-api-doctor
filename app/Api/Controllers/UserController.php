@@ -208,6 +208,13 @@ class UserController extends BaseController
         }
 
         /**
+         * Common text
+         */
+        if (isset($request['common_text'])) {
+            $user->blacklist = $request['common_text'];
+        }
+
+        /**
          * Get rong yun token.
          */
         if (($user->rong_yun_token == '' || $user->rong_yun_token == null) && ($user->name != '' && $user->name != null)) {
