@@ -120,6 +120,7 @@ class AppointmentController extends BaseController
             'patient_age' => $request['age'],
             'patient_history' => $request['history'],
             'doctor_id' => $request['doctor'],
+            'doctor_or_patient' => 'd', //医生发起的约诊
             'expect_visit_date' => $expectVisitDate,
             'expect_am_pm' => $expectAmPm,
             'price' => $doctor->fee,

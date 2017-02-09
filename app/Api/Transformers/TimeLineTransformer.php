@@ -29,7 +29,7 @@ class TimeLineTransformer
         /**
          * 发起约诊的第一个时间点内容:
          */
-        $retData = self::otherInfoContent_firstInfo($appointments, $doctors, $retData);
+        $retData = self::otherInfoContent_firstInfo($appointments, $doctors, $myId, $retData);
 
         /**
          * 如果是患者发起代约,多一条信息:
@@ -223,13 +223,14 @@ class TimeLineTransformer
      *
      * @param $appointments
      * @param $doctors
+     * @param $myId
      * @param $retData
      * @return mixed
      */
-    private static function otherInfoContent_firstInfo($appointments, $doctors, $retData)
+    private static function otherInfoContent_firstInfo($appointments, $doctors, $myId, $retData)
     {
         $time = $appointments->created_at->format('Y-m-d H:i:s');
-        $infoText = self::beginText($appointments, $doctors);
+        $infoText = self::beginText($appointments, $doctors, $myId);
         $infoOther = [[
             'name' => \Config::get('constants.DESIRED_TREATMENT_TIME'),
             'content' => PublicTransformer::expectVisitDateTransform($appointments->expect_visit_date, $appointments->expect_am_pm)
@@ -440,13 +441,18 @@ class TimeLineTransformer
      *
      * @param $appointments
      * @param $doctors
+     * @param $myId
      * @return mixed
      */
-    public static function beginText($appointments, $doctors)
+    public static function beginText($appointments, $doctors, $myId)
     {
         if ($appointments->doctor_or_patient == 'd') {
             $text = \Config::get('constants.APPOINTMENT_DEFAULT');
-            $text = str_replace('{代约医生}', $appointments->locums_name, $text);
+            if($appointments->locums_id == $myId) {
+                $text = str_replace('{代约医生}', '您', $text);
+            }else{
+                $text = str_replace('{代约医生}', $appointments->locums_name, $text);
+            }
             $text = str_replace('{患者}', $appointments->patient_name, $text);
             $text = str_replace('{医生}', $doctors->name, $text);
         } else {
