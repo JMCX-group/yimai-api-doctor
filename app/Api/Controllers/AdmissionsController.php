@@ -84,7 +84,6 @@ class AdmissionsController extends BaseController
             $appointment->doctor_refusal_time = date('Y-m-d H:i:s'); //确认接诊时间
 
             try {
-                dd($appointment->id);
                 if ($appointment->save()) {
                     $this->paymentStatusRefresh($appointment->id); //刷新支付状态
 
