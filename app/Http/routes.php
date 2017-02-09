@@ -146,7 +146,7 @@ $api->version('v1', function ($api) {
                 $api->post('update', 'AppointmentController@update');
                 $api->post('upload-img', 'AppointmentController@uploadImg');
                 $api->get('detail/{appointment}', 'AppointmentController@getDetailInfo');
-                $api->get('list', 'AppointmentController@getReservationRecord');
+                $api->get('list', 'AppointmentController@myList');
             });
             
             //Admissions
