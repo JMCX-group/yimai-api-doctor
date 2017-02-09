@@ -2111,8 +2111,8 @@ class ApiController extends BaseController
                             'token' => ''
                         ],
                         'form-data' => [
-                            'id' => '约诊ID',
-                            'visit_time' => '接诊时间',
+                            'id' => '约诊ID；必选项',
+                            'visit_time' => '接诊时间，直接将选择的时间，带日期时间格式传来即可；必选项',
                             'supplement' => '附加信息; 可选项',
                             'remark' => '补充说明; 可选项'
                         ],
