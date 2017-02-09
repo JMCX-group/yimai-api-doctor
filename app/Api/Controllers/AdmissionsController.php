@@ -23,7 +23,6 @@ use App\Hospital;
 use App\Patient;
 use App\User;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Illuminate\Support\Facades\Log;
 
 class AdmissionsController extends BaseController
 {
@@ -106,36 +105,120 @@ class AdmissionsController extends BaseController
     }
 
     /**
-     * 转诊。
+     * 转诊
      *
      * @param RefusalRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return array|\Illuminate\Http\JsonResponse|mixed
      */
     public function transfer(RefusalRequest $request)
     {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
         $appointment = Appointment::find($request['id']);
 
         if ($appointment->status == 'wait-2') {
-            $appointment->doctor_id = $request['doctor_id']; //修改医生信息
-
+            /**
+             * 本约诊结束：
+             */
+            $appointment->status = 'close-5'; //医生转诊,约诊关闭
+            $appointment->doctor_transfer_time = date('Y-m-d H:i:s');
             try {
                 if ($appointment->save()) {
                     MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
-                    $doctor = Doctor::where('id', $appointment->doctor_id)->first();
-                    if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
-                        MsgAndNotification::pushAppointmentMsg($doctor->device_token, $appointment->status, $appointment->id, 'doctor'); //向医生端推送消息
-                    }
-
-                    return response()->json(['success' => ''], 204);
                 } else {
                     return response()->json(['message' => '保存失败'], 500);
                 }
             } catch (JWTException $e) {
                 return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
             }
+
+            /**
+             * 新开约诊：
+             */
+            $doctorId = $request['doctor_id'];
+            $doctor = User::getDoctorAllInfo($doctorId);
+            $newAppointmentId = $this->newAppointmentId();
+            $data = [
+                'id' => $newAppointmentId,
+                'locums_id' => $user->id, //代理医生ID
+                'patient_name' => $appointment->patient_name,
+                'patient_phone' => $appointment->patient_phone,
+                'patient_gender' => $appointment->gender,
+                'patient_age' => $appointment->patient_age,
+                'patient_history' => $appointment->patient_history,
+                'patient_imgs' => $appointment->patient_imgs,
+                'doctor_id' => $doctorId,
+                'patient_id' => $appointment->patient_id,
+                'doctor_or_patient' => 'd', //医生发起的约诊
+                'expect_visit_date' => $appointment->expect_visit_date,
+                'expect_am_pm' => $appointment->expect_am_pm,
+                'price' => $doctor->fee,
+                'is_transfer' => 1, //已被转诊
+                'is_pay' => 1,
+                'status' => 'wait-2'
+            ];
+
+            try {
+                $newAppointment = Appointment::create($data);
+                $newAppointment['id'] = $newAppointmentId;
+
+                MsgAndNotification::sendAppointmentsMsg($newAppointment, 'wait-1'); //推送消息,wait-1
+                MsgAndNotification::sendAppointmentsMsg($newAppointment); //推送消息,wait-2
+
+                /**
+                 * 通知患者换订单了：
+                 */
+                $patient = Patient::where('phone', $appointment['patient_phone'])->first();
+                if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
+                    MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $newAppointmentId, 'patient', $newAppointment); //向患者端推送消息
+                }
+
+                /**
+                 * 给新的接诊医生推送消息：
+                 */
+                $doctor = Doctor::where('id', $doctorId)->first();
+                if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
+                    MsgAndNotification::pushAppointmentMsg($doctor->device_token, $data['status'], $newAppointmentId, 'doctor'); //向医生端推送消息
+                }
+
+                /**
+                 * 返回旧的约诊信息给当前医生：
+                 */
+                return self::appointmentDetailInfo($appointment->id, $user->id);
+            } catch (JWTException $e) {
+                return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+            }
         } else {
             return response()->json(['message' => '状态错误'], 400);
         }
+    }
+
+    /**
+     * 生成新的约诊订单号
+     *
+     * @return string
+     */
+    public function newAppointmentId()
+    {
+        /**
+         * 计算预约码做ID.
+         * 规则:01-99 . 年月日各两位长 . 0001-9999
+         */
+        $frontId = '01' . date('ymd');
+        $lastId = Appointment::where('id', 'like', $frontId . '%')
+            ->orderBy('id', 'desc')
+            ->lists('id');
+        if ($lastId->isEmpty()) {
+            $nowId = '0001';
+        } else {
+            $lastId = intval(substr($lastId[0], 8));
+            $nowId = str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
+        }
+
+        return $frontId . $nowId;
     }
 
     /**

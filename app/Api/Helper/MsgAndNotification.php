@@ -188,13 +188,14 @@ class MsgAndNotification
      * @param $appointmentStatus
      * @param $appointmentId
      * @param $recipient
+     * @param null $appointment
      */
-    public static function pushAppointmentMsg($deviceToken, $appointmentStatus, $appointmentId, $recipient)
+    public static function pushAppointmentMsg($deviceToken, $appointmentStatus, $appointmentId, $recipient, $appointment=null)
     {
         /**
          * 获取推送文案和动作
          */
-        $content = AppointmentStatus::pushContent($appointmentStatus, $recipient);
+        $content = AppointmentStatus::pushContent($appointmentStatus, $recipient, $appointment);
         $action = 'appointment';
 
         if ($recipient == 'doctor') {

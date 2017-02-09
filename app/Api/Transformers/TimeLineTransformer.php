@@ -94,6 +94,7 @@ class TimeLineTransformer
              * close-2: 医生过期未接诊,约诊关闭
              * close-3: 医生拒绝接诊
              * close-4: 患者过期未确认,约诊关闭
+             * close-5: 医生转诊,约诊关闭
              */
             case 'close-1':
                 $infoText = \Config::get('constants.NOT_PAY_CLOSE');
@@ -120,6 +121,13 @@ class TimeLineTransformer
                 $retData = self::otherInfoContent_doctorRescheduled($appointments, $retData);
 
                 $infoText = \Config::get('constants.PATIENT_EXPIRED_APPOINTMENT_CLOSE');
+                $retData = self::copyTransformer($retData, null, $infoText, null, 'close');
+                break;
+
+            case 'close-5':
+                $retData = self::otherInfoContent_alreadyPaid($appointments, $retData);
+
+                $infoText = \Config::get('constants.DOCTOR_TRANSFER');
                 $retData = self::copyTransformer($retData, null, $infoText, null, 'close');
                 break;
 
@@ -402,6 +410,7 @@ class TimeLineTransformer
                 $retData = ['milestone' => '患者确认', 'status' => '已关闭'];
                 break;
             case 'close-4':
+            case 'close-5':
                 $retData = ['milestone' => '医生确认', 'status' => '已关闭'];
                 break;
 

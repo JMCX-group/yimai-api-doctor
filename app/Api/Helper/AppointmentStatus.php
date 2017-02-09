@@ -344,9 +344,10 @@ class AppointmentStatus
      *
      * @param $status
      * @param string $recipient
+     * @param null $appointment
      * @return string
      */
-    public static function pushContent($status, $recipient = 'patient')
+    public static function pushContent($status, $recipient = 'patient', $appointment = null)
     {
         switch ($status) {
             case 'wait-0':
@@ -356,7 +357,11 @@ class AppointmentStatus
                 $retData = '您有新的约诊订单需要支付';
                 break;
             case 'wait-2':
-                $retData = '患者已付款，待您确认';
+                if ($appointment != null && $appointment['is_transfer'] == 1) {
+                    $retData = '医生已转诊，请您确认';
+                } else {
+                    $retData = '患者已付款，待您确认';
+                }
                 break;
             case 'wait-3':
                 $retData = '医生确认接诊，待面诊';
