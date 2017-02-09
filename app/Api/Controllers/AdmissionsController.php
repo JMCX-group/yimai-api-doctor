@@ -408,10 +408,10 @@ class AdmissionsController extends BaseController
                 case 'wait-1':
                     break;
                 case 'wait-2':
-                case 'wait-4':
                     array_push($waitingForReply, AdmissionsRecordTransformer::admissionsTransform($appointment));
                     break;
                 case 'wait-3':
+                case 'wait-4':
                 case 'wait-5':
                     array_push($waitingForComplete, AdmissionsRecordTransformer::admissionsTransform($appointment));
                     break;
