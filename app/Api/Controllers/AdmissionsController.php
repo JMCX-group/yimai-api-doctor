@@ -273,7 +273,10 @@ class AdmissionsController extends BaseController
     {
         $appointment = Appointment::find($request['id']);
         $appointment->status = 'wait-4'; //医生改期
-        $appointment->rescheduled_time = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+        $appointment->rescheduled_time = date('Y-m-d H:i:s');
+        $appointment->new_visit_time = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+        $amOrPm = date('H', strtotime($request['visit_time']));
+        $appointment->new_am_pm = $amOrPm <= 12 ? 'am' : 'pm';
 
         try {
             if ($appointment->save()) {
@@ -405,10 +408,10 @@ class AdmissionsController extends BaseController
                 case 'wait-1':
                     break;
                 case 'wait-2':
+                case 'wait-4':
                     array_push($waitingForReply, AdmissionsRecordTransformer::admissionsTransform($appointment));
                     break;
                 case 'wait-3':
-                case 'wait-4':
                 case 'wait-5':
                     array_push($waitingForComplete, AdmissionsRecordTransformer::admissionsTransform($appointment));
                     break;
