@@ -44,6 +44,7 @@ class AppointmentStatus
          * close-2: 医生过期未接诊,约诊关闭
          * close-3: 医生拒绝接诊
          * close-4: 患者过期未确认,约诊关闭
+         * close-5: 医生转诊,约诊关闭
          *
          * Cancel:
          * cancel-1: 患者取消约诊; 未付款
@@ -80,6 +81,10 @@ class AppointmentStatus
 
             case 'close-4':
                 $retText = '患者' . $patient . '逾期未确认' . $doctor . '医生的改期，约诊关闭。（预约号' . $id . '）';
+                break;
+
+            case 'close-5':
+                $retText = $doctor . '医生转诊，约诊关闭。（预约号' . $id . '）';
                 break;
 
             case 'cancel-2':
@@ -134,6 +139,7 @@ class AppointmentStatus
          * close-2: 医生过期未接诊,约诊关闭
          * close-3: 医生拒绝接诊
          * close-4: 患者过期未确认,约诊关闭
+         * close-5: 医生转诊,约诊关闭
          *
          * Cancel:
          * cancel-1: 患者取消约诊; 未付款
@@ -195,6 +201,7 @@ class AppointmentStatus
          * close-2: 医生过期未接诊,约诊关闭
          * close-3: 医生拒绝接诊
          * close-4: 患者过期未确认,约诊关闭
+         * close-5: 医生转诊,约诊关闭
          *
          * Cancel:
          * cancel-1: 患者取消约诊; 未付款
@@ -231,6 +238,9 @@ class AppointmentStatus
                 break;
             case 'close-4':
                 $retText = '您逾期未确认' . $doctor . '医生的改期，约诊关闭。（预约号' . $id . '）';
+                break;
+            case 'close-5':
+                $retText = $doctor . '转诊，约诊关闭。（预约号' . $id . '）';
                 break;
 
             case 'cancel-2':
@@ -287,6 +297,9 @@ class AppointmentStatus
                 break;
             case 'close-4':
                 $retData = '患者逾期未确认改期，约诊关闭';
+                break;
+            case 'close-5':
+                $retData = '医生转诊，约诊关闭';
                 break;
 
             case 'cancel-1':
@@ -366,6 +379,9 @@ class AppointmentStatus
                 break;
             case 'close-4':
                 $retData = (($recipient == 'patient') ? '您' : '患者') . '逾期未确认改期，约诊关闭';
+                break;
+            case 'close-5':
+                $retData = '医生转诊，约诊关闭';
                 break;
 
             case 'cancel-1':
