@@ -34,6 +34,7 @@ class Kernel extends ConsoleKernel
          * 每分钟刷新订单信息：
          */
         $schedule->call(function () {
+            self::newLogFile();
             self::updateExpiredAndPushAppointment();
 //            self::processOrders(); //已经不需要了，使用appointment fee管理支付了
         })->everyMinute();
@@ -42,8 +43,24 @@ class Kernel extends ConsoleKernel
          * 每10分钟刷新支付信息：
          */
         $schedule->call(function () {
+            self::newLogFile();
             self::updateWeChatPayInfo();
         })->everyTenMinutes();
+    }
+
+    /**
+     * 由于这个文件是root run，所以建立了log文件后，需要修改成777权限，否则Apache无法访问
+     */
+    public static function newLogFile()
+    {
+        $dir = dirname(dirname(dirname(__FILE__))) . '/storage/logs/';
+        $fileName = $dir . 'laravel-' . date('Y-m-d', time()) . '.log';
+
+        if (!file_exists($fileName)) {
+            $newFile = fopen($fileName, 'w') or die('');
+            fclose($newFile);
+        }
+        chmod($fileName, 0777); //修改文件的权限，防止被访问之后无法使用；权限用的八进制
     }
 
     /**
