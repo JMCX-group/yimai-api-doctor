@@ -23,6 +23,7 @@ use App\Hospital;
 use App\Patient;
 use App\User;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Log;
 
 class AdmissionsController extends BaseController
 {
@@ -83,6 +84,7 @@ class AdmissionsController extends BaseController
             $appointment->doctor_refusal_time = date('Y-m-d H:i:s'); //确认接诊时间
 
             try {
+                dd($appointment->id);
                 if ($appointment->save()) {
                     $this->paymentStatusRefresh($appointment->id); //刷新支付状态
 
@@ -254,17 +256,21 @@ class AdmissionsController extends BaseController
      */
     public function paymentStatusRefresh($appointmentIdList)
     {
-        AppointmentFee::whereIn('appointment_id', $appointmentIdList)
-            ->update([
-                'total_fee' => 0,
-                'reception_fee' => 0,
-                'platform_fee' => 0,
-                'intermediary_fee' => 0,
-                'guide_fee' => 0,
-                'default_fee_rate' => 0,
-                'status' => 'cancelled', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
-                'time_expire' => date('Y-m-d H:i:s')
-            ]);
+        try {
+            AppointmentFee::whereIn('appointment_id', $appointmentIdList)
+                ->update([
+                    'total_fee' => 0,
+                    'reception_fee' => 0,
+                    'platform_fee' => 0,
+                    'intermediary_fee' => 0,
+                    'guide_fee' => 0,
+                    'default_fee_rate' => 0,
+                    'status' => 'cancelled', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
+                    'time_expire' => date('Y-m-d H:i:s')
+                ]);
+        } catch (\Exception $e) {
+            Log::info('refresh-payment-status', ['context' => $e->getMessage()]);
+        }
     }
 
     /**
