@@ -97,7 +97,7 @@ class Kernel extends ConsoleKernel
             $rechargeRecord = PatientRechargeRecord::where('out_trade_no', $outTradeNo)->first();
             if (!empty($rechargeRecord->id)) {
                 $rechargeRecord->status = 'err';
-                $rechargeRecord->time_expire = $wxData['time_end'];
+                $rechargeRecord->time_expire = date('Y-m-d H:i:s');
                 $rechargeRecord->ret_data = json_encode($wxData);
                 $rechargeRecord->save();
             }
