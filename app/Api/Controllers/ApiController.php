@@ -2064,7 +2064,7 @@ class ApiController extends BaseController
                                 'history' => '病情描述',
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
-                            'detail_info' => [
+                            'other_info' => [
                                 'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
@@ -2129,7 +2129,7 @@ class ApiController extends BaseController
                                 'history' => '病情描述',
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
-                            'detail_info' => [
+                            'other_info' => [
                                 'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
@@ -2171,49 +2171,51 @@ class ApiController extends BaseController
                             'reason' => '拒绝原因'
                         ],
                         'response' => [
-                            'doctor_info' => [
-                                'id' => '用户ID; 这个是代约医生或平台的信息',
-                                'name' => '用户姓名',
-                                'head_url' => '头像URL',
-                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
-                                'hospital' => '所属医院',
-                                'department' => '所属科室'
-                            ],
-                            'patient_info' => [
-                                'name' => '患者姓名',
-                                'head_url' => '患者头像URL',
-                                'sex' => '患者性别',
-                                'age' => '患者年龄',
-                                'phone' => '所属科室',
-                                'history' => '病情描述',
-                                'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
-                            ],
-                            'detail_info' => [
-                                'progress' => '顶部进度',
-                                'time_line' => [
-                                    '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
-                                    '内容' => [[
-                                        'time' => '时间轴左侧的时间',
-                                        'info' => [
-                                            'text' => '文案描述',
-                                            'other' => [
-                                                '内容' => [[
-                                                    'name' => '其他的信息名称,例如:期望就诊时间',
-                                                    'content' => '其他的信息内容,例如:2016-05-18 上午; 多条时间信息用逗号隔开,展示时则是换行展示,例如:2016-05-12 上午,2016-05-13 下午'
-                                                ], []]
-                                            ]
-                                        ],
-                                        'type' => '决定使用什么icon; begin | wait'
-                                    ],
-                                        [
-                                            'time' => '时间轴左侧的时间, null为没有',
+                            [
+                                'doctor_info' => [
+                                    'id' => '用户ID; 这个是代约医生或平台的信息',
+                                    'name' => '用户姓名',
+                                    'head_url' => '头像URL',
+                                    'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
+                                    'hospital' => '所属医院',
+                                    'department' => '所属科室'
+                                ],
+                                'patient_info' => [
+                                    'name' => '患者姓名',
+                                    'head_url' => '患者头像URL',
+                                    'sex' => '患者性别',
+                                    'age' => '患者年龄',
+                                    'phone' => '所属科室',
+                                    'history' => '病情描述',
+                                    'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
+                                ],
+                                'other_info' => [
+                                    'progress' => '顶部进度',
+                                    'time_line' => [
+                                        '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
+                                        '内容' => [[
+                                            'time' => '时间轴左侧的时间',
                                             'info' => [
                                                 'text' => '文案描述',
-                                                'other' => 'null为没有'
+                                                'other' => [
+                                                    '内容' => [[
+                                                        'name' => '其他的信息名称,例如:期望就诊时间',
+                                                        'content' => '其他的信息内容,例如:2016-05-18 上午; 多条时间信息用逗号隔开,展示时则是换行展示,例如:2016-05-12 上午,2016-05-13 下午'
+                                                    ], []]
+                                                ]
                                             ],
                                             'type' => '决定使用什么icon; begin | wait'
-                                        ]]
-                                ]
+                                        ],
+                                            [
+                                                'time' => '时间轴左侧的时间, null为没有',
+                                                'info' => [
+                                                    'text' => '文案描述',
+                                                    'other' => 'null为没有'
+                                                ],
+                                                'type' => '决定使用什么icon; begin | wait'
+                                            ]]
+                                    ]
+                                ],
                             ],
                             'message' => '',
                             'error' => ''
@@ -2231,7 +2233,52 @@ class ApiController extends BaseController
                         ],
                         '说明' => 'HTTP状态204; 会触发一个通知给新的医生; 点击转诊跳转到:2.4-约诊 =》预约_0006_预约医生7.png,只有医生可以修改',
                         'response' => [
-                            'success' => '',
+                            [
+                                'doctor_info' => [
+                                    'id' => '用户ID; 这个是代约医生或平台的信息',
+                                    'name' => '用户姓名',
+                                    'head_url' => '头像URL',
+                                    'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
+                                    'hospital' => '所属医院',
+                                    'department' => '所属科室'
+                                ],
+                                'patient_info' => [
+                                    'name' => '患者姓名',
+                                    'head_url' => '患者头像URL',
+                                    'sex' => '患者性别',
+                                    'age' => '患者年龄',
+                                    'phone' => '所属科室',
+                                    'history' => '病情描述',
+                                    'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
+                                ],
+                                'other_info' => [
+                                    'progress' => '顶部进度',
+                                    'time_line' => [
+                                        '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
+                                        '内容' => [[
+                                            'time' => '时间轴左侧的时间',
+                                            'info' => [
+                                                'text' => '文案描述',
+                                                'other' => [
+                                                    '内容' => [[
+                                                        'name' => '其他的信息名称,例如:期望就诊时间',
+                                                        'content' => '其他的信息内容,例如:2016-05-18 上午; 多条时间信息用逗号隔开,展示时则是换行展示,例如:2016-05-12 上午,2016-05-13 下午'
+                                                    ], []]
+                                                ]
+                                            ],
+                                            'type' => '决定使用什么icon; begin | wait'
+                                        ],
+                                            [
+                                                'time' => '时间轴左侧的时间, null为没有',
+                                                'info' => [
+                                                    'text' => '文案描述',
+                                                    'other' => 'null为没有'
+                                                ],
+                                                'type' => '决定使用什么icon; begin | wait'
+                                            ]]
+                                    ]
+                                ],
+                            ],
                             'message' => '',
                             'error' => ''
                         ]
@@ -2263,7 +2310,7 @@ class ApiController extends BaseController
                                 'history' => '病情描述',
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
-                            'detail_info' => [
+                            'other_info' => [
                                 'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
@@ -2322,7 +2369,7 @@ class ApiController extends BaseController
                                 'history' => '病情描述',
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
-                            'detail_info' => [
+                            'other_info' => [
                                 'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
@@ -2381,7 +2428,7 @@ class ApiController extends BaseController
                                 'history' => '病情描述',
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
-                            'detail_info' => [
+                            'other_info' => [
                                 'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
@@ -2516,7 +2563,7 @@ class ApiController extends BaseController
                                 'history' => '病情描述',
                                 'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
                             ],
-                            'detail_info' => [
+                            'other_info' => [
                                 'progress' => '顶部进度',
                                 'time_line' => [
                                     '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
@@ -2542,7 +2589,8 @@ class ApiController extends BaseController
                                             'type' => '决定使用什么icon; begin | wait'
                                         ]]
                                 ],
-                                'status_code' => '状态CODE'
+                                'status_code' => '状态CODE',
+                                'is_transfer' => '1为已转诊'
                             ],
                             'message' => '',
                             'error' => ''

@@ -451,7 +451,6 @@ class AdmissionsController extends BaseController
             ->leftJoin('doctors', 'doctors.id', '=', 'appointments.locums_id')
             ->leftJoin('patients', 'patients.id', '=', 'appointments.patient_id')
             ->select('appointments.*', 'doctors.name as locums_name', 'patients.avatar as patient_avatar')
-            ->get()
             ->first();
 
         /**
@@ -463,7 +462,6 @@ class AdmissionsController extends BaseController
             ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
             ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
             ->where('doctors.id', $appointments->doctor_id)
-            ->get()
             ->first();
 
         /**
@@ -475,7 +473,6 @@ class AdmissionsController extends BaseController
             ->leftJoin('hospitals', 'hospitals.id', '=', 'doctors.hospital_id')
             ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
             ->where('doctors.id', $appointments->locums_id)
-            ->get()
             ->first();
 
         $appointments['time_line'] = TimeLineTransformer::generateTimeLine($appointments, $doctors, $userId, $locumsDoctors);

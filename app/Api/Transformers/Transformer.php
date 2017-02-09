@@ -376,7 +376,8 @@ class Transformer
             'other_info' => [
                 'progress' => $appointments->progress,
                 'time_line' => $appointments->time_line,
-                'status_code' => $appointments->status
+                'status_code' => $appointments->status,
+                'is_transfer' => $appointments->is_transfer
             ]
         ];
     }
