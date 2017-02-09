@@ -211,7 +211,7 @@ class UserController extends BaseController
          * Common text
          */
         if (isset($request['common_text'])) {
-            $user->blacklist = $request['common_text'];
+            $user->common_text = $request['common_text'];
         }
 
         /**
