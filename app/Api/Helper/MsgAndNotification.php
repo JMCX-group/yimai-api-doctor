@@ -241,7 +241,7 @@ class MsgAndNotification
             $content = AppointmentStatus::pushContent($appointment->status, 'patient', $isPushAppointmentToContent ? $appointment : null);
             $action = 'appointment';
 
-            self::pushPatientUnicast($patient->device_token, $content, $action, $appointmentId);
+            self::pushPatientUnicast($patient->device_token, $content, $action, $appointment->id);
         }
     }
 
@@ -277,7 +277,7 @@ class MsgAndNotification
             $content = AppointmentStatus::pushContent($appointment->status, 'doctor', $isPushAppointmentToContent ? $appointment : null);
             $action = 'appointment';
 
-            self::pushDoctorUnicast($doctor->device_token, $content, $action, $appointmentId);
+            self::pushDoctorUnicast($doctor->device_token, $content, $action, $appointment->id);
         }
     }
 
