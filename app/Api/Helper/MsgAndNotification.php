@@ -190,18 +190,17 @@ class MsgAndNotification
      * @param $recipient
      * @param null $appointment
      */
-    public static function pushAppointmentMsg($deviceToken, $appointmentStatus, $appointmentId, $recipient, $appointment=null)
+    public static function pushAdmissionsMsg($deviceToken, $appointmentStatus, $appointmentId, $recipient, $appointment=null)
     {
         /**
          * 获取推送文案和动作
          */
         $content = AppointmentStatus::pushContent($appointmentStatus, $recipient, $appointment);
-        $action = 'appointment';
 
         if ($recipient == 'doctor') {
-            self::pushDoctorUnicast($deviceToken, $content, $action, $appointmentId);
+            self::pushDoctorUnicast($deviceToken, $content, 'admissions', $appointmentId);
         } else {
-            self::pushPatientUnicast($deviceToken, $content, $action, $appointmentId);
+            self::pushPatientUnicast($deviceToken, $content, 'appointment', $appointmentId);
         }
     }
 
@@ -235,13 +234,9 @@ class MsgAndNotification
         }
 
         if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
-            /**
-             * 获取推送文案和动作
-             */
-            $content = AppointmentStatus::pushContent($appointment->status, 'patient', $isPushAppointmentToContent ? $appointment : null);
-            $action = 'appointment';
+            $content = AppointmentStatus::pushContent($appointment->status, 'patient', $isPushAppointmentToContent ? $appointment : null); //获取推送文案
 
-            self::pushPatientUnicast($patient->device_token, $content, $action, $appointment->id);
+            self::pushPatientUnicast($patient->device_token, $content, 'appointment', $appointment->id);
         }
     }
 
@@ -275,12 +270,14 @@ class MsgAndNotification
         }
 
         if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
+            $content = AppointmentStatus::pushContent($appointment->status, 'doctor', $isPushAppointmentToContent ? $appointment : null); //获取推送文案
 
-            /**
-             * 获取推送文案和动作
-             */
-            $content = AppointmentStatus::pushContent($appointment->status, 'doctor', $isPushAppointmentToContent ? $appointment : null);
-            $action = 'appointment';
+            //获取动作
+            if ($doctor->id == $appointment->doctor_id) {
+                $action = 'admissions';
+            } else {
+                $action = 'appointment';
+            }
 
             self::pushDoctorUnicast($doctor->device_token, $content, $action, $appointment->id);
         }
