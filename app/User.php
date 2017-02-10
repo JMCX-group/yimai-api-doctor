@@ -152,8 +152,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function getInviter($dpCode)
     {
-        return User::select('*')
-            ->where('dept_id', substr($dpCode, 0, 3))
+        return User::where('dept_id', substr($dpCode, 0, 3))
             ->where('dp_code', substr($dpCode, 3))
             ->first();
     }

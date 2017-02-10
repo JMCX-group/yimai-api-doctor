@@ -262,7 +262,7 @@ class UserController extends BaseController
             $dr = DoctorRelation::where('doctor_id', $myId)->where('doctor_friend_id', $friendInfo->id)->first();
             if (!$dr) {
                 $data['doctor_id'] = $myId;
-                $data['doctor_friend_id'] = $friendInfo['id'];
+                $data['doctor_friend_id'] = $friendInfo->id;
                 $data['doctor_read'] = 1;
                 $data['doctor_friend_read'] = 0;
                 $data['confirm'] = 1;
@@ -272,9 +272,9 @@ class UserController extends BaseController
             /**
              * 增加好友和自己的关系
              */
-            $dr2 = DoctorRelation::where('doctor_id', $friendInfo['id'])->where('doctor_friend_id', $myId)->first();
+            $dr2 = DoctorRelation::where('doctor_id', $friendInfo->id)->where('doctor_friend_id', $myId)->first();
             if ($dr2) {
-                $friendData['doctor_id'] = $friendInfo['id'];
+                $friendData['doctor_id'] = $friendInfo->id;
                 $friendData['doctor_friend_id'] = $myId;
                 $friendData['doctor_read'] = 0;
                 $friendData['doctor_friend_read'] = 1;
@@ -285,8 +285,8 @@ class UserController extends BaseController
             /**
              * 推送相关信息：
              */
-            if (isset($friendInfo['id']) && ($friendInfo['device_token'] != '' && $friendInfo['device_token'] != null)) {
-                MsgAndNotification::pushAddFriendMsg($friendInfo['device_token'], $friendInfo['id']); //向相关医生推送消息
+            if (isset($friendInfo->id) && ($friendInfo->device_token != '' && $friendInfo->device_token != null)) {
+                MsgAndNotification::pushAddFriendMsg($friendInfo->device_token, $friendInfo->id); //向相关医生推送消息
             }
         } catch (\Exception $e) {
             Log::info('auto-add-friend', ['context' => $e->getMessage()]);
