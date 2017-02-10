@@ -206,6 +206,82 @@ class MsgAndNotification
     }
 
     /**
+     * Push appointment msg for patient.
+     *
+     * @param $patient
+     * @param $appointment
+     * @param null $patientId
+     * @param null $appointmentId
+     * @param bool $isPushAppointmentToContent
+     */
+    public static function pushAppointmentMsg_patient($patient, $appointment, $patientId=null, $appointmentId=null, $isPushAppointmentToContent=false)
+    {
+        /**
+         * Get appointment info.
+         */
+        if (!$appointment) {
+            $appointment = Appointment::find($appointmentId);
+        }
+
+        /**
+         * Get patient info.
+         */
+        if (!$patient) {
+            if ($patientId) {
+                $patient = Patient::find($patientId);
+            } else {
+                $patient = Patient::where('phone', $appointment->patient_phone)->first();
+            }
+        }
+
+        if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
+            /**
+             * 获取推送文案和动作
+             */
+            $content = AppointmentStatus::pushContent($appointment->status, 'patient', $isPushAppointmentToContent ? $appointment : null);
+            $action = 'appointment';
+
+            self::pushPatientUnicast($patient->device_token, $content, $action, $appointmentId);
+        }
+    }
+
+    /**
+     * Push appointment msg for doctor.
+     *
+     * @param $doctor
+     * @param $appointment
+     * @param null $doctorId
+     * @param null $appointmentId
+     * @param bool $isPushAppointmentToContent
+     */
+    public static function pushAppointmentMsg_doctor($doctor, $appointment, $doctorId=null, $appointmentId=null, $isPushAppointmentToContent=false)
+    {
+        /**
+         * Get doctor info.
+         */
+        if (!$doctor) {
+            $doctor = Doctor::find($doctorId);
+        }
+
+        if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
+            /**
+             * Get appointment info.
+             */
+            if (!$appointment) {
+                $appointment = Appointment::find($appointmentId);
+            }
+
+            /**
+             * 获取推送文案和动作
+             */
+            $content = AppointmentStatus::pushContent($appointment->status, 'doctor', $isPushAppointmentToContent ? $appointment : null);
+            $action = 'appointment';
+
+            self::pushDoctorUnicast($doctor->device_token, $content, $action, $appointmentId);
+        }
+    }
+
+    /**
      * 给医生用户推送添加好友信息
      *
      * @param $deviceToken

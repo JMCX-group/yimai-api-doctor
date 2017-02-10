@@ -54,10 +54,7 @@ class AppointmentController extends BaseController
         try {
             if ($appointment->save()) {
                 MsgAndNotification::sendAppointmentsMsg(Appointment::find($appointmentId)); //推送消息
-                $patient = Patient::where('phone', $request['phone'])->first();
-                if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
-                    MsgAndNotification::pushAppointmentMsg($patient->device_token, $appointment->status, $appointmentId, 'patient'); //向患者端推送消息
-                }
+                MsgAndNotification::pushAppointmentMsg_patient(null, $appointment); //向患者端推送消息
 
                 return response()->json(['success' => ''], 204);
             } else {
@@ -129,7 +126,6 @@ class AppointmentController extends BaseController
 
         try {
             $appointment = Appointment::create($data);
-            $appointment['id'] = $appointmentId;
             MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
 
             /**
@@ -138,9 +134,7 @@ class AppointmentController extends BaseController
              */
             $patient = Patient::where('phone', $request['phone'])->first();
             if (isset($patient->id)) {
-                if ($patient->device_token != '' && $patient->device_token != null) {
-                    MsgAndNotification::pushAppointmentMsg($patient->device_token, $data['status'], $appointmentId, 'patient'); //向患者端推送消息
-                }
+                MsgAndNotification::pushAppointmentMsg_patient($patient, $appointment); //向患者端推送消息
             } else {
                 SmsContent::sendSMS_newPatient($user, $doctor, $request['phone']); //向患者端发送短信
             }
