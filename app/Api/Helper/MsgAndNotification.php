@@ -257,19 +257,24 @@ class MsgAndNotification
     public static function pushAppointmentMsg_doctor($doctor, $appointment, $doctorId=null, $appointmentId=null, $isPushAppointmentToContent=false)
     {
         /**
+         * Get appointment info.
+         */
+        if (!$appointment) {
+            $appointment = Appointment::find($appointmentId);
+        }
+
+        /**
          * Get doctor info.
          */
         if (!$doctor) {
-            $doctor = Doctor::find($doctorId);
+            if ($doctorId) {
+                $doctor = Doctor::find($doctorId);
+            } else {
+                $doctor = Doctor::find($appointment->doctor_id);
+            }
         }
 
         if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
-            /**
-             * Get appointment info.
-             */
-            if (!$appointment) {
-                $appointment = Appointment::find($appointmentId);
-            }
 
             /**
              * 获取推送文案和动作
