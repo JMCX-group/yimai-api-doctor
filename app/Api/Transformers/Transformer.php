@@ -340,6 +340,12 @@ class Transformer
      */
     public static function appointmentsTransform($appointments, $doctor)
     {
+        if ($appointments->status == 'wait-0' && $appointments->visit_time == null) {
+            $basicInfoDate = ($appointments->expect_visit_time == null) ? '由专家决定约诊时间' : date('Y-m-d', strtotime($appointments->expect_visit_time));
+        } else {
+            $basicInfoDate = ($appointments->visit_time == null) ? '由专家决定约诊时间' : date('Y-m-d', strtotime($appointments->visit_time));
+        }
+
         return [
             'patient_demand' => [
                 'doctor_name' => $appointments->patient_demand_doctor_name,
@@ -351,7 +357,7 @@ class Transformer
                 'appointment_id' => $appointments->id,
                 'history' => $appointments->patient_history,
                 'img_url' => $appointments->patient_imgs,
-                'date' => date('Y-m-d', strtotime($appointments->visit_time)),
+                'date' => $basicInfoDate,
                 'hospital' => ($doctor == null) ? null : $doctor->hospital,
                 'remark' => $appointments->remark,
                 'supplement' => $appointments->supplement,

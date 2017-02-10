@@ -166,7 +166,6 @@ class Doctor extends Model
             ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
             ->leftJoin('colleges', 'colleges.id', '=', 'doctors.college_id')
             ->where('doctors.id', $id)
-            ->get()
             ->first();
     }
 }

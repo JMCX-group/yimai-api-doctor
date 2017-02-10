@@ -177,7 +177,6 @@ class User extends Model implements AuthenticatableContract,
             ->leftJoin('colleges', 'colleges.id', '=', 'doctors.college_id')
             ->where('dept_id', substr($dpCode, 0, 3))
             ->where('dp_code', substr($dpCode, 3))
-            ->get()
             ->first();
     }
 
@@ -376,7 +375,6 @@ class User extends Model implements AuthenticatableContract,
             ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
             ->leftJoin('colleges', 'colleges.id', '=', 'doctors.college_id')
             ->where('doctors.id', $id)
-            ->get()
             ->first();
     }
 
@@ -402,7 +400,6 @@ class User extends Model implements AuthenticatableContract,
             ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
             ->leftJoin('colleges', 'colleges.id', '=', 'doctors.college_id')
             ->where('doctors.id', $id)
-            ->get()
             ->first();
     }
 
@@ -427,7 +424,6 @@ class User extends Model implements AuthenticatableContract,
             ->leftJoin('dept_standards', 'dept_standards.id', '=', 'doctors.dept_id')
             ->leftJoin('colleges', 'colleges.id', '=', 'doctors.college_id')
             ->where('doctors.phone', $phone)
-            ->get()
             ->first();
     }
 }
