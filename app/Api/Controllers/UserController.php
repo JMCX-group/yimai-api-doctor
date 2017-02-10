@@ -273,7 +273,7 @@ class UserController extends BaseController
              * 增加好友和自己的关系
              */
             $dr2 = DoctorRelation::where('doctor_id', $friendInfo->id)->where('doctor_friend_id', $myId)->first();
-            if ($dr2) {
+            if (!$dr2) {
                 $friendData['doctor_id'] = $friendInfo->id;
                 $friendData['doctor_friend_id'] = $myId;
                 $friendData['doctor_read'] = 0;
