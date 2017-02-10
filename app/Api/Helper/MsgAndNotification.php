@@ -149,7 +149,6 @@ class MsgAndNotification
      */
     public static function generateAppointmentsMsg($appointments, $status = '', $time = false)
     {
-        $status = ($status == '') ? $appointments->status : $status; //有则表示是新状态的，没有则表示通知当前状态
         $type = (in_array($status, array('completed-1', 'completed-2'))) ? 0 : 1; //0为普通，1为重要
         if (isset($appointments->patient_id) && ($appointments->patient_id != null || $appointments->patient_id != '')) {
             $patientId = $appointments->patient_id;

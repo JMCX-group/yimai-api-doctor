@@ -160,6 +160,7 @@ class AdmissionsController extends BaseController
 
             try {
                 $newAppointment = Appointment::create($data);
+                $newAppointment->id = $newAppointmentId;
 
                 MsgAndNotification::sendAppointmentsMsg($newAppointment, 'wait-1'); //推送消息,wait-1
                 MsgAndNotification::sendAppointmentsMsg($newAppointment); //推送消息,wait-2
