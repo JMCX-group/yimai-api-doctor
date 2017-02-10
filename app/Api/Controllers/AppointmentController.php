@@ -108,6 +108,7 @@ class AppointmentController extends BaseController
          * 发起约诊信息记录
          */
         $doctor = User::find($request['doctor']);
+        $patient = Patient::where('phone', $request['phone'])->first();
         $data = [
             'id' => $appointmentId,
             'locums_id' => $user->id, //代理医生ID
@@ -117,6 +118,7 @@ class AppointmentController extends BaseController
             'patient_age' => $request['age'],
             'patient_history' => $request['history'],
             'doctor_id' => $request['doctor'],
+            'patient_id' => (isset($patient->id)) ? $patient->id : null,
             'doctor_or_patient' => 'd', //医生发起的约诊
             'expect_visit_date' => $expectVisitDate,
             'expect_am_pm' => $expectAmPm,
@@ -132,7 +134,6 @@ class AppointmentController extends BaseController
              * 是否为已注册患者
              * 注册患者发送单播通知；未注册患者需要发送短信
              */
-            $patient = Patient::where('phone', $request['phone'])->first();
             if (isset($patient->id)) {
                 MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
                 MsgAndNotification::pushAppointmentMsg_patient($patient, $appointment); //向患者端推送消息
