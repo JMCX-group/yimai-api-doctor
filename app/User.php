@@ -137,11 +137,9 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function getDpCode($id)
     {
-        $data = User::select('dp_code', 'dept_id')->where('id', $id)->first();
+        $doctor = User::find($id);
 
-        $dpCode = str_pad($data->dept_id, 3, '0', STR_PAD_LEFT) . $data->dp_code;
-
-        return $dpCode;
+        return str_pad($doctor->dept_id, 3, '0', STR_PAD_LEFT) . $doctor->dp_code;
     }
 
     /**
