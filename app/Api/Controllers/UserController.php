@@ -231,7 +231,7 @@ class UserController extends BaseController
              * 有了融云信息，则表示已经更新过一次信息，则进行自动添加邀请人：
              */
             if ($user->inviter_dp_code != '' && $user->inviter_dp_code != null) {
-                $inviter = User::getInviter($request['inviter_dp_code']);
+                $inviter = User::getInviter($user->inviter_dp_code);
                 $this->autoAddFriend($user->id, $inviter);
             }
         }
