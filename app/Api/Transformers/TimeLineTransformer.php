@@ -366,7 +366,7 @@ class TimeLineTransformer
             'content' => $supplement
         ], [
             'name' => \Config::get('constants.TREATMENT_NOTICE'),
-            'content' => $appointments->remark
+            'content' => ($appointments->remark == null) ? '无' : $appointments->remark
         ],];
     }
 
