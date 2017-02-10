@@ -277,7 +277,7 @@ class UserController extends BaseController
                 $friendData['doctor_id'] = $friendInfo->id;
                 $friendData['doctor_friend_id'] = $myId;
                 $friendData['doctor_read'] = 0;
-                $friendData['doctor_friend_read'] = 1;
+                $friendData['doctor_friend_read'] = 0;
                 $friendData['confirm'] = 1;
                 DoctorRelation::create($friendData);
             }
