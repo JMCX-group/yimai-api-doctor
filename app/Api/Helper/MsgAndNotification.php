@@ -198,9 +198,9 @@ class MsgAndNotification
         $content = AppointmentStatus::pushContent($appointmentStatus, $recipient, $appointment);
 
         if ($recipient == 'doctor') {
-            self::pushDoctorUnicast($deviceToken, $content, 'admissions', $appointmentId);
+            self::pushDoctorUnicast($deviceToken, $content, 'admissions', $appointmentId, $appointmentStatus);
         } else {
-            self::pushPatientUnicast($deviceToken, $content, 'appointment', $appointmentId);
+            self::pushPatientUnicast($deviceToken, $content, 'appointment', $appointmentId, $appointmentStatus);
         }
     }
 
@@ -236,7 +236,7 @@ class MsgAndNotification
         if (isset($patient->id) && ($patient->device_token != '' && $patient->device_token != null)) {
             $content = AppointmentStatus::pushContent($appointment->status, 'patient', $isPushAppointmentToContent ? $appointment : null); //获取推送文案
 
-            self::pushPatientUnicast($patient->device_token, $content, 'appointment', $appointment->id);
+            self::pushPatientUnicast($patient->device_token, $content, 'appointment', $appointment->id, $appointment->status);
         }
     }
 
@@ -279,7 +279,7 @@ class MsgAndNotification
                 $action = 'appointment';
             }
 
-            self::pushDoctorUnicast($doctor->device_token, $content, $action, $appointment->id);
+            self::pushDoctorUnicast($doctor->device_token, $content, $action, $appointment->id, $appointment->status);
         }
     }
 
@@ -288,8 +288,9 @@ class MsgAndNotification
      *
      * @param $deviceToken
      * @param $doctorId
+     * @param $status
      */
-    public static function pushAddFriendMsg($deviceToken, $doctorId)
+    public static function pushAddFriendMsg($deviceToken, $doctorId, $status)
     {
         /**
          * 获取推送文案和动作
@@ -297,7 +298,7 @@ class MsgAndNotification
         $content = '您有新的好友添加通知';
         $action = 'add-friend';
 
-        self::pushDoctorUnicast($deviceToken, $content, $action, $doctorId);
+        self::pushDoctorUnicast($deviceToken, $content, $action, $doctorId, $status);
     }
 
     /**
@@ -307,8 +308,9 @@ class MsgAndNotification
      * @param $content
      * @param $action
      * @param $dataId
+     * @param $status
      */
-    public static function pushDoctorUnicast($deviceToken, $content, $action, $dataId)
+    public static function pushDoctorUnicast($deviceToken, $content, $action, $dataId, $status)
     {
         require_once('UmengNotification/NotificationPush.php');
 
@@ -322,12 +324,12 @@ class MsgAndNotification
              */
             //医生端企业版
             $pushE = new \NotificationPush('58073c2ae0f55a4ac00023e4', 'npypnjmmor5ufydocxyia3o6lwq1vh5n');
-            $pushE_falseResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId);
-            $pushE_trueResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId, 'true');
+            $pushE_falseResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId, $status);
+            $pushE_trueResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId, $status, 'true');
             //医生端AppStore
             $pushApp = new \NotificationPush('587704278f4a9d795e001f79', 'ajcvonw3kas06oyljq1xcujvuadqszcj');
-            $pushApp_falseResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId);
-            $pushApp_trueResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId, 'true');
+            $pushApp_falseResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId, $status);
+            $pushApp_trueResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId, $status, 'true');
 
             self::pushBroadcastIosLog($action, 'doctor', $pushE_falseResult, $pushE_trueResult, $pushApp_falseResult, $pushApp_trueResult, $deviceToken);
         } else {
@@ -335,7 +337,7 @@ class MsgAndNotification
              * 安卓推送
              */
             $push = new \NotificationPush('58073313e0f55a4825002a47', '0hmugthtu84nyou6egw3kmdsf6v4zmom');
-            $pushResult = $push->sendAndroidUnicast($deviceToken, $content, $action, $dataId);
+            $pushResult = $push->sendAndroidUnicast($deviceToken, $content, $action, $dataId, $status);
 
             self::pushBroadcastAndroidLog($action, 'doctor', $pushResult, $deviceToken);
         }
@@ -348,8 +350,9 @@ class MsgAndNotification
      * @param $content
      * @param $action
      * @param $dataId
+     * @param $status
      */
-    public static function pushPatientUnicast($deviceToken, $content, $action, $dataId)
+    public static function pushPatientUnicast($deviceToken, $content, $action, $dataId, $status)
     {
         require_once('UmengNotification/NotificationPush.php');
 
@@ -363,12 +366,12 @@ class MsgAndNotification
              */
             //患者端企业版
             $pushE = new \NotificationPush('58770533c62dca6297001b7b', 'mnbtm9nu5v2cw5neqbxo6grqsuhxg1o8');
-            $pushE_falseResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId);
-            $pushE_trueResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId, 'true');
+            $pushE_falseResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId, $status);
+            $pushE_trueResult = $pushE->sendIOSUnicast($deviceToken, $content, $action, $dataId, $status, 'true');
             //患者端AppStore
             $pushApp = new \NotificationPush('587704b3310c934edb002251', 'mngbtbi7lj0y8shlmdvvqdkek9k3hfin');
-            $pushApp_falseResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId);
-            $pushApp_trueResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId, 'true');
+            $pushApp_falseResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId, $status);
+            $pushApp_trueResult = $pushApp->sendIOSUnicast($deviceToken, $content, $action, $dataId, $status, 'true');
 
             self::pushBroadcastIosLog($action, 'patient', $pushE_falseResult, $pushE_trueResult, $pushApp_falseResult, $pushApp_trueResult, $deviceToken);
         } else {
@@ -376,7 +379,7 @@ class MsgAndNotification
              * 安卓推送
              */
             $push = new \NotificationPush('587b786af43e4833800004cb', 'oth53caymcr5zxc2edhi0ghuoyuxbov3');
-            $pushResult = $push->sendAndroidUnicast($deviceToken, $content, $action, $dataId);
+            $pushResult = $push->sendAndroidUnicast($deviceToken, $content, $action, $dataId, $status);
 
             self::pushBroadcastAndroidLog($action, 'patient', $pushResult, $deviceToken);
         }

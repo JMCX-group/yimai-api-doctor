@@ -65,9 +65,10 @@ class NotificationPush
      * @param $title
      * @param $action
      * @param $dataId
+     * @param $status
      * @return array
      */
-    function sendAndroidUnicast($deviceToken, $title, $action, $dataId='')
+    function sendAndroidUnicast($deviceToken, $title, $action, $dataId='', $status='')
     {
         try {
             $unicast = new AndroidUnicast();
@@ -86,6 +87,7 @@ class NotificationPush
             // Set extra fields
             $unicast->setExtraField("action", $action);
             $unicast->setExtraField("data-id", $dataId);
+            $unicast->setExtraField("status", $status);
             $unicast->send();
 
             return ['result' => true, 'message' => ''];
@@ -252,11 +254,12 @@ class NotificationPush
      * @param $deviceToken
      * @param $alert
      * @param $action
-     * @param $dataId
-     * @param $productionMode
+     * @param string $dataId
+     * @param $status
+     * @param string $productionMode
      * @return array
      */
-    function sendIOSUnicast($deviceToken, $alert, $action, $dataId='', $productionMode='false')
+    function sendIOSUnicast($deviceToken, $alert, $action, $dataId='', $status='', $productionMode='false')
     {
         try {
             $unicast = new IOSUnicast();
@@ -273,6 +276,7 @@ class NotificationPush
             // Set customized fields
             $unicast->setCustomizedField("action", $action);
             $unicast->setCustomizedField("data-id", $dataId);
+            $unicast->setCustomizedField("status", $status);
             $unicast->send();
 
             return ['result' => true, 'message' => ''];
