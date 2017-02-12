@@ -290,7 +290,7 @@ class MsgAndNotification
      * @param $doctorId
      * @param $status
      */
-    public static function pushAddFriendMsg($deviceToken, $doctorId, $status)
+    public static function pushAddFriendMsg($deviceToken, $doctorId, $status='')
     {
         /**
          * 获取推送文案和动作
