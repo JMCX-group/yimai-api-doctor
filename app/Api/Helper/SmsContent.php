@@ -61,7 +61,8 @@ class SmsContent
                 AppUserVerifyCode::where('phone', $phone)->update(['code' => $newCode['code']]);
             }
 
-            return response()->json(['debug' => $newCode['code']], 200);
+//            return response()->json(['debug' => $newCode['code']], 200);
+            return response()->json(['debug' => ''], 200);
         } else {
             return response()->json(['message' => '短信发送失败'], 500);
         }
