@@ -74,6 +74,21 @@ class Patient extends Model
     }
 
     /**
+     * 通过code查找邀请者
+     *
+     * @param $code
+     * @return mixed
+     */
+    public static function getInviter($code)
+    {
+        $cityId = City::where('code', intval(substr($code, 0, 4)))->first()->id;
+
+        return Patient::where('city_id', $cityId)
+            ->where('code', intval(substr($code, 4)))
+            ->first();
+    }
+
+    /**
      * Get health consultant code.
      * 长度7位：城市编号4位 + 000开始的3位编码.
      *

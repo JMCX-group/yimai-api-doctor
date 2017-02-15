@@ -19,6 +19,7 @@ use App\Api\Transformers\UserTransformer;
 use App\DoctorContactRecord;
 use App\DoctorRelation;
 use App\Hospital;
+use App\InvitedDoctor;
 use App\User;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -62,6 +63,15 @@ class UserController extends BaseController
 
         $user->auth = 'processing'; //未认证： ；认证成功：completed；认证中：processing；认证失败：fail；
         $user->save();
+
+        /**
+         * 如果是被邀请的，则更新状态：
+         */
+        $invitedDoctor = InvitedDoctor::where('doctor_id', $user->id)->first();
+        if (!$invitedDoctor) {
+            $invitedDoctor->status = 'processing'; //processing：认证中；completed：完成认证
+            $invitedDoctor->save();
+        }
 
         return ['url' => $user->auth_img];
     }
@@ -232,7 +242,9 @@ class UserController extends BaseController
              */
             if ($user->inviter_dp_code != '' && $user->inviter_dp_code != null) {
                 $inviter = User::getInviter($user->inviter_dp_code);
-                $this->autoAddFriend($user->id, $inviter);
+                if (!$inviter) { //有可能是合作专区健康顾问码
+                    $this->autoAddFriend($user->id, $inviter);
+                }
             }
         }
 

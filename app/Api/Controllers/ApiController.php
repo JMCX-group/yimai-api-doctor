@@ -114,7 +114,7 @@ class ApiController extends BaseController
                             'phone' => '11位长的纯数字手机号码；必填',
                             'password' => '6-60位密码；必填',
                             'verify_code' => '4位数字验证码；必填',
-                            'inviter_dp_code' => '邀请者DP Code，目前是6位长的数值，请用字符串形式传，否则0开头的会没有；选填'
+                            'inviter_dp_code' => '邀请者DP Code或合作专区邀请Code；目前是6-7位长的数值，请用字符串形式传，否则0开头的会没有；选填'
                         ],
                         'response' => [
                             'token' => '成功后会返回登录之后的token值',

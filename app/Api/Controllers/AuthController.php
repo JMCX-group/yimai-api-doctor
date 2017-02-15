@@ -14,6 +14,8 @@ use App\Api\Requests\InviterRequest;
 use App\Api\Requests\ResetPhoneRequest;
 use App\Api\Requests\ResetPwdRequest;
 use App\Api\Transformers\UserTransformer;
+use App\InvitedDoctor;
+use App\Patient;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -70,9 +72,36 @@ class AuthController extends BaseController
             'admission_set_fixed' => '[{"week":"sun","am":"false","pm":"false"},{"week":"mon","am":"false","pm":"false"},{"week":"tue","am":"false","pm":"false"},{"week":"wed","am":"false","pm":"false"},{"week":"thu","am":"false","pm":"false"},{"week":"fri","am":"false","pm":"false"},{"week":"sat","am":"false","pm":"false"}]'
         ];
         $user = User::create($newUser);
+
+        /**
+         * 判断是否医脉合作专区邀请：
+         */
+        if (isset($request['inviter_dp_code'])) {
+            $this->newInvitationRecord($request['inviter_dp_code'], $user);
+        }
+
         $token = JWTAuth::fromUser($user);
 
         return response()->json(compact('token'));
+    }
+
+    /**
+     * 新建邀请记录
+     *
+     * @param $code
+     * @param $user
+     */
+    public function newInvitationRecord($code, $user)
+    {
+        $patient = Patient::getInviter($code);
+
+        if (!$patient) {
+            $data = [
+                'doctor_id' => $user->id,
+                'patient_id' => $patient->id
+            ];
+            InvitedDoctor::create($data);
+        }
     }
 
     /**

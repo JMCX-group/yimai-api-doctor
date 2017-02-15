@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+class InvitedDoctor extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'citys';
+    protected $table = 'invited_doctors';
 
     /**
      * The attributes that are mass assignable.
@@ -19,13 +19,9 @@ class City extends Model
      * @var array
      */
     protected $fillable = [
-        'province_id',
-        'name',
-        'code'
+        'doctor_id',
+        'patient_id',
+        'status', //processing：认证中；completed：完成认证
+        'bonus'
     ];
-
-    /**
-     * @var bool
-     */
-    public $timestamps = false;
 }
