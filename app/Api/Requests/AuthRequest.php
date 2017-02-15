@@ -41,7 +41,8 @@ class AuthRequest extends Request
             $rules = [
                 'phone' => 'required|digits_between:11,11|unique:doctors',
                 'password' => 'required|between:6,60',
-                'verify_code' => 'required|digits_between:4,4|exists:user_verify_codes,code,phone,' . $_POST['phone']
+                'verify_code' => 'required|digits_between:4,4|exists:user_verify_codes,code,phone,' . $_POST['phone'],
+                'inviter_dp_code' => 'between:6,7'
             ];
         }
 
@@ -71,7 +72,8 @@ class AuthRequest extends Request
         return [
             'phone' => '手机号码',
             'password' => '用户密码',
-            'verify_code' => '验证码'
+            'verify_code' => '验证码',
+            'inviter_dp_code' => '邀请码'
         ];
     }
 
