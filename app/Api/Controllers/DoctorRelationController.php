@@ -103,7 +103,7 @@ class DoctorRelationController extends BaseController
                     return response()->json(['message' => '已添加过'], 500);
                 }
             } catch (\Exception $e) {
-                Log::info('add friend', ['context' => $e->getMessage()]);
+                Log::info('add-friend', ['context' => $e->getMessage()]);
                 return response()->json(['message' => '添加失败'], 400);
             }
         } else {
@@ -138,7 +138,7 @@ class DoctorRelationController extends BaseController
             try {
                 DoctorRelation::create($data);
             } catch (\Exception $e) {
-                Log::info('add friend', ['context' => $e->getMessage()]);
+                Log::info('add-all-friend', ['context' => $e->getMessage()]);
                 continue;
             }
         }
@@ -200,7 +200,7 @@ class DoctorRelationController extends BaseController
                     return response()->json(['message' => '添加失败'], 500);
                 }
             } catch (\Exception $e) {
-                Log::info('add friend', ['context' => $e->getMessage()]);
+                Log::info('add-friend-update', ['context' => $e->getMessage()]);
                 return response()->json(['message' => '添加失败'], 400);
             }
         } else {
