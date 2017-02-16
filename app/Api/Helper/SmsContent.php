@@ -32,7 +32,7 @@ class SmsContent
             $doctor->hospital .
             $doctor->dept .
             $doctor->name . '医师的面诊，约诊费约为' .
-            (($doctor->fee) / 100) . '元，请在12小时内安装“医者脉连-看专家”客户端进行确认。下载地址：http://pre.im/PHMF 。请确保使用本手机号码进行注册和登陆以便查看该笔预约。';
+            $doctor->fee . '元，请在12小时内安装“医者脉连-看专家”客户端进行确认。下载地址：http://pre.im/PHMF 。请确保使用本手机号码进行注册和登陆以便查看该笔预约。';
 
         self::sendSms($phone, $txt, 'send-sms-patient');
     }
