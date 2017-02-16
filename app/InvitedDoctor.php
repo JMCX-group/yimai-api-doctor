@@ -20,6 +20,7 @@ class InvitedDoctor extends Model
      */
     protected $fillable = [
         'doctor_id',
+        'doctor_phone',
         'patient_id',
         'status', //wait：等待邀请；invited：已邀请/未加入；re-invite：可以重新邀请了；join：已加入；processing：认证中；completed：完成认证
         'bonus'
