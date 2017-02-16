@@ -98,7 +98,8 @@ class AuthController extends BaseController
         if (!$patient) {
             $data = [
                 'doctor_id' => $user->id,
-                'patient_id' => $patient->id
+                'patient_id' => $patient->id,
+                'status' => 'join' //wait：等待邀请；invited：已邀请/未加入；re-invite：可以重新邀请了；join：已加入；processing：认证中；completed：完成认证
             ];
             InvitedDoctor::create($data);
         }

@@ -69,6 +69,25 @@ class SmsContent
     }
 
     /**
+     * 发送合作专区邀请短信给新的注册用户
+     *
+     * @param $phone
+     * @param string $name
+     * @param string $content
+     * @return bool
+     */
+    public static function sendSMS_zoneInvite($phone, $name='', $content='')
+    {
+        if($content){
+            $txt = $content;
+        } else {
+            $txt = '【医者脉连】您的朋友' . $name . '邀请您登陆医脉医生端，在医脉平台，您可以建立属于您自己的个人品牌。'; //文案
+        }
+
+        return self::sendSms($phone, $txt, 'send-sms-zone-invite');
+    }
+
+    /**
      * 发送邀请短信
      *
      * @param $dpCode
