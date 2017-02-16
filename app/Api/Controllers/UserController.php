@@ -68,7 +68,7 @@ class UserController extends BaseController
          * 如果是被邀请的，则更新状态：
          */
         $invitedDoctor = InvitedDoctor::where('doctor_id', $user->id)->first();
-        if (!$invitedDoctor) {
+        if (!empty($invitedDoctor)) {
             $invitedDoctor->status = 'processing'; //processing：认证中；completed：完成认证
             $invitedDoctor->save();
         }
