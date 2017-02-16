@@ -47,7 +47,6 @@ class AuthRequest extends Request
         }
 
         return $rules;
-
     }
 
     /**
