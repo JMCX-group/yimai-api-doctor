@@ -155,7 +155,11 @@ class MsgAndNotification
             $patientId = $appointments->patient_id;
         } else {
             if (isset($appointments->patient_phone)) {
-                $patientId = Patient::where('phone', $appointments->patient_phone)->first()->id; //患者ID
+                try {
+                    $patientId = Patient::where('phone', $appointments->patient_phone)->first()->id; //患者ID
+                } catch (\Exception $e) {
+                    Log::info('generateAppointmentsMsg', ['context' => $e->getMessage(), 'appointment' => $appointments]);
+                }
             } else {
                 $patientId = Patient::where('phone', $appointments['patient_phone'])->first()->id; //患者ID
             }
