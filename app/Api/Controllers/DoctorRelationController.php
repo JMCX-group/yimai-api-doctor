@@ -75,33 +75,44 @@ class DoctorRelationController extends BaseController
             $data['doctor_friend_read'] = 0;
             $data['confirm'] = ($friend['verify_switch'] == 0) ? 1 : 0; //是否确认；1：已确认，0：未确认；
 
+            /**
+             * 判断是否有这条数据：
+             */
+            $relation = DoctorRelation::where('doctor_id', $data['doctor_id'])
+                ->where('doctor_friend_id', $data['doctor_friend_id'])
+                ->first();
+            if ($relation) {
+                $relation->doctor_read = 1;
+                $relation->confirm = $data['confirm'];
+                $relation->save();
+
+                return response()->json(['message' => '已添加过'], 500);
+            } else {
+                DoctorRelation::create($data);
+            }
+
             try {
-                $relation = DoctorRelation::create($data);
-                if ($relation) {
-                    /**
-                     * 判断被加一方是否无需验证：
-                     */
-                    if ($friend['verify_switch'] == 0) {
-                        $friendData['doctor_id'] = $friend['id'];
-                        $friendData['doctor_friend_id'] = $user->id;
-                        $friendData['doctor_read'] = 0;
-                        $friendData['doctor_friend_read'] = 1;
-                        $friendData['confirm'] = 1;
-                        DoctorRelation::create($friendData);
-                    }
-
-                    /**
-                     * 推送相关信息：
-                     */
-                    $doctor = Doctor::find($request['id']);
-                    if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
-                        MsgAndNotification::pushAddFriendMsg($doctor->device_token, $request['id']); //向相关医生推送消息
-                    }
-
-                    return response()->json(['success' => ''], 204);
-                } else {
-                    return response()->json(['message' => '已添加过'], 500);
+                /**
+                 * 判断被加一方是否无需验证：
+                 */
+                if ($friend['verify_switch'] == 0) {
+                    $friendData['doctor_id'] = $friend['id'];
+                    $friendData['doctor_friend_id'] = $user->id;
+                    $friendData['doctor_read'] = 0;
+                    $friendData['doctor_friend_read'] = 1;
+                    $friendData['confirm'] = 1;
+                    DoctorRelation::create($friendData);
                 }
+
+                /**
+                 * 推送相关信息：
+                 */
+                $doctor = Doctor::find($request['id']);
+                if (isset($doctor->id) && ($doctor->device_token != '' && $doctor->device_token != null)) {
+                    MsgAndNotification::pushAddFriendMsg($doctor->device_token, $request['id']); //向相关医生推送消息
+                }
+
+                return response()->json(['success' => ''], 204);
             } catch (\Exception $e) {
                 Log::info('add-friend', ['context' => $e->getMessage()]);
                 return response()->json(['message' => '添加失败'], 400);
