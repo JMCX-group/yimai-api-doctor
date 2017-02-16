@@ -154,7 +154,11 @@ class MsgAndNotification
         if (isset($appointments->patient_id) && ($appointments->patient_id != null || $appointments->patient_id != '')) {
             $patientId = $appointments->patient_id;
         } else {
-            $patientId = Patient::where('phone', $appointments->patient_phone)->first()->id; //患者ID
+            if (isset($appointments->patient_phone)) {
+                $patientId = Patient::where('phone', $appointments->patient_phone)->first()->id; //患者ID
+            } else {
+                $patientId = Patient::where('phone', $appointments['patient_phone'])->first()->id; //患者ID
+            }
         }
 
         return [
