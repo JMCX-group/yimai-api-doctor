@@ -154,6 +154,7 @@ class AdmissionsController extends BaseController
                 'expect_am_pm' => $appointment->expect_am_pm,
                 'price' => $doctor->fee,
                 'is_transfer' => 1, //已被转诊
+                'transfer_id' => $appointment->id,
                 'is_pay' => 1,
                 'status' => 'wait-2'
             ];

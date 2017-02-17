@@ -50,6 +50,7 @@ class Appointment extends Model
         'patient_cancel_time',
         'doctor_transfer_time',
         'is_transfer',
+        'transfer_id',
         'deposit',
         'price',
         'transaction_id',
