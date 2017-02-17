@@ -285,7 +285,7 @@ class TimeLineTransformer
         if ($appointmentFee) {
             $time = $appointmentFee->created_at->format('Y-m-d H:i:s');
         } else {
-            $time = '';
+            $time = $appointments->updated_at->format('Y-m-d H:i:s');
         }
 
         $infoText = \Config::get('constants.ALREADY_PAID');
