@@ -137,7 +137,7 @@ class AdmissionsController extends BaseController
              */
             $doctorId = $request['doctor_id'];
             $doctor = User::find($doctorId);
-            $newAppointmentId = $this->newAppointmentId();
+            $newAppointmentId = $this->newAppointmentId('66'); //66是转诊
             $data = [
                 'id' => $newAppointmentId,
                 'locums_id' => $user->id, //代理医生ID
@@ -158,9 +158,37 @@ class AdmissionsController extends BaseController
                 'status' => 'wait-2'
             ];
 
+            /**
+             * 获取旧的约诊支付情况和部署新的支付情况：
+             */
+            $oldAppointmentFeeData = AppointmentFee::where('appointment_id', $appointment->id)->first();
+
+            $appointmentFeeData = [
+                'doctor_id' => $appointment->doctor_id,
+                'patient_id' => $appointment->patient_id,
+                'locums_id' => $user->id,
+                'appointment_id' => $newAppointmentId,
+                'total_fee' => $oldAppointmentFeeData->totalFee,
+                'reception_fee' => $oldAppointmentFeeData->reception_fee,
+                'platform_fee' => $oldAppointmentFeeData->platform_fee,
+                'intermediary_fee' => 0, //中介费
+                'guide_fee' => 0, //导诊费
+                'default_fee_rate' => 0, //违约费率
+                'status' => 'paid' //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
+            ];
+
+            /**
+             * 老的支付信息置0
+             */
+            $oldAppointmentFeeData->total_fee = 0;
+            $oldAppointmentFeeData->reception_fee = 0;
+            $oldAppointmentFeeData->platform_fee = 0;
+            $oldAppointmentFeeData->save();
+
             try {
                 $newAppointment = Appointment::create($data);
                 $newAppointment->id = $newAppointmentId;
+                AppointmentFee::create($appointmentFeeData);
 
                 MsgAndNotification::sendAppointmentsMsg($newAppointment, 'wait-1'); //推送消息,wait-1
                 MsgAndNotification::sendAppointmentsMsg($newAppointment); //推送消息,wait-2
@@ -186,15 +214,17 @@ class AdmissionsController extends BaseController
     /**
      * 生成新的约诊订单号
      *
+     * @param string $front
      * @return string
      */
-    public function newAppointmentId()
+    public function newAppointmentId($front='01')
     {
         /**
          * 计算预约码做ID.
          * 规则:01-99 . 年月日各两位长 . 0001-9999
+         * 66是转诊
          */
-        $frontId = '01' . date('ymd');
+        $frontId = $front . date('ymd');
         $lastId = Appointment::where('id', 'like', $frontId . '%')
             ->orderBy('id', 'desc')
             ->lists('id');
