@@ -74,17 +74,21 @@ class AppointmentController extends BaseController
      */
     public function refusal(RefusalAdmissionsRequest $request)
     {
+        $user = User::getAuthenticatedUser();
+        if (!isset($user->id)) {
+            return $user;
+        }
+
         $appointment = Appointment::find($request['id']);
 
-        if ($appointment->status == 'wait-0') {
+        if ($appointment->status == 'wait-0' && $appointment->lucums_id == $user->id) {
             $appointment->status = 'close-0'; //医生拒绝代约
             $appointment->refusal_reason = $request['reason'];
-
             $appointment->doctor_refusal_time = date('Y-m-d H:i:s'); //确认接诊时间
 
             try {
                 if ($appointment->save()) {
-//                    MsgAndNotification::pushAppointmentMsg_patient(null, $appointment); //向患者端推送消息
+                    MsgAndNotification::pushAppointmentMsg_patient(null, $appointment); //向患者端推送消息
 
                     return $this->getDetailInfo($request['id']);
                 } else {
