@@ -186,6 +186,10 @@ class AppointmentController extends BaseController
             ->select('appointments.*', 'doctors.name as locums_name', 'patients.avatar as patient_avatar')
             ->first();
 
+        if (empty($appointments)) {
+            return response()->json(['message' => '没有该订单'], 404);
+        }
+
         $doctors = User::select(
             'doctors.id', 'doctors.name', 'doctors.avatar', 'doctors.hospital_id', 'doctors.dept_id', 'doctors.title',
             'hospitals.name AS hospital', 'dept_standards.name AS dept')
