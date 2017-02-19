@@ -67,6 +67,7 @@ class AdmissionsRecordTransformer extends TransformerAbstract
 
             /**
              * close:
+             * close-0: 代约医生拒绝代约
              * close-1: 待患者付款
              * close-2: 医生过期未接诊,约诊关闭
              * close-3: 医生拒绝接诊
@@ -90,6 +91,7 @@ class AdmissionsRecordTransformer extends TransformerAbstract
                 $retData = '患者关闭';
                 break;
 
+            case 'close-0':
             case 'close-2':
             case 'close-3':
             case 'close-5':

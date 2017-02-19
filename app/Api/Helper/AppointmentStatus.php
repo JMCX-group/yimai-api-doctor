@@ -40,6 +40,7 @@ class AppointmentStatus
          * wait-5: 患者确认改期，待面诊
          *
          * Close:
+         * close-0: 代约医生拒绝代约
          * close-1: 待患者付款
          * close-2: 医生过期未接诊,约诊关闭
          * close-3: 医生拒绝接诊
@@ -64,9 +65,15 @@ class AppointmentStatus
             case 'wait-0':
                 $retText = '患者' . $patient . '请求您代约。';
                 break;
+
             case 'wait-1':
                 $retText = '您替' . $patient . '约诊' . $doctor . '医生的信息已发送，等待确认及支付。若12小时内未完成支付则约诊失效。';
                 break;
+
+            case 'close-0':
+                $retText = '您拒绝了患者' . $patient . '请您代约的约诊（预约号' . $id . '），约诊关闭。';
+                break;
+
             case 'close-1':
                 $retText = '患者' . $patient . '逾期未确认您代约' . $doctor . '的约诊（预约号' . $id . '），约诊过期。';
                 break;
@@ -198,6 +205,7 @@ class AppointmentStatus
          * wait-5: 患者确认改期，待面诊
          *
          * Close:
+         * close-0: 代约医生拒绝代约
          * close-1: 待患者付款
          * close-2: 医生过期未接诊,约诊关闭
          * close-3: 医生拒绝接诊
@@ -287,11 +295,14 @@ class AppointmentStatus
                 $retData = '患者确认改期，待面诊';
                 break;
 
+            case 'close-0':
+                $retData = '代约医生拒绝代约，约诊关闭';
+                break;
             case 'close-1':
                 $retData = '待患者付款';
                 break;
             case 'close-2':
-                $retData = '医生过期未接诊,约诊关闭';
+                $retData = '医生过期未接诊，约诊关闭';
                 break;
             case 'close-3':
                 $retData = '医生拒绝接诊';
@@ -374,6 +385,9 @@ class AppointmentStatus
                 $retData = '患者确认改期，待面诊';
                 break;
 
+            case 'close-0':
+                $retData = '代约医生拒绝代约,约诊关闭';
+                break;
             case 'close-1':
                 $retData = '您逾期未付款,约诊关闭';
                 break;

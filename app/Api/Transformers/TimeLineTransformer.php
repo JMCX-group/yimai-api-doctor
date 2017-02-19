@@ -34,7 +34,7 @@ class TimeLineTransformer
         /**
          * 如果是患者发起代约,多一条信息:
          */
-        if ($appointments->status != 'wait-0' && $appointments->doctor_or_patient == 'p') {
+        if ($appointments->status != 'wait-0' && $appointments->status != 'close-0' && $appointments->doctor_or_patient == 'p') {
             $time = $appointments->confirm_locums_time;
             $infoText = self::confirmLocumsText($appointments, $myId, $locumsDoctor);
             $retData = self::copyTransformer($retData, $time, $infoText, null, 'pass');
@@ -93,12 +93,18 @@ class TimeLineTransformer
 
             /**
              * close:
+             * close-0: 代约医生拒绝代约
              * close-1: 待患者付款
              * close-2: 医生过期未接诊,约诊关闭
              * close-3: 医生拒绝接诊
              * close-4: 患者过期未确认,约诊关闭
              * close-5: 医生转诊,约诊关闭
              */
+            case 'close-0':
+                $infoText = '代约医生拒绝代约';
+                $retData = self::copyTransformer($retData, null, $infoText, null, 'close');
+                break;
+
             case 'close-1':
                 $infoText = \Config::get('constants.NOT_PAY_CLOSE');
                 $retData = self::copyTransformer($retData, null, $infoText, null, 'close');
@@ -405,6 +411,7 @@ class TimeLineTransformer
             /**
              * close:
              */
+            case 'close-0':
             case 'close-1':
                 $retData = ['milestone' => '发起约诊', 'status' => '已关闭'];
                 break;
