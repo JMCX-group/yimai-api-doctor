@@ -132,6 +132,17 @@ class ApiController extends BaseController
                             'message' => ''
                         ]
                     ],
+                    '发送重置密码验证码' => [
+                        'url' => $http . '/api/user/reset-pwd-verify-code',
+                        'method' => 'POST',
+                        'form-data' => [
+                            'phone' => '11位长的纯数字手机号码'
+                        ],
+                        'response' => [
+                            'debug' => '为了测试方便,成功后会返回随机的4位手机验证码,正式版上线时没有该项',
+                            'message' => '当手机号未注册时，会返回404，和提示语'
+                        ]
+                    ],
                     '获取邀请人' => [
                         'url' => $http . '/api/user/inviter',
                         'method' => 'POST',

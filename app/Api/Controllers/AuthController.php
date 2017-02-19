@@ -206,6 +206,23 @@ class AuthController extends BaseController
     }
 
     /**
+     * Send reset pwd verify code.
+     *
+     * @param AuthRequest $request
+     * @return mixed
+     */
+    public function sendResetPwdVerifyCode(AuthRequest $request)
+    {
+        $phone = $request->get('phone');
+        $doctor = User::where('phone', $phone)->first();
+        if ($doctor) {
+            return SmsContent::sendSMS_newUser($phone);
+        } else {
+            return response()->json(['message' => '该手机号未注册'], 404);
+        }
+    }
+
+    /**
      * Get inviter name.
      *
      * @param InviterRequest $request

@@ -37,6 +37,7 @@ $api->version('v1', function ($api) {
         $api->group(['prefix' => 'user'], function ($api) {
             $api->post('register', 'AuthController@register');
             $api->post('verify-code', 'AuthController@sendVerifyCode');
+            $api->post('reset-pwd-verify-code', 'AuthController@sendResetPwdVerifyCode');
             $api->post('inviter', 'AuthController@getInviter');
             $api->post('login', 'AuthController@authenticate');
             $api->post('reset-pwd', 'AuthController@resetPassword');
