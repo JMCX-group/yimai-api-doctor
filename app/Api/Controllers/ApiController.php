@@ -1970,6 +1970,81 @@ class ApiController extends BaseController
                             'error' => ''
                         ]
                     ],
+                    '拒绝代约' => [
+                        'url' => $http . '/api/appointment/refusal',
+                        'method' => 'POST',
+                        'params' => [
+                            'token' => ''
+                        ],
+                        'form-data' => [
+                            'id' => '约诊ID',
+                            'reason' => '拒绝原因'
+                        ],
+                        'response' => [
+                            'patient_demand' => [
+                                'doctor_name' => '患者所需的医生姓名',
+                                'hospital' => '患者所需的医院',
+                                'department' => '患者所需的科室',
+                                'job_title' => '患者所需的医生头衔'
+                            ],
+                            'basic_info' => [
+                                'appointment_id' => '约诊ID',
+                                'history' => '现病史',
+                                'img_url' => '辅助检查',
+                                'date' => '就诊时间',
+                                'hospital' => '就诊医院',
+                                'remark' => '补充说明',
+                                'supplement' => '就诊须知'
+                            ],
+                            'doctor_info' => [
+                                'id' => '用户ID',
+                                'name' => '用户姓名',
+                                'head_url' => '头像URL',
+                                'job_title' => '用户职称,直接传名称; 总共4个: 主任医师,副主任医师,主治医师,住院医师',
+                                'hospital' => '所属医院',
+                                'department' => '所属科室'
+                            ],
+                            'patient_info' => [
+                                'name' => '患者姓名',
+                                'head_url' => '患者头像URL',
+                                'sex' => '患者性别',
+                                'age' => '患者年龄',
+                                'phone' => '所属科室',
+                                'history' => '病情描述',
+                                'img_url' => '病历图片url序列,url中把{_thumb}替换掉就是未压缩图片,例如:/uploads/case-history/2016/05/011605130001/1463539005_thumb.jpg,原图就是:/uploads/case-history/2016/05/011605130001/1463539005.jpg',
+                            ],
+                            'other_info' => [
+                                'progress' => '顶部进度',
+                                'time_line' => [
+                                    '说明' => 'time_line数组及其内部other数组下可能有1条或多条信息,需要遍历,0和1的序号不用在意,foreach就好',
+                                    '内容' => [[
+                                        'time' => '时间轴左侧的时间',
+                                        'info' => [
+                                            'text' => '文案描述',
+                                            'other' => [
+                                                '内容' => [[
+                                                    'name' => '其他的信息名称,例如:期望就诊时间',
+                                                    'content' => '其他的信息内容,例如:2016-05-18 上午; 多条时间信息用逗号隔开,展示时则是换行展示,例如:2016-05-12 上午,2016-05-13 下午'
+                                                ], []]
+                                            ]
+                                        ],
+                                        'type' => '决定使用什么icon; begin | wait'
+                                    ],
+                                        [
+                                            'time' => '时间轴左侧的时间, null为没有',
+                                            'info' => [
+                                                'text' => '文案描述',
+                                                'other' => 'null为没有'
+                                            ],
+                                            'type' => '决定使用什么icon; begin | wait'
+                                        ]]
+                                ],
+                                'status_code' => '状态CODE'
+                            ],
+                            'message' => '',
+                            'error' => ''
+                        ]
+                    ],
                     '上传图片' => [
                         'url' => $http . '/api/appointment/upload-img',
                         'method' => 'POST',

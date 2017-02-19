@@ -13,6 +13,7 @@ use App\Api\Helper\SmsContent;
 use App\Api\Requests\AppointmentIdRequest;
 use App\Api\Requests\AppointmentRequest;
 use App\Api\Requests\AppointmentUpdateRequest;
+use App\Api\Requests\RefusalAdmissionsRequest;
 use App\Api\Transformers\ReservationRecordTransformer;
 use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
@@ -62,6 +63,38 @@ class AppointmentController extends BaseController
             }
         } catch (JWTException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+        }
+    }
+
+    /**
+     * 拒绝代约
+     *
+     * @param RefusalAdmissionsRequest $request
+     * @return array|\Illuminate\Http\JsonResponse|mixed
+     */
+    public function refusal(RefusalAdmissionsRequest $request)
+    {
+        $appointment = Appointment::find($request['id']);
+
+        if ($appointment->status == 'wait-0') {
+            $appointment->status = 'close-0'; //医生拒绝代约
+            $appointment->refusal_reason = $request['reason'];
+
+            $appointment->doctor_refusal_time = date('Y-m-d H:i:s'); //确认接诊时间
+
+            try {
+                if ($appointment->save()) {
+//                    MsgAndNotification::pushAppointmentMsg_patient(null, $appointment); //向患者端推送消息
+
+                    return $this->getDetailInfo($request['id']);
+                } else {
+                    return response()->json(['message' => '保存失败'], 500);
+                }
+            } catch (JWTException $e) {
+                return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+            }
+        } else {
+            return response()->json(['message' => '状态错误'], 400);
         }
     }
 
