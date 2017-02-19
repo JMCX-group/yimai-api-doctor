@@ -12,7 +12,7 @@ return [
     'AVATAR_SAVE_PATH' => 'uploads/avatar/',
     'AUTH_PATH' => 'uploads/auth/',
     
-    'APPOINTMENT_DEFAULT' => '{代约医生}替患者{患者}向{医生}医生发起约诊',
+    'APPOINTMENT_DEFAULT' => '{代约医生}替患者{患者}向{医生}发起约诊',
     'APPOINTMENT_DEFAULT_REQUEST' => '{患者}发起代约请求',
 
     'WAIT_PAYMENT' => '待患者付款',
