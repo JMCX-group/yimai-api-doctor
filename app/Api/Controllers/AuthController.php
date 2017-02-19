@@ -95,7 +95,7 @@ class AuthController extends BaseController
     {
         $patient = Patient::getInviter($code);
 
-        if (!$patient) {
+        if ($patient) {
             $data = [
                 'doctor_id' => $user->id,
                 'doctor_phone' => $user->phone,
