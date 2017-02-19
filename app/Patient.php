@@ -81,7 +81,7 @@ class Patient extends Model
      */
     public static function getInviter($code)
     {
-        $city = City::where('code', intval(substr($code, 0, 4)))->first();
+        $city = City::where('code', substr($code, 1, 3))->first();
         if ($city) {
             return Patient::where('city_id', $city->id)
                 ->where('code', intval(substr($code, 4)))
