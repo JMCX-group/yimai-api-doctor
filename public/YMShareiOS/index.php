@@ -91,8 +91,18 @@ if(!isset($_GET['userid'])){
 
     $(function(){
         console.log("got here");
-        g_jq_dom.$body.removeClass("cf-invisible")
+        g_jq_dom.$body.removeClass("cf-invisible");
+        $("#page-download").on(g_event.touchend, function () {
+            if(is_weixn()) {
+                alert("请点击右上角，在系统浏览器中打开此链接。")
+            }
+        });
     });
+
+    function is_weixn(){
+        var ua = navigator.userAgent.toLowerCase();
+        return (ua.match(/MicroMessenger/i) == "micromessenger")
+    }
 </script>
 </body>
 </html>
