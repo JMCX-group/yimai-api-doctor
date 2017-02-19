@@ -76,7 +76,7 @@ class AuthController extends BaseController
         /**
          * 判断是否医脉合作专区邀请：
          */
-        if (isset($request['inviter_dp_code']) && $request['inviter_dp_code'] != '') {
+        if (isset($request['inviter_dp_code']) && $request['inviter_dp_code'] != '' && strlen($request['inviter_dp_code']) > 6) {
             $this->newInvitationRecord($request['inviter_dp_code'], $user);
         }
 
