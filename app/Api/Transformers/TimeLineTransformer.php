@@ -457,13 +457,14 @@ class TimeLineTransformer
     {
         if ($appointments->doctor_or_patient == 'd') {
             $text = \Config::get('constants.APPOINTMENT_DEFAULT');
-            if($appointments->locums_id == $myId) {
+            if($appointments->locums_id == $myId) { //自己是代约医生
                 $text = str_replace('{代约医生}', '您', $text);
+                $text = str_replace('{医生}', $doctors->name, $text);
             }else{
                 $text = str_replace('{代约医生}', $appointments->locums_name, $text);
+                $text = str_replace('{医生}', '您', $text);
             }
             $text = str_replace('{患者}', $appointments->patient_name, $text);
-            $text = str_replace('{医生}', $doctors->name, $text);
         } else {
             $text = \Config::get('constants.APPOINTMENT_DEFAULT_REQUEST');
             $text = str_replace('{患者}', $appointments->patient_name, $text);
