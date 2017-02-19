@@ -34,7 +34,7 @@ class TimeLineTransformer
         /**
          * 如果是患者发起代约,多一条信息:
          */
-        if ($appointments->doctor_or_patient == 'p') {
+        if ($appointments->status != 'wait-0' && $appointments->doctor_or_patient == 'p') {
             $time = $appointments->confirm_locums_time;
             $infoText = self::confirmLocumsText($appointments, $myId, $locumsDoctor);
             $retData = self::copyTransformer($retData, $time, $infoText, null, 'pass');
@@ -51,6 +51,9 @@ class TimeLineTransformer
              * wait-5: 患者确认改期，待面诊
              */
             case 'wait-0':
+                $time = $appointments->confirm_locums_time;
+                $infoText = self::waitLocumsText($appointments, $myId, $locumsDoctor);
+                $retData = self::copyTransformer($retData, $time, $infoText, null, 'wait');
                 break;
             case 'wait-1':
                 $infoText = \Config::get('constants.WAIT_PAYMENT');
@@ -468,6 +471,27 @@ class TimeLineTransformer
         } else {
             $text = \Config::get('constants.APPOINTMENT_DEFAULT_REQUEST');
             $text = str_replace('{患者}', $appointments->patient_name, $text);
+        }
+
+        return $text;
+    }
+
+    /**
+     * 等待代约文案的角色名称替换
+     *
+     * @param $appointments
+     * @param $myId
+     * @param null $locumsDoctor
+     * @return mixed
+     */
+    public static function waitLocumsText($appointments, $myId, $locumsDoctor = null)
+    {
+        if ($appointments->locums_id == $myId) {
+            $text = \Config::get('constants.CONFIRM_APPOINTMENT');
+            $text = str_replace('{人称}', '等待您', $text);
+        } else {
+            $text = \Config::get('constants.CONFIRM_APPOINTMENT');
+            $text = str_replace('{人称}', '等待' . $locumsDoctor['name'], $text);
         }
 
         return $text;
