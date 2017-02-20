@@ -300,7 +300,7 @@ class AdmissionsController extends BaseController
     public function rescheduled(AgreeAdmissionsRequest $request)
     {
         $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
-        if ($visitTime == '1970-01-01') {
+        if ($visitTime == '1970-01-01 00:00:00') {
             $visitTime = $request['visit_time'];
             Log::info('android-rescheduled-time', ['context' => $visitTime]);
         }
