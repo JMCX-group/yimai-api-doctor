@@ -355,7 +355,7 @@ class Transformer
             ],
             'basic_info' => [
                 'appointment_id' => $appointments->id,
-                'history' => $appointments->patient_history,
+                'history' => empty($appointments->patient_history) ? '暂无信息' : $appointments->patient_history,
                 'img_url' => $appointments->patient_imgs,
                 'date' => $basicInfoDate,
                 'hospital' => ($doctor == null) ? null : $doctor->hospital,
