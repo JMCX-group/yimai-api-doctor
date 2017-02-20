@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Api\Helper\MsgAndNotification;
 use App\Api\Helper\WeiXinPay;
 use App\Appointment;
+use App\AppointmentFee;
 use App\PatientRechargeRecord;
 use App\PatientWallet;
 use Illuminate\Console\Scheduling\Schedule;
@@ -174,22 +175,55 @@ class Kernel extends ConsoleKernel
          * 更新过期（4小时）未确认完成面诊的信息并推送：
          * wait-3 to completed-1
          */
-        $wait2Appointments = Appointment::getOverdueNotConfirmedFace('wait-3');
-        MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'completed-1', true);
+        $wait3Appointments = Appointment::getOverdueNotConfirmedFace('wait-3');
+        MsgAndNotification::sendAppointmentsMsg_list($wait3Appointments, 'completed-1', true);
 
         /**
          * 更新过期（到面诊时间）未确认医生改期的信息并推送：
          * wait-4 to close-4
          */
-        $wait2Appointments = Appointment::getOverdueNotConfirmedRescheduled();
-        MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'close-4', true);
+        $wait4Appointments = Appointment::getOverdueNotConfirmedRescheduled();
+        MsgAndNotification::sendAppointmentsMsg_list($wait4Appointments, 'close-4', true);
 
         /**
          * 更新过期（4小时）未确认完成面诊的信息并推送：
          * wait-5 to completed-2
          */
-        $wait2Appointments = Appointment::getOverdueNotConfirmedFace('wait-5');
-        MsgAndNotification::sendAppointmentsMsg_list($wait2Appointments, 'completed-2', true);
+        $wait5Appointments = Appointment::getOverdueNotConfirmedFace('wait-5');
+        MsgAndNotification::sendAppointmentsMsg_list($wait5Appointments, 'completed-2', true);
+
+        /**
+         * 更新过期（4小时）未确认完成支付状态变更的：
+         * completed-1
+         * completed-2
+         */
+        $completed1AppointmentIdList = Appointment::getOverdueNotConfirmedFaceIdList('completed-1');
+        $completed2AppointmentIdList = Appointment::getOverdueNotConfirmedFaceIdList('completed-2');
+
+        /**
+         * 更新约诊状态
+         */
+        if ($completed1AppointmentIdList) {
+            self::updateAppointmentsPayStatus($completed1AppointmentIdList); //批量更新约诊支付状态
+        }
+        if ($completed2AppointmentIdList) {
+            self::updateAppointmentsPayStatus($completed2AppointmentIdList); //批量更新约诊支付状态
+        }
+    }
+
+    /**
+     * 更新相应的支付状态
+     *
+     * @param $appointmentIdList
+     */
+    public static function updateAppointmentsPayStatus($appointmentIdList)
+    {
+        AppointmentFee::whereIn('appointment_id', $appointmentIdList)
+            ->where('status', 'paid')
+            ->update([
+                'status' => 'completed', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
+                'time_expire' => date('Y-m-d H:i:s')
+            ]);
     }
 
     /**

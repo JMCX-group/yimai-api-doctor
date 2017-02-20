@@ -124,6 +124,20 @@ class Appointment extends Model
     }
 
     /**
+     * 查询过期（4小时）未确认完成面诊的ID list
+     *
+     * @param $status
+     * @return mixed
+     */
+    public static function getOverdueNotConfirmedFaceIdList($status)
+    {
+        return Appointment::where('status', $status)
+            ->where('visit_time', '<', date('Y-m-d H:i:s', time() - 4 * 3600))
+            ->lists('id')
+            ->toArray();
+    }
+
+    /**
      * 查询过期（到面诊时间）未确认医生改期的
      *
      * @return mixed
