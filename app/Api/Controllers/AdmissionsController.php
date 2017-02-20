@@ -260,6 +260,8 @@ class AdmissionsController extends BaseController
 
             try {
                 if ($appointment->save()) {
+                    $this->updateAppointmentsPayStatus($appointment->id); //TODO 测试阶段，立刻完成支付
+
                     MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
                     MsgAndNotification::pushAppointmentMsg_patient(null, $appointment); //向患者端推送消息
 
@@ -273,6 +275,21 @@ class AdmissionsController extends BaseController
         } else {
             return response()->json(['message' => '状态错误'], 400);
         }
+    }
+
+    /**
+     * 更新相应的支付状态
+     *
+     * @param $appointmentId
+     */
+    public function updateAppointmentsPayStatus($appointmentId)
+    {
+        AppointmentFee::where('appointment_id', $appointmentId)
+            ->where('status', 'paid')
+            ->update([
+                'status' => 'completed', //资金状态：paid（已支付）、completed（已完成）、cancelled（已取消）
+                'time_expire' => date('Y-m-d H:i:s')
+            ]);
     }
 
     /**
