@@ -438,7 +438,7 @@ class DoctorRelationController extends BaseController
         $addressBook->content = $request->get('content'); //直接json入库
         $addressBook->save();
 
-        $data = $this->contactsAnalysis($user->id, json_decode($addressBook['content'], true));
+        $data = $this->contactsAnalysis($user->id, json_decode($addressBook->content, true));
 
         return response()->json(compact('data'), 200);
     }
