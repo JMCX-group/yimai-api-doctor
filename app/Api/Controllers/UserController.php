@@ -18,6 +18,7 @@ use App\Api\Transformers\Transformer;
 use App\Api\Transformers\UserTransformer;
 use App\DoctorContactRecord;
 use App\DoctorRelation;
+use App\DoctorVIcon;
 use App\Hospital;
 use App\InvitedDoctor;
 use App\User;
@@ -104,6 +105,14 @@ class UserController extends BaseController
         if (isset($request['name']) && !empty($request['name']) && $user->auth != 'completed' && $user->auth != 'processing') {
             $user->name = $request['name'];
             $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
+
+            /**
+             * 匹配医生数据库的直接给予认证标志：
+             */
+            $doctorVIcon = DoctorVIcon::where('phone', $user->phone)->where('name', $user->name)->first();
+            if ($doctorVIcon) {
+                $user->auth = 'completed';
+            }
         }
         if (isset($request['head_img']) && !empty($request['head_img'])) {
             $user->avatar = SaveImage::avatar($user->id, $request->file('head_img'));

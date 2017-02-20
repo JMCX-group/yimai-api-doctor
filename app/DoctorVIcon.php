@@ -25,6 +25,7 @@ class DoctorVIcon extends Model
      */
     protected $fillable = [
         'name',
-        'phone'
+        'phone',
+        'status'
     ];
 }
