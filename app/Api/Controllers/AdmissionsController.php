@@ -300,11 +300,11 @@ class AdmissionsController extends BaseController
     public function rescheduled(AgreeAdmissionsRequest $request)
     {
         if(strstr($request['visit_time'], '月') && !strstr($request['visit_time'], '年')){
-            $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
-        } else{
             $time = date('Y年') . $request['visit_time'];
             $time = str_replace('日', ' 日', $time);
             $visitTime = date('Y-m-d H:i:s', $time);
+        } else{
+            $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
         }
 //        $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
 //        if ($visitTime == '1970-01-01 08:00:00') {
