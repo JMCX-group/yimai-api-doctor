@@ -92,12 +92,14 @@ class MsgAndNotification
                 /**
                  * 批量插入推送消息
                  */
-                foreach ($appointmentMsgList as $item){
+                foreach ($appointmentMsgList as $item) {
                     AppointmentMsg::create($item);
                 }
 
-                foreach ($deviceTokens as $deviceToken) {
-                    self::pushAppointmentMsg($deviceToken['device_token'], $status, $deviceToken['id'], 'patient'); //向患者端推送消息
+                if (!empty($deviceTokens)) {
+                    foreach ($deviceTokens as $deviceToken) {
+                        self::pushAppointmentMsg($deviceToken['device_token'], $status, $deviceToken['id'], 'patient'); //向患者端推送消息
+                    }
                 }
 
                 if ($isPushDoctor) {
