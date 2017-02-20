@@ -299,10 +299,15 @@ class AdmissionsController extends BaseController
      */
     public function rescheduled(AgreeAdmissionsRequest $request)
     {
-        $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
-        if ($visitTime == '1970-01-01 08:00:00') {
+        if(strstr($request['visit_time'], '月') && !strstr($request['visit_time'], '年')){
+            $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+        } else{
             $visitTime = date('Y-m-d H:i:s', strtotime(date('Y年') . $request['visit_time']));
         }
+//        $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+//        if ($visitTime == '1970-01-01 08:00:00') {
+//            $visitTime = date('Y-m-d H:i:s', strtotime(date('Y年') . $request['visit_time']));
+//        }
         Log::info('android-rescheduled-time', ['context' => 'old:' . $request['visit_time'] . ' - new:' . $visitTime . ' - end:' . (date('Y年') . $request['visit_time'])]);
 
         $appointment = Appointment::find($request['id']);
