@@ -376,7 +376,7 @@ class Transformer
                 'sex' => $appointments->patient_gender,
                 'age' => $appointments->patient_age,
                 'phone' => $appointments->patient_phone,
-                'history' => $appointments->patient_history,
+                'history' => empty($appointments->patient_history) ? '暂无信息' : $appointments->patient_history,
                 'img_url' => $appointments->patient_imgs
             ],
             'other_info' => [
