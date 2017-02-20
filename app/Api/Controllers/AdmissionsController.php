@@ -169,7 +169,7 @@ class AdmissionsController extends BaseController
                 'patient_id' => $appointment->patient_id,
                 'locums_id' => $user->id,
                 'appointment_id' => $newAppointmentId,
-                'total_fee' => $oldAppointmentFeeData->totalFee,
+                'total_fee' => $oldAppointmentFeeData->total_fee,
                 'reception_fee' => $oldAppointmentFeeData->reception_fee,
                 'platform_fee' => $oldAppointmentFeeData->platform_fee,
                 'intermediary_fee' => 0, //中介费
