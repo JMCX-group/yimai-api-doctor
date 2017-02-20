@@ -81,7 +81,7 @@ class AppointmentController extends BaseController
 
         $appointment = Appointment::find($request['id']);
 
-        if ($appointment->status == 'wait-0' && $appointment->lucums_id == $user->id) {
+        if ($appointment->status == 'wait-0') {
             $appointment->status = 'close-0'; //医生拒绝代约
             $appointment->refusal_reason = $request['reason'];
             $appointment->doctor_refusal_time = date('Y-m-d H:i:s'); //确认接诊时间
