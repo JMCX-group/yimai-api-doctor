@@ -21,7 +21,6 @@ use App\AppointmentFee;
 use App\Hospital;
 use App\User;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Illuminate\Support\Facades\Log;
 
 class AdmissionsController extends BaseController
 {
@@ -317,29 +316,37 @@ class AdmissionsController extends BaseController
      */
     public function rescheduled(AgreeAdmissionsRequest $request)
     {
-        $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
-        if ($visitTime == '1970-01-01 08:00:00') {
-            $visitTime = date('Y-m-d H:i:s', strtotime($this->getRightTime(date('Y年') . $request['visit_time'])));
-        }
-
         $appointment = Appointment::find($request['id']);
-        $appointment->status = 'wait-4'; //医生改期
-        $appointment->rescheduled_time = date('Y-m-d H:i:s');
-        $appointment->new_visit_time = $visitTime;
-        $amOrPm = date('H', strtotime($request['visit_time']));
-        $appointment->new_am_pm = $amOrPm <= 12 ? 'am' : 'pm';
 
-        try {
-            if ($appointment->save()) {
-                MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
-                MsgAndNotification::pushAppointmentMsg_patient(null, $appointment); //向患者端推送消息
-
-                return $this->detail($request['id']);
-            } else {
-                return response()->json(['message' => '保存失败'], 500);
+        if (empty($appointment->new_visit_time) && $appointment->status == 'wait-3') {
+            /**
+             * 时间格式转换和校验
+             */
+            $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+            if ($visitTime == '1970-01-01 08:00:00') {
+                $visitTime = date('Y-m-d H:i:s', strtotime($this->getRightTime(date('Y年') . $request['visit_time'])));
             }
-        } catch (JWTException $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+
+            $appointment->status = 'wait-4'; //医生改期
+            $appointment->rescheduled_time = date('Y-m-d H:i:s');
+            $appointment->new_visit_time = $visitTime;
+            $amOrPm = date('H', strtotime($request['visit_time']));
+            $appointment->new_am_pm = $amOrPm <= 12 ? 'am' : 'pm';
+
+            try {
+                if ($appointment->save()) {
+                    MsgAndNotification::sendAppointmentsMsg($appointment); //推送消息
+                    MsgAndNotification::pushAppointmentMsg_patient(null, $appointment); //向患者端推送消息
+
+                    return $this->detail($request['id']);
+                } else {
+                    return response()->json(['message' => '保存失败'], 500);
+                }
+            } catch (JWTException $e) {
+                return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+            }
+        } else {
+            return response()->json(['message' => '已经改期，无法再次改期或状态不正确，请刷新订单再试'], 400);
         }
     }
 
