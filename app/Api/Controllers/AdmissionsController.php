@@ -18,11 +18,10 @@ use App\Api\Transformers\TimeLineTransformer;
 use App\Api\Transformers\Transformer;
 use App\Appointment;
 use App\AppointmentFee;
-use App\Doctor;
 use App\Hospital;
-use App\Patient;
 use App\User;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Log;
 
 class AdmissionsController extends BaseController
 {
@@ -300,10 +299,16 @@ class AdmissionsController extends BaseController
      */
     public function rescheduled(AgreeAdmissionsRequest $request)
     {
+        $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+        if ($visitTime == '1970-01-01') {
+            $visitTime = $request['visit_time'];
+            Log::info('android-rescheduled-time', ['context' => $visitTime]);
+        }
+
         $appointment = Appointment::find($request['id']);
         $appointment->status = 'wait-4'; //医生改期
         $appointment->rescheduled_time = date('Y-m-d H:i:s');
-        $appointment->new_visit_time = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+        $appointment->new_visit_time = $visitTime;
         $amOrPm = date('H', strtotime($request['visit_time']));
         $appointment->new_am_pm = $amOrPm <= 12 ? 'am' : 'pm';
 
