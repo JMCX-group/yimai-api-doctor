@@ -101,7 +101,7 @@ class UserController extends BaseController
             $user->device_token = $request['device_token'];
         }
 
-        if (isset($request['name']) && !empty($request['name'])) {
+        if (isset($request['name']) && !empty($request['name']) && $user->auth != 'completed') {
             $user->name = $request['name'];
             $this->rongYunSer->userRefresh($user->id, $user->name, $user->avatar); //更新融云用户信息
         }
