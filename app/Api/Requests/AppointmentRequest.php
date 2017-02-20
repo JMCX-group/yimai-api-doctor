@@ -30,7 +30,10 @@ class AppointmentRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'between:1,10'
+            'name' => 'between:1,10',
+            'phone' => 'required|digits_between:11,11',
+            'doctor' => 'required|exists:doctors,id',
+            'date' => 'required'
         ];
     }
 
@@ -41,7 +44,9 @@ class AppointmentRequest extends Request
     {
         return [
             'required' => ':attribute不能为空',
-            'between' => ':attribute长度必须在:min和:max之间'
+            'between' => ':attribute长度必须在:min和:max之间',
+            'digits_between' => ':attribute必须为:min位长的数字',
+            'exists' => ':attribute不存在'
         ];
     }
 
@@ -51,7 +56,10 @@ class AppointmentRequest extends Request
     public function attributes()
     {
         return [
-            'name' => '姓名'
+            'name' => '姓名',
+            'phone' => '手机号',
+            'doctor' => '医生',
+            'date' => '期望就诊时间',
         ];
     }
 
