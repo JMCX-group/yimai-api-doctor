@@ -217,7 +217,7 @@ class AdmissionsController extends BaseController
      * @param string $front
      * @return string
      */
-    public function newAppointmentId($front='01')
+    public function newAppointmentId($front = '01')
     {
         /**
          * 计算预约码做ID.
@@ -292,6 +292,24 @@ class AdmissionsController extends BaseController
     }
 
     /**
+     * 时间格式化，主要是肠媳那传的没年没秒
+     *
+     * @param $time
+     * @return mixed|string
+     */
+    public function getRightTime($time)
+    {
+        $time = str_replace('年', '-', $time);
+        $time = str_replace('月', '-', $time);
+        $time = str_replace('日', ' ', $time);
+        $time = str_replace('点', ':', $time);
+        $time = str_replace('分', ':', $time);
+        $time = $time . '00';
+
+        return $time;
+    }
+
+    /**
      * 医生改期。
      *
      * @param AgreeAdmissionsRequest $request
@@ -299,18 +317,10 @@ class AdmissionsController extends BaseController
      */
     public function rescheduled(AgreeAdmissionsRequest $request)
     {
-        if(strstr($request['visit_time'], '月') && !strstr($request['visit_time'], '年')){
-            $time = date('Y年') . $request['visit_time'];
-            $time = str_replace('日', ' 日', $time);
-            $visitTime = date('Y-m-d H:i:s', $time);
-        } else{
-            $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+        $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+        if ($visitTime == '1970-01-01 08:00:00') {
+            $visitTime = date('Y-m-d H:i:s', strtotime($this->getRightTime(date('Y年') . $request['visit_time'])));
         }
-//        $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
-//        if ($visitTime == '1970-01-01 08:00:00') {
-//            $visitTime = date('Y-m-d H:i:s', strtotime(date('Y年') . $request['visit_time']));
-//        }
-        Log::info('android-rescheduled-time', ['context' => 'old:' . $request['visit_time'] . ' - new:' . $visitTime . ' - end:' . (date('Y年') . $request['visit_time'])]);
 
         $appointment = Appointment::find($request['id']);
         $appointment->status = 'wait-4'; //医生改期
