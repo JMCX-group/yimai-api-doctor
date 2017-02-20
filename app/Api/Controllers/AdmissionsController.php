@@ -302,8 +302,8 @@ class AdmissionsController extends BaseController
         $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
         if ($visitTime == '1970-01-01 00:00:00') {
             $visitTime = $request['visit_time'];
-            Log::info('android-rescheduled-time', ['context' => $visitTime]);
         }
+        Log::info('android-rescheduled-time', ['context' => $request['visit_time']]);
 
         $appointment = Appointment::find($request['id']);
         $appointment->status = 'wait-4'; //医生改期
