@@ -303,6 +303,7 @@ class AdmissionsController extends BaseController
         $time = str_replace('月', '-', $time);
         $time = str_replace('日', ' ', $time);
         $time = str_replace('点', ':', $time);
+        $time = str_replace('60分', '59分', $time);
         $time = str_replace('分', ':', $time);
         $time = $time . '00';
 
