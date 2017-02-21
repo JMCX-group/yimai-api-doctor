@@ -228,9 +228,15 @@ class AppointmentStatus
         switch ($status) {
             case 'wait-1':
                 $doctorInfo = Doctor::findDoctor($doctorId);
-                $retText = $locums . '医生替您向' . $doctor . '(' .
-                    $doctorInfo['hospital'] . $doctorInfo['dept'] . $doctorInfo['title'] .
-                    ')发起了约诊（预约号' . $id . '），请在12小时内缴费确认。';
+                if ($locums == '无') {
+                    $retText = '您向' . $doctor . '(' .
+                        $doctorInfo['hospital'] . $doctorInfo['dept'] . $doctorInfo['title'] .
+                        ')发起了约诊（预约号' . $id . '），请在12小时内缴费确认。';
+                } else {
+                    $retText = $locums . '医生替您向' . $doctor . '(' .
+                        $doctorInfo['hospital'] . $doctorInfo['dept'] . $doctorInfo['title'] .
+                        ')发起了约诊（预约号' . $id . '），请在12小时内缴费确认。';
+                }
                 break;
             case 'wait-3':
                 $retText = $doctor . '医生已确认接诊（预约号' . $id . '），请按时到医院就诊。';
@@ -240,7 +246,14 @@ class AppointmentStatus
                 break;
 
             case 'close-2':
-                $retText = $doctor . '医生过期未接诊（预约号' . $id . '），接诊关闭。';
+                if ($doctor == '无') {
+                    $retText = $locums . '医生过期未代约（预约号' . $id . '），接诊关闭。';
+                } else {
+                    $retText = $doctor . '医生过期未接诊（预约号' . $id . '），接诊关闭。';
+                }
+                break;
+            case 'close-0':
+                $retText = $locums . '医生拒绝代约（预约号' . $id . '），接诊关闭。';
                 break;
             case 'close-3':
                 $retText = $doctor . '医生拒绝接诊（预约号' . $id . '），接诊关闭。';
