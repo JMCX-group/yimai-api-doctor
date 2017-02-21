@@ -21,7 +21,7 @@ class AppointmentMsgTransformer
         return [
             'id' => $appointmentMsg['id'],
             'appointment_id' => $appointmentMsg['appointment_id'],
-            'text' => AppointmentStatus::appointmentMsgContent($appointmentMsg['status'], $appointmentMsg['doctor_name'], $appointmentMsg['patient_name'], $appointmentMsg['appointment_id']),
+            'text' => AppointmentStatus::appointmentMsgContent($appointmentMsg['status'], $appointmentMsg['doctor_name'], $appointmentMsg['locums_name'], $appointmentMsg['patient_name'], $appointmentMsg['appointment_id']),
             'type' => $appointmentMsg['type'],
             'read' => $appointmentMsg['locums_read'],
             'time' => $appointmentMsg['created_at']->format('Y-m-d H:i:s')

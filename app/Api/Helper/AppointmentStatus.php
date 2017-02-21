@@ -24,11 +24,12 @@ class AppointmentStatus
      *
      * @param $status
      * @param $doctor
+     * @param $locums
      * @param $patient
      * @param $id
      * @return string
      */
-    public static function appointmentMsgContent($status, $doctor, $patient, $id)
+    public static function appointmentMsgContent($status, $doctor, $locums, $patient, $id)
     {
         /**
          * Wait:
@@ -67,7 +68,7 @@ class AppointmentStatus
                 break;
 
             case 'wait-1':
-                $retText = '您替' . $patient . '约诊' . $doctor . '医生的信息已发送，等待确认及支付。若12小时内未完成支付则约诊失效。';
+                $retText = '您替患者' . $patient . '约诊' . $doctor . '医生的信息已发送，等待确认及支付。若12小时内未完成支付则约诊失效。';
                 break;
 
             case 'close-0':
@@ -75,11 +76,15 @@ class AppointmentStatus
                 break;
 
             case 'close-1':
-                $retText = '患者' . $patient . '逾期未确认您代约' . $doctor . '的约诊（预约号' . $id . '），约诊过期。';
+                $retText = '患者' . $patient . '逾期未确认您代约' . $doctor . '医生的约诊（预约号' . $id . '），约诊过期。';
                 break;
 
             case 'close-2':
-                $retText = '医生' . $doctor . '过期未接诊，约诊关闭。（预约号' . $id . '）';
+                if($doctor == '无'){
+                    $retText = $locums . '医生逾期未确认您的代约申请，约诊关闭。（预约号' . $id . '）';
+                } else {
+                    $retText = $doctor . '医生过期未接诊，约诊关闭。（预约号' . $id . '）';
+                }
                 break;
 
             case 'close-3':
@@ -97,7 +102,7 @@ class AppointmentStatus
             case 'cancel-2':
             case 'cancel-4':
             case 'cancel-7':
-                $retText = '医生' . $doctor . '取消了约诊请求。（预约号' . $id . '）';
+                $retText = $doctor . '医生取消了约诊请求。（预约号' . $id . '）';
                 break;
 
             case 'cancel-1':
