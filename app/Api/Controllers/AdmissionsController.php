@@ -21,6 +21,7 @@ use App\AppointmentFee;
 use App\Hospital;
 use App\User;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Log;
 
 class AdmissionsController extends BaseController
 {
@@ -326,6 +327,10 @@ class AdmissionsController extends BaseController
             if ($visitTime == '1970-01-01 08:00:00') {
                 $visitTime = date('Y-m-d H:i:s', strtotime($this->getRightTime(date('Y年') . $request['visit_time'])));
             }
+
+
+            Log::info('android-rescheduled', ['src' => $request['visit_time'], 'end' => $visitTime]);
+            return response()->json(['message' => $request['visit_time']], 500);
 
             $appointment->status = 'wait-4'; //医生改期
             $appointment->rescheduled_time = date('Y-m-d H:i:s');
