@@ -36,8 +36,16 @@ class AdmissionsController extends BaseController
         $appointment = Appointment::find($request['id']);
 
         if ($appointment->status == 'wait-2') {
+            /**
+             * 时间格式转换和校验
+             */
+            $visitTime = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+            if ($visitTime == '1970-01-01 08:00:00') {
+                $visitTime = date('Y-m-d H:i:s', strtotime($this->getRightTime(date('Y年') . $request['visit_time'])));
+            }
+
             $appointment->status = 'wait-3'; //医生确认接诊
-            $appointment->visit_time = date('Y-m-d H:i:s', strtotime($request['visit_time']));
+            $appointment->visit_time = $visitTime;
             $amOrPm = date('H', strtotime($request['visit_time']));
             $appointment->am_pm = $amOrPm <= 12 ? 'am' : 'pm';
             $appointment->supplement = (isset($request['supplement']) && $request['supplement'] != null) ? $request['supplement'] : ''; //补充说明
@@ -292,7 +300,7 @@ class AdmissionsController extends BaseController
     }
 
     /**
-     * 时间格式化，主要是肠媳那传的没年没秒
+     * 时间格式化，主要是肠媳那传的没年没秒还有60分的情况
      *
      * @param $time
      * @return mixed|string
@@ -328,10 +336,6 @@ class AdmissionsController extends BaseController
             if ($visitTime == '1970-01-01 08:00:00') {
                 $visitTime = date('Y-m-d H:i:s', strtotime($this->getRightTime(date('Y年') . $request['visit_time'])));
             }
-
-
-            Log::info('android-rescheduled', ['src' => $request['visit_time'], 'end' => $visitTime]);
-            return response()->json(['message' => $request['visit_time']], 500);
 
             $appointment->status = 'wait-4'; //医生改期
             $appointment->rescheduled_time = date('Y-m-d H:i:s');
