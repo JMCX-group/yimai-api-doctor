@@ -79,7 +79,7 @@ class NotificationPush
             $unicast->setPredefinedKeyValue("device_tokens", $deviceToken);
             $unicast->setPredefinedKeyValue("ticker", "Android unicast ticker");
             $unicast->setPredefinedKeyValue("title", $title);
-            $unicast->setPredefinedKeyValue("text", "");
+            $unicast->setPredefinedKeyValue("text", "滑动或点击查看详情");
             $unicast->setPredefinedKeyValue("after_open", "go_app");
             // Set 'production_mode' to 'false' if it's a test device.
             // For how to register a test device, please see the developer doc.
