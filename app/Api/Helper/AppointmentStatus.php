@@ -164,7 +164,11 @@ class AppointmentStatus
          */
         switch ($status) {
             case 'wait-2':
-                $retText = '您收到一条' . $locums . '替患者' . $patient . '发起的约诊请求（预约号' . $id . '），请在48小时内处理。';
+                if ($locums == '无') {
+                    $retText = '您收到一条患者' . $patient . '发起的约诊请求（预约号' . $id . '），请在48小时内处理。';
+                } else {
+                    $retText = '您收到一条' . $locums . '医生替患者' . $patient . '发起的约诊请求（预约号' . $id . '），请在48小时内处理。';
+                }
                 break;
             case 'wait-5':
                 $retText = '患者' . $patient . '已确认您将原定的约诊时间改为：' . Appointment::find($id)->rescheduled_time . '。（预约号' . $id . '）';
