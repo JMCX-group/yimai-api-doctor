@@ -1,3 +1,13 @@
+# 医脉
+
+承接“慧天为医疗”的医脉项目。
+
+此为其中医生端API的代码。
+
+
+![Logo](logo.jpeg)
+
+
 ## Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
